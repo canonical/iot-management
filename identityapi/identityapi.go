@@ -17,34 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package memory
+package identityapi
 
-import (
-	"testing"
-)
-
-func TestStore_OrgUserAccess(t *testing.T) {
-	type args struct {
-		orgID    string
-		username string
-		role     int
-	}
-	tests := []struct {
-		name string
-		args args
-		want bool
-	}{
-		{"valid", args{"abc", "jamesj", 200}, true},
-		{"valid-superuser", args{"abc", "jamesj", 300}, true},
-		{"invalid-org", args{"invalid", "jamesj", 200}, false},
-		{"invalid-user", args{"abc", "invalid", 200}, false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			mem := NewStore()
-			if got := mem.OrgUserAccess(tt.args.orgID, tt.args.username, tt.args.role); got != tt.want {
-				t.Errorf("Store.OrgUserAccess() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+// Client is a client for the identity API
+type Client interface {
 }

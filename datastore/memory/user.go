@@ -20,31 +20,38 @@
 package memory
 
 import (
-	"testing"
+	"fmt"
+	"github.com/CanonicalLtd/iot-management/datastore"
 )
 
-func TestStore_OrgUserAccess(t *testing.T) {
-	type args struct {
-		orgID    string
-		username string
-		role     int
+// UserList lists existing users
+func (mem *Store) UserList() ([]datastore.User, error) {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	return mem.Users, nil
+}
+
+// CreateUser creates a new user
+func (mem *Store) CreateUser(user datastore.User) (int64, error) {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	user.ID = int64(len(mem.Users) + 1)
+	mem.Users = append(mem.Users, user)
+	return user.ID, nil
+}
+
+// GetUser gets an existing user
+func (mem *Store) GetUser(username string) (datastore.User, error) {
+	mem.lock.RLock()
+	defer mem.lock.RUnlock()
+
+	for _, u := range mem.Users {
+		if u.Username == username {
+			return u, nil
+		}
 	}
-	tests := []struct {
-		name string
-		args args
-		want bool
-	}{
-		{"valid", args{"abc", "jamesj", 200}, true},
-		{"valid-superuser", args{"abc", "jamesj", 300}, true},
-		{"invalid-org", args{"invalid", "jamesj", 200}, false},
-		{"invalid-user", args{"abc", "invalid", 200}, false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			mem := NewStore()
-			if got := mem.OrgUserAccess(tt.args.orgID, tt.args.username, tt.args.role); got != tt.want {
-				t.Errorf("Store.OrgUserAccess() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+
+	return datastore.User{}, fmt.Errorf("cannot find the user `%s`", username)
 }

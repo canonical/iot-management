@@ -26,7 +26,7 @@ import (
 	"github.com/CanonicalLtd/iot-management/twinapi"
 )
 
-func TestManagement_GetUser(t *testing.T) {
+func TestManagement_UserWorkflow(t *testing.T) {
 	type args struct {
 		username string
 	}
@@ -34,10 +34,11 @@ func TestManagement_GetUser(t *testing.T) {
 		name    string
 		args    args
 		want    string
+		count   int
 		wantErr bool
 	}{
-		{"valid", args{"jamesj"}, "JJ", false},
-		{"invalid-user", args{"invalid"}, "", true},
+		{"valid", args{"jamesj"}, "JJ", 1, false},
+		{"invalid-user", args{"invalid"}, "", 1, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -49,6 +50,19 @@ func TestManagement_GetUser(t *testing.T) {
 			}
 			if got.Name != tt.want {
 				t.Errorf("Management.GetUser() = %v, want %v", got.Name, tt.want)
+			}
+
+			if tt.wantErr {
+				return
+			}
+
+			users, err := srv.UserList()
+			if err != nil {
+				t.Errorf("Management.UserList() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if len(users) != tt.count {
+				t.Errorf("Management.UserList() = %v, want %v", len(users), tt.count)
 			}
 		})
 	}

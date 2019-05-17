@@ -20,6 +20,7 @@
 package manage
 
 import (
+	"fmt"
 	"github.com/CanonicalLtd/iot-devicetwin/web"
 	"github.com/CanonicalLtd/iot-management/datastore"
 	"github.com/CanonicalLtd/iot-management/domain"
@@ -46,7 +47,16 @@ func (m *MockManage) OpenIDNonceStore() openid.NonceStore {
 
 // GetUser mocks fetching a user
 func (m *MockManage) GetUser(username string) (domain.User, error) {
-	panic("implement me")
+	if username != "jamesj" {
+		return domain.User{}, fmt.Errorf("User not found: %v", username)
+	}
+
+	return domain.User{Username: "jamesj", Name: "JJ", Role: 300}, nil
+}
+
+// UserList mocks fetching users
+func (m *MockManage) UserList() ([]domain.User, error) {
+	return []domain.User{{Username: "jamesj", Name: "JJ", Role: 300}}, nil
 }
 
 // DeviceList mocks fetching devices

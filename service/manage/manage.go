@@ -32,6 +32,7 @@ import (
 type Manage interface {
 	OpenIDNonceStore() openid.NonceStore
 	GetUser(username string) (domain.User, error)
+	UserList() ([]domain.User, error)
 
 	DeviceList(orgID, username string, role int) web.DevicesResponse
 	DeviceGet(orgID, username string, role int, deviceID string) web.DeviceResponse

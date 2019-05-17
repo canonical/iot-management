@@ -26,6 +26,7 @@ type DataStore interface {
 	OpenIDNonceStore() openid.NonceStore
 	CreateUser(user User) (int64, error)
 	GetUser(username string) (User, error)
+	UserList() ([]User, error)
 
 	OrgUserAccess(orgID, username string, role int) bool
 }

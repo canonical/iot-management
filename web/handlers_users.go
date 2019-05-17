@@ -19,45 +19,37 @@
 
 package web
 
-//// UserResponse is the response from a user creation/update
-//type UserResponse struct {
-//	Success      bool           `json:"success"`
-//	ErrorCode    string         `json:"error_code"`
-//	ErrorMessage string         `json:"message"`
-//	User         datastore.User `json:"user"`
-//}
-//
-//// UsersResponse is the response from a user list request
-//type UsersResponse struct {
-//	Success      bool             `json:"success"`
-//	ErrorCode    string           `json:"error_code"`
-//	ErrorMessage string           `json:"message"`
-//	Users        []datastore.User `json:"users"`
-//}
+import (
+	"github.com/CanonicalLtd/iot-identity/web"
+	"github.com/CanonicalLtd/iot-management/domain"
+	"net/http"
+)
 
-//
-//func formatUserResponse(success bool, errorCode, message string, user datastore.User, w http.ResponseWriter) error {
-//	response := UserResponse{Success: success, ErrorCode: errorCode, ErrorMessage: message, User: user}
-//
-//	// Encode the response as JSON
-//	if err := json.NewEncoder(w).Encode(response); err != nil {
-//		log.Println("Error forming the user response.")
-//		return err
-//	}
-//	return nil
-//}
-//
-//func formatUsersResponse(success bool, errorCode, message string, users []datastore.User, w http.ResponseWriter) error {
-//	response := UsersResponse{Success: success, ErrorCode: errorCode, ErrorMessage: message, Users: users}
-//
-//	// Encode the response as JSON
-//	if err := json.NewEncoder(w).Encode(response); err != nil {
-//		log.Println("Error forming the users response.")
-//		return err
-//	}
-//	return nil
-//}
-//
+// UsersResponse defines the response to list users
+type UsersResponse struct {
+	web.StandardResponse
+	Users []domain.User
+}
+
+// UserListHandler is the API method to list the users
+func (wb Service) UserListHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	// Get the users
+	users, err := wb.Manage.UserList()
+	if err != nil {
+		formatStandardResponse("UserAuth", err.Error(), w)
+		return
+	}
+
+	_ = encodeResponse(UsersResponse{web.StandardResponse{}, users}, w)
+}
+
 //// UsersHandler is the API method to list the users
 //func (wb Service) UsersHandler(w http.ResponseWriter, r *http.Request) {
 //	w.Header().Set("Content-Type", JSONHeader)

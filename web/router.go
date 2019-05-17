@@ -69,7 +69,7 @@ func (wb Service) Router() *mux.Router {
 	//router.Handle("/v1/accounts", Middleware(http.HandlerFunc(AccountCreateHandler))).Methods("POST")
 
 	//// API routes: users
-	//router.Handle("/v1/users", Middleware(http.HandlerFunc(UsersHandler))).Methods("GET")
+	router.Handle("/v1/users", Middleware(http.HandlerFunc(wb.UserListHandler))).Methods("GET")
 	//router.Handle("/v1/users", Middleware(http.HandlerFunc(UserCreateHandler))).Methods("POST")
 	//router.Handle("/v1/users/{id}", Middleware(http.HandlerFunc(UserGetHandler))).Methods("GET")
 	//router.Handle("/v1/users/{id}", Middleware(http.HandlerFunc(UserUpdateHandler))).Methods("PUT")

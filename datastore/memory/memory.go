@@ -20,7 +20,6 @@
 package memory
 
 import (
-	"fmt"
 	"github.com/CanonicalLtd/iot-management/datastore"
 	"github.com/juju/usso/openid"
 	"sync"
@@ -43,30 +42,6 @@ func NewStore() *Store {
 		Orgs:     []datastore.Organization{{OrganizationID: "abc", Name: "Example Org"}},
 		OrgUsers: []datastore.OrganizationUser{{OrganizationID: "abc", Username: "jamesj"}},
 	}
-}
-
-// CreateUser creates a new user
-func (mem *Store) CreateUser(user datastore.User) (int64, error) {
-	mem.lock.Lock()
-	defer mem.lock.Unlock()
-
-	user.ID = int64(len(mem.Users) + 1)
-	mem.Users = append(mem.Users, user)
-	return user.ID, nil
-}
-
-// GetUser gets an existing user
-func (mem *Store) GetUser(username string) (datastore.User, error) {
-	mem.lock.RLock()
-	defer mem.lock.RUnlock()
-
-	for _, u := range mem.Users {
-		if u.Username == username {
-			return u, nil
-		}
-	}
-
-	return datastore.User{}, fmt.Errorf("cannot find the user `%s`", username)
 }
 
 // OpenIDNonceStore returns an openid nonce store

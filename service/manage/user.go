@@ -44,3 +44,24 @@ func (srv *Management) GetUser(username string) (domain.User, error) {
 		Role:     u.Role,
 	}, nil
 }
+
+// UserList fetches the existing users
+func (srv *Management) UserList() ([]domain.User, error) {
+	users, err := srv.DB.UserList()
+	if err != nil {
+		return nil, err
+	}
+
+	uu := []domain.User{}
+
+	for _, u := range users {
+		uu = append(uu, domain.User{
+			ID:       u.ID,
+			Name:     u.Name,
+			Username: u.Username,
+			Email:    u.Email,
+			Role:     u.Role,
+		})
+	}
+	return uu, nil
+}
