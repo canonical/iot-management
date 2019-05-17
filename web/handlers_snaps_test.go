@@ -1,0 +1,102 @@
+// -*- Mode: Go; indent-tabs-mode: t -*-
+
+/*
+ * This file is part of the IoT Management Service
+ * Copyright 2019 Canonical Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License version 3, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranties of MERCHANTABILITY,
+ * SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package web
+
+import (
+	"bytes"
+	"github.com/CanonicalLtd/iot-management/datastore/memory"
+	"github.com/CanonicalLtd/iot-management/service/manage"
+	"net/http"
+	"testing"
+)
+
+func TestService_SnapListHandler(t *testing.T) {
+	tests := []struct {
+		name        string
+		url         string
+		permissions int
+		want        int
+		wantErr     string
+	}{
+		{"valid", "/v1/device/abc/a111/snaps", 300, http.StatusOK, ""},
+		{"invalid-permissions", "/v1/device/abc/a111/snaps", 0, http.StatusOK, "UserAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db := memory.NewStore()
+			wb := NewService(getSettings(), manage.NewMockManagement(db))
+			w := sendRequest("GET", tt.url, nil, wb, wb.Settings.JwtSecret, tt.permissions)
+			if w.Code != tt.want {
+				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
+			}
+
+			resp, err := parseStandardResponse(w.Body)
+			if err != nil {
+				t.Errorf("Error parsing response: %v", err)
+			}
+			if resp.Code != tt.wantErr {
+				t.Errorf("Web.SnapListHandler() got = %v, want %v", resp.Code, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestService_SnapWorkflow(t *testing.T) {
+	tests := []struct {
+		name        string
+		method      string
+		url         string
+		body        []byte
+		permissions int
+		want        int
+		wantErr     string
+	}{
+		{"install-valid", "POST", "/v1/snaps/abc/a111/helloworld", nil, 300, http.StatusOK, ""},
+		{"install-invalid-permissions", "POST", "/v1/snaps/abc/a111/helloworld", nil, 0, http.StatusOK, "UserAuth"},
+		{"delete-valid", "DELETE", "/v1/snaps/abc/a111/helloworld", nil, 300, http.StatusOK, ""},
+		{"delete-invalid-permissions", "DELETE", "/v1/snaps/abc/a111/helloworld", nil, 0, http.StatusOK, "UserAuth"},
+		{"update-valid-refresh", "PUT", "/v1/snaps/abc/a111/helloworld/refresh", nil, 300, http.StatusOK, ""},
+		{"update-valid-enable", "PUT", "/v1/snaps/abc/a111/helloworld/enable", nil, 300, http.StatusOK, ""},
+		{"update-valid-disable", "PUT", "/v1/snaps/abc/a111/helloworld/disable", nil, 300, http.StatusOK, ""},
+		{"update-action-invalid", "PUT", "/v1/snaps/abc/a111/helloworld/invalid", nil, 300, http.StatusBadRequest, "SnapUpdate"},
+		{"update-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/refresh", nil, 0, http.StatusOK, "UserAuth"},
+		{"config-valid", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 300, http.StatusOK, ""},
+		{"config-valid-empty", "PUT", "/v1/snaps/abc/a111/helloworld/settings", nil, 300, http.StatusOK, ""},
+		{"config-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 0, http.StatusOK, "UserAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db := memory.NewStore()
+			wb := NewService(getSettings(), manage.NewMockManagement(db))
+			w := sendRequest(tt.method, tt.url, bytes.NewReader(tt.body), wb, wb.Settings.JwtSecret, tt.permissions)
+			if w.Code != tt.want {
+				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
+			}
+
+			resp, err := parseStandardResponse(w.Body)
+			if err != nil {
+				t.Errorf("Error parsing response: %v", err)
+			}
+			if resp.Code != tt.wantErr {
+				t.Errorf("Web.SnapInstallHandler() got = %v, want %v", resp.Code, tt.wantErr)
+			}
+		})
+	}
+}

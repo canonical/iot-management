@@ -1,0 +1,6 @@
+.idea/
+main
+vendor/*/
+settings.yaml
+main
+.coverage/
