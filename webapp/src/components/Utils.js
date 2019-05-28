@@ -133,17 +133,17 @@ export function formatError(data) {
 }
 
 export function saveAccount(account) {
-    sessionStorage.setItem('accountId', account.id);
+    //sessionStorage.setItem('accountId', account.id);
     sessionStorage.setItem('accountCode', account.code);
     sessionStorage.setItem('accountName', account.name);
-    sessionStorage.setItem('accountActive', account.active);
+    //sessionStorage.setItem('accountActive', account.active);
 }
 
 export function getAccount() {
     return {
-        id: parseInt(sessionStorage.getItem('accountId'),10),
+        //id: parseInt(sessionStorage.getItem('accountId'),10),
         code: sessionStorage.getItem('accountCode'),
         name: sessionStorage.getItem('accountName'),
-        active: sessionStorage.getItem('accountActive')==='true',
+        //active: sessionStorage.getItem('accountActive')==='true',
     }
 }

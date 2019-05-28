@@ -55,21 +55,3 @@ func (mem *Store) createOpenidNonce(nonce datastore.OpenidNonce) error {
 	// Create the nonce in the database
 	return nil
 }
-
-// OrgUserAccess checks if the user has permissions to access the organization
-func (mem *Store) OrgUserAccess(orgID, username string, role int) bool {
-	mem.lock.Lock()
-	defer mem.lock.Unlock()
-
-	// Superusers can access all accounts
-	if role == datastore.Superuser {
-		return true
-	}
-
-	for _, ou := range mem.OrgUsers {
-		if ou.OrganizationID == orgID && ou.Username == username {
-			return true
-		}
-	}
-	return false
-}

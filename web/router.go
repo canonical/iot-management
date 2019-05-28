@@ -62,8 +62,8 @@ func (wb Service) Router() *mux.Router {
 	// API routes: store functionality
 	router.Handle("/v1/store/snaps/{snapName}", Middleware(http.HandlerFunc(wb.StoreSearchHandler))).Methods("GET")
 
-	//// API routes: accounts
-	//router.Handle("/v1/accounts", Middleware(http.HandlerFunc(AccountListHandler))).Methods("GET")
+	// API routes: accounts
+	router.Handle("/v1/accounts", Middleware(http.HandlerFunc(wb.OrganizationListHandler))).Methods("GET")
 	//router.Handle("/v1/accounts/{id}", Middleware(http.HandlerFunc(AccountGetHandler))).Methods("GET")
 	//router.Handle("/v1/accounts/{id}", Middleware(http.HandlerFunc(AccountUpdateHandler))).Methods("PUT")
 	//router.Handle("/v1/accounts", Middleware(http.HandlerFunc(AccountCreateHandler))).Methods("POST")

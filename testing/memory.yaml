@@ -1,0 +1,9 @@
+driver: memory
+datasource: .
+jwtSecret: 6eUGq42zM7KJriquYZ8G1S6yfHsG42AZR7kXdDvjE
+localport: "8010"
+deviceTwinAPIServiceUrl: http://localhost:8040/api/
+urlHost: management:8010
+urlScheme: http
+storeURL: https://api.snapcraft.io/api/v1/
+version: "0.1"

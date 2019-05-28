@@ -36,16 +36,16 @@ var settings *config.Settings
 
 func getSettings() *config.Settings {
 	if settings == nil {
-		settings, _ = config.Config("../settings.yaml")
+		settings, _ = config.Config("../testing/memory.yaml")
 	}
 	return settings
 }
 
-func sendRequest(method, url string, data io.Reader, srv *Service, jwtSecret string, permissions int) *httptest.ResponseRecorder {
+func sendRequest(method, url string, data io.Reader, srv *Service, username, jwtSecret string, permissions int) *httptest.ResponseRecorder {
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest(method, url, data)
 
-	if err := createJWTWithRole(jwtSecret, r, permissions); err != nil {
+	if err := createJWTWithRole(username, jwtSecret, r, permissions); err != nil {
 		log.Fatalf("Error creating JWT: %v", err)
 	}
 
@@ -54,8 +54,8 @@ func sendRequest(method, url string, data io.Reader, srv *Service, jwtSecret str
 	return w
 }
 
-func createJWTWithRole(jwtSecret string, r *http.Request, role int) error {
-	sreg := map[string]string{"nickname": "jamesj", "fullname": "JJ", "email": "jj@example.com"}
+func createJWTWithRole(username, jwtSecret string, r *http.Request, role int) error {
+	sreg := map[string]string{"nickname": username, "fullname": "JJ", "email": "jj@example.com"}
 	resp := openid.Response{ID: "identity", Teams: []string{}, SReg: sreg}
 	jwtToken, err := usso.NewJWTToken(jwtSecret, &resp, role)
 	if err != nil {

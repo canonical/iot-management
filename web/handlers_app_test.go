@@ -40,7 +40,7 @@ func TestService_IndexHandler(t *testing.T) {
 			indexTemplate = tt.template
 			db := memory.NewStore()
 			wb := NewService(getSettings(), manage.NewMockManagement(db))
-			w := sendRequest("GET", "/", nil, wb, wb.Settings.JwtSecret, 100)
+			w := sendRequest("GET", "/", nil, wb, "jamesj", wb.Settings.JwtSecret, 100)
 			if w.Code != tt.want {
 				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
 			}
@@ -58,12 +58,12 @@ func TestService_VersionTokenHandler(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			db := memory.NewStore()
 			wb := NewService(getSettings(), manage.NewMockManagement(db))
-			w := sendRequest("GET", "/v1/version", nil, wb, wb.Settings.JwtSecret, 100)
+			w := sendRequest("GET", "/v1/version", nil, wb, "jamesj", wb.Settings.JwtSecret, 100)
 			if w.Code != http.StatusOK {
 				t.Errorf("Expected HTTP status '%d', got: %v", http.StatusOK, w.Code)
 			}
 
-			w = sendRequest("GET", "/v1/token", nil, wb, wb.Settings.JwtSecret, 100)
+			w = sendRequest("GET", "/v1/token", nil, wb, "jamesj", wb.Settings.JwtSecret, 100)
 			if w.Code != http.StatusOK {
 				t.Errorf("Expected HTTP status '%d', got: %v", http.StatusOK, w.Code)
 			}

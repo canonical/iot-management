@@ -38,7 +38,7 @@ import (
 
 func TestLoginHandlerUSSORedirect(t *testing.T) {
 	// Mock the database
-	settings, _ := config.Config("../../settings.yaml")
+	settings, _ := config.Config("../../testing/memory.yaml")
 	db := memory.NewStore()
 
 	w := httptest.NewRecorder()
@@ -57,23 +57,23 @@ func TestLoginHandlerUSSORedirect(t *testing.T) {
 	}
 
 	// Check that the redirect is to the Ubuntu SSO service
-	url := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
-	if url != usso.ProductionUbuntuSSOServer.LoginURL() {
-		t.Errorf("Unexpected redirect URL: %v", url)
+	urlSSO := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
+	if urlSSO != usso.ProductionUbuntuSSOServer.LoginURL() {
+		t.Errorf("Unexpected redirect URL: %v", urlSSO)
 	}
 }
 
 func TestLoginHandlerReturn(t *testing.T) {
 	// Response parameters from OpenID login
-	const url = "/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=id_res&openid.op_endpoint=https://login.ubuntu.com/%2Bopenid&openid.claimed_id=https://login.ubuntu.com/%2Bid/AAAAAA&openid.identity=https://login.ubuntu.com/%2Bid/AAAAAA&openid.return_to=http://return.to&openid.response_nonce=2005-05-15T17:11:51ZUNIQUE&openid.assoc_handle=1&openid.signed=op_endpoint,return_to,response_nonce,assoc_handle,claimed_id,identity,sreg.email,sreg.fullname&openid.sig=AAAA&openid.ns.sreg=http://openid.net/extensions/sreg/1.1&openid.sreg.email=a@example.org&openid.sreg.fullname=A&openid.sreg.nickname=jamesj"
+	const urlSSO = "/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=id_res&openid.op_endpoint=https://login.ubuntu.com/%2Bopenid&openid.claimed_id=https://login.ubuntu.com/%2Bid/AAAAAA&openid.identity=https://login.ubuntu.com/%2Bid/AAAAAA&openid.return_to=http://return.to&openid.response_nonce=2005-05-15T17:11:51ZUNIQUE&openid.assoc_handle=1&openid.signed=op_endpoint,return_to,response_nonce,assoc_handle,claimed_id,identity,sreg.email,sreg.fullname&openid.sig=AAAA&openid.ns.sreg=http://openid.net/extensions/sreg/1.1&openid.sreg.email=a@example.org&openid.sreg.fullname=A&openid.sreg.nickname=jamesj"
 
 	// Mock the database and OpenID verification
-	settings, _ := config.Config("../../settings.yaml")
+	settings, _ := config.Config("../../testing/memory.yaml")
 	db := memory.NewStore()
 	verify = verifySuccess
 
 	w := httptest.NewRecorder()
-	r, _ := http.NewRequest("GET", url, nil)
+	r, _ := http.NewRequest("GET", urlSSO, nil)
 	resp, req, s, err := LoginHandler(settings, db.OpenIDNonceStore(), w, r)
 
 	if err != nil {
@@ -92,15 +92,15 @@ func TestLoginHandlerReturn(t *testing.T) {
 
 func TestLoginHandlerReturnBad(t *testing.T) {
 	// Response parameters from OpenID login (with empty nickname)
-	const url = "/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=id_res&openid.op_endpoint=https://login.ubuntu.com/%2Bopenid&openid.claimed_id=https://login.ubuntu.com/%2Bid/AAAAAA&openid.identity=https://login.ubuntu.com/%2Bid/AAAAAA&openid.return_to=http://return.to&openid.response_nonce=2005-05-15T17:11:51ZUNIQUE&openid.assoc_handle=1&openid.signed=op_endpoint,return_to,response_nonce,assoc_handle,claimed_id,identity,sreg.email,sreg.fullname&openid.sig=AAAA&openid.ns.sreg=http://openid.net/extensions/sreg/1.1&openid.sreg.email=a@example.org&openid.sreg.fullname=A&openid.sreg.nickname="
+	const urlSSO = "/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=id_res&openid.op_endpoint=https://login.ubuntu.com/%2Bopenid&openid.claimed_id=https://login.ubuntu.com/%2Bid/AAAAAA&openid.identity=https://login.ubuntu.com/%2Bid/AAAAAA&openid.return_to=http://return.to&openid.response_nonce=2005-05-15T17:11:51ZUNIQUE&openid.assoc_handle=1&openid.signed=op_endpoint,return_to,response_nonce,assoc_handle,claimed_id,identity,sreg.email,sreg.fullname&openid.sig=AAAA&openid.ns.sreg=http://openid.net/extensions/sreg/1.1&openid.sreg.email=a@example.org&openid.sreg.fullname=A&openid.sreg.nickname="
 
 	// Mock the database and OpenID verification
-	settings, _ := config.Config("../../settings.yaml")
+	settings, _ := config.Config("../../testing/memory.yaml")
 	db := memory.NewStore()
 	verify = verifyFail
 
 	w := httptest.NewRecorder()
-	r, _ := http.NewRequest("GET", url, nil)
+	r, _ := http.NewRequest("GET", urlSSO, nil)
 	resp, req, s, err := LoginHandler(settings, db.OpenIDNonceStore(), w, r)
 
 	if err == nil {

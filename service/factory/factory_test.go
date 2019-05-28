@@ -17,30 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package config
+package factory
 
 import (
-	"os"
 	"testing"
+
+	"github.com/CanonicalLtd/iot-management/config"
 )
 
-func TestReadConfig(t *testing.T) {
-	settings, err := Config("../testing/memory.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
+func TestCreateDataStore(t *testing.T) {
+	tests := []struct {
+		name    string
+		wantErr bool
+	}{
+		{"valid", false},
 	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			settings, err := config.Config("../../testing/memory.yaml")
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CreateDataStore() settings = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 
-func TestReadConfigNew(t *testing.T) {
-	settings, err := Config("./settings.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
+			_, err = CreateDataStore(settings)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CreateDataStore() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-	_ = os.Remove("./settings.yaml")
 }

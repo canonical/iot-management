@@ -17,34 +17,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package memory
+package main
 
 import (
+	"github.com/CanonicalLtd/iot-management/datastore/memory"
 	"testing"
 )
 
-func TestStore_OrgUserAccess(t *testing.T) {
+func Test_run_success(t *testing.T) {
+	tests := []struct {
+		name    string
+		user    string
+		wantErr bool
+	}{
+		{"valid", "john", false},
+		{"valid-no-user", "", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db := memory.NewStore()
+			err := run(db, tt.user, "User", "j@example.com")
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CreateSuperUser.Run() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_main(t *testing.T) {
 	type args struct {
-		orgID    string
-		username string
-		role     int
+		user string
 	}
 	tests := []struct {
 		name string
 		args args
-		want bool
 	}{
-		{"valid", args{"abc", "jamesj", 200}, true},
-		{"valid-superuser", args{"abc", "jamesj", 300}, true},
-		{"invalid-org", args{"invalid", "jamesj", 200}, false},
-		{"invalid-user", args{"abc", "invalid", 200}, false},
+		{"valid", args{"john"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mem := NewStore()
-			if got := mem.OrgUserAccess(tt.args.orgID, tt.args.username, tt.args.role); got != tt.want {
-				t.Errorf("Store.OrgUserAccess() = %v, want %v", got, tt.want)
-			}
+			parseFlags = func() {}
+			username = tt.args.user
+			main()
 		})
 	}
 }

@@ -17,30 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package config
+package factory
 
 import (
-	"os"
-	"testing"
+	"fmt"
+	"github.com/CanonicalLtd/iot-management/config"
+	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/CanonicalLtd/iot-management/datastore/memory"
+	"github.com/CanonicalLtd/iot-management/datastore/postgres"
 )
 
-func TestReadConfig(t *testing.T) {
-	settings, err := Config("../testing/memory.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
+// CreateDataStore is the factory method to create a data store
+func CreateDataStore(settings *config.Settings) (datastore.DataStore, error) {
+	var db datastore.DataStore
+	switch settings.Driver {
+	case "memory":
+		db = memory.NewStore()
+	case "postgres":
+		db = postgres.OpenStore(settings.Driver, settings.DataSource)
+	default:
+		return nil, fmt.Errorf("unknown data store driver: %v", settings.Driver)
 	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-}
 
-func TestReadConfigNew(t *testing.T) {
-	settings, err := Config("./settings.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
-	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-	_ = os.Remove("./settings.yaml")
+	return db, nil
 }

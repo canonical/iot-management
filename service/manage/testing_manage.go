@@ -102,3 +102,25 @@ func (m *MockManage) GroupList(orgID, username string, role int) web.GroupsRespo
 	twin := twinapi.NewMockClient("")
 	return twin.GroupList(orgID)
 }
+
+// OrganizationsForUser mocks organizations for a user
+func (m *MockManage) OrganizationsForUser(username string) ([]domain.Organization, error) {
+	if username == "invalid" {
+		return nil, fmt.Errorf("MOCK error user org")
+	}
+	if username != "jamesj" {
+		return []domain.Organization{}, nil
+	}
+	return []domain.Organization{{OrganizationID: "abc", Name: "Example Org"}}, nil
+}
+
+// OrganizationGet mocks fetching a user
+func (m *MockManage) OrganizationGet(orgID string) (domain.Organization, error) {
+	if orgID != "invalid" {
+		return domain.Organization{}, fmt.Errorf("MOCK error get")
+	}
+	if orgID != "abc" {
+		return domain.Organization{}, nil
+	}
+	return domain.Organization{OrganizationID: "abc", Name: "Example Org"}, nil
+}

@@ -26,22 +26,25 @@ import (
 	"testing"
 )
 
-func TestService_UserListHandler(t *testing.T) {
+func TestService_OrganizationListHandler(t *testing.T) {
 	tests := []struct {
 		name        string
 		url         string
+		username    string
 		permissions int
 		want        int
 		wantErr     string
 	}{
-		{"valid", "/v1/users", 300, http.StatusOK, ""},
-		{"invalid-permissions", "/v1/users", 200, http.StatusOK, "UserAuth"},
+		{"valid", "/v1/accounts", "jamesj", 300, http.StatusOK, ""},
+		{"invalid-permissions", "/v1/accounts", "jamesj", 0, http.StatusOK, "UserAuth"},
+		{"valid", "/v1/accounts", "unknown", 300, http.StatusOK, ""},
+		{"invalid-user", "/v1/accounts", "invalid", 200, http.StatusOK, "OrgList"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			db := memory.NewStore()
 			wb := NewService(getSettings(), manage.NewMockManagement(db))
-			w := sendRequest("GET", tt.url, nil, wb, "jamesj", wb.Settings.JwtSecret, tt.permissions)
+			w := sendRequest("GET", tt.url, nil, wb, tt.username, wb.Settings.JwtSecret, tt.permissions)
 			if w.Code != tt.want {
 				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
 			}
@@ -51,7 +54,7 @@ func TestService_UserListHandler(t *testing.T) {
 				t.Errorf("Error parsing response: %v", err)
 			}
 			if resp.Code != tt.wantErr {
-				t.Errorf("Web.UserListHandler() got = %v, want %v", resp.Code, tt.wantErr)
+				t.Errorf("Web.OrganizationListHandler() got = %v, want %v", resp.Code, tt.wantErr)
 			}
 		})
 	}

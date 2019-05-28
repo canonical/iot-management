@@ -35,12 +35,12 @@ const (
 	Version           = "0.1"
 	paramsPath        = "."
 	paramsFilename    = "settings.yaml"
-	defaultURLHost    = "management:8008"
+	defaultURLHost    = "management:8010"
 	defaultURLScheme  = "http"
-	defaultLocalPort  = "8008"
+	defaultLocalPort  = "8010"
 	defaultDriver     = "memory"
-	defaultDataSource = "management.db"
-	defaultMQTTAPIUrl = "http://localhost:8007/api/"
+	defaultDataSource = ""
+	defaultMQTTAPIUrl = "http://localhost:8040/api/"
 	defaultStoreURL   = "https://api.snapcraft.io/api/v1/"
 )
 
@@ -54,7 +54,6 @@ type Settings struct {
 	URLHost          string `yaml:"urlHost"`
 	URLScheme        string `yaml:"urlScheme"`
 	StoreURL         string `yaml:"storeURL"`
-	AccountFilter    bool   `yaml:"accountFilter"`
 	Version          string
 }
 
@@ -84,7 +83,7 @@ func Config(filePath string) (*Settings, error) {
 			return nil, err
 		}
 		settings.JwtSecret = secret
-		Store(settings, filePath)
+		_ = Store(settings, filePath)
 	}
 
 	return settings, nil
@@ -112,7 +111,7 @@ func Store(c *Settings, p string) error {
 		log.Printf("Error storing config parameters: %v", err)
 		return err
 	}
-	f.Sync()
+	_ = f.Sync()
 
 	// // Restrict access to the file
 	// err = os.Chmod(p, 0600)
@@ -161,15 +160,11 @@ func parseArgs(c *Settings) {
 		storeURL = defaultStoreURL
 	}
 
-	// Set the application settings from the command-line parameters
+	// Set the application settings from the environment/default parameters
 	c.Version = Version
 	c.LocalPort = defaultLocalPort
 	c.Driver = driver
-	if len(paramsPath) > 0 {
-		c.DataSource = getDataPath()
-	} else {
-		c.DataSource = datasource
-	}
+	c.DataSource = datasource
 	c.URLHost = urlHost
 	c.URLScheme = urlScheme
 	c.DeviceTwinAPIUrl = urlDeviceTwinAPI
@@ -179,9 +174,4 @@ func parseArgs(c *Settings) {
 // GetPath returns the path to the settings file
 func GetPath() string {
 	return path.Join(paramsPath, paramsFilename)
-}
-
-// getDataPath returns the path to the database
-func getDataPath() string {
-	return path.Join(paramsPath, defaultDataSource)
 }

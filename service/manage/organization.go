@@ -17,30 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package config
+package manage
 
-import (
-	"os"
-	"testing"
-)
+import "github.com/CanonicalLtd/iot-management/domain"
 
-func TestReadConfig(t *testing.T) {
-	settings, err := Config("../testing/memory.yaml")
+// OrganizationsForUser fetches the organizations for a user
+func (srv *Management) OrganizationsForUser(username string) ([]domain.Organization, error) {
+	orgs, err := srv.DB.OrganizationsForUser(username)
 	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
+		return nil, err
 	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
+
+	oo := []domain.Organization{}
+	for _, o := range orgs {
+		oo = append(oo, domain.Organization{
+			OrganizationID: o.OrganizationID,
+			Name:           o.Name,
+		})
 	}
+	return oo, nil
 }
 
-func TestReadConfigNew(t *testing.T) {
-	settings, err := Config("./settings.yaml")
+// OrganizationGet fetches an organization
+func (srv *Management) OrganizationGet(orgID string) (domain.Organization, error) {
+	org, err := srv.DB.OrganizationGet(orgID)
 	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
+		return domain.Organization{}, err
 	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-	_ = os.Remove("./settings.yaml")
+	return domain.Organization{
+		OrganizationID: org.OrganizationID,
+		Name:           org.Name,
+	}, nil
 }

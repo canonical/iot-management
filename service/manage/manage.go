@@ -44,6 +44,9 @@ type Manage interface {
 	SnapConfigSet(orgID, username string, role int, deviceID, snap string, config []byte) web.StandardResponse
 
 	GroupList(orgID, username string, role int) web.GroupsResponse
+
+	OrganizationsForUser(username string) ([]domain.Organization, error)
+	OrganizationGet(orgID string) (domain.Organization, error)
 }
 
 // Management implementation of the management service use cases

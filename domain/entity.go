@@ -27,3 +27,9 @@ type User struct {
 	Email    string `json:"email"`
 	Role     int    `json:"role"`
 }
+
+// Organization holds details of the organization
+type Organization struct {
+	OrganizationID string `json:"orgid"`
+	Name           string `json:"name"`
+}

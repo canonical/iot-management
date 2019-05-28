@@ -25,7 +25,7 @@ import "time"
 //
 // * Invalid:	default value set in case there is no authentication previous process for this user and thus not got a valid role.
 // * Standard:	role for regular users. This is the less privileged role
-// * Admin:		role for admin users, including standard role permissions but not superuser ones
+// * Admin:		role for createsuperuser users, including standard role permissions but not superuser ones
 // * Superuser:	role for users having all the permissions
 const (
 	Invalid   = iota       // 0
@@ -33,12 +33,6 @@ const (
 	Admin                  // 200
 	Superuser              // 300
 )
-
-// RoleName holds the names for each of the roles
-var RoleName = map[int]string{0: "", 100: "standard", 200: "admin", 300: "superuser"}
-
-// RoleID holds the ID for each of the named roles
-var RoleID = map[string]int{"": 0, "standard": 100, "admin": 200, "superuser": 300}
 
 // User holds user personal, authentication and authorization info
 type User struct {
@@ -52,8 +46,10 @@ type User struct {
 // OpenidNonceMaxAge is the maximum age of stored nonces. Any nonces older
 // than this will automatically be rejected. Stored nonces older
 // than this will periodically be purged from the database.
-const OpenidNonceMaxAge = maxNonceAgeInSeconds * time.Second
-const maxNonceAgeInSeconds = 60
+const OpenidNonceMaxAge = MaxNonceAgeInSeconds * time.Second
+
+// MaxNonceAgeInSeconds is the nonce age
+const MaxNonceAgeInSeconds = 60
 
 // OpenidNonce holds the details of the nonce, combining a timestamp and random text
 type OpenidNonce struct {

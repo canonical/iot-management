@@ -17,30 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package config
+package postgres
 
-import (
-	"os"
-	"testing"
+const createUserTableSQL = `
+CREATE TABLE IF NOT EXISTS userinfo (
+   id             serial primary key,
+   created        timestamp default current_timestamp,
+   modified       timestamp default current_timestamp,
+   username       varchar(200) unique not null,
+   name           varchar(200) not null,
+   email          varchar(200) not null,
+   user_role      int not null
 )
+`
 
-func TestReadConfig(t *testing.T) {
-	settings, err := Config("../testing/memory.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
-	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-}
-
-func TestReadConfigNew(t *testing.T) {
-	settings, err := Config("./settings.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
-	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-	_ = os.Remove("./settings.yaml")
-}
+const createUserSQL = "insert into userinfo (username, name, email, user_role) values ($1,$2,$3,$4) returning id"
+const listUsersSQL = "select id, username, name, email, user_role from userinfo order by username"
+const getUserSQL = "select id, username, name, email, user_role from userinfo where username=$1"

@@ -31,7 +31,7 @@ var settings *config.Settings
 
 func getSettings() *config.Settings {
 	if settings == nil {
-		settings, _ = config.Config("../../settings.yaml")
+		settings, _ = config.Config("../../testing/memory.yaml")
 	}
 	return settings
 }

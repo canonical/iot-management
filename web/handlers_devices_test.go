@@ -44,7 +44,7 @@ func TestService_DeviceHandlers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			db := memory.NewStore()
 			wb := NewService(getSettings(), manage.NewMockManagement(db))
-			w := sendRequest("GET", tt.url, nil, wb, wb.Settings.JwtSecret, tt.permissions)
+			w := sendRequest("GET", tt.url, nil, wb, "jamesj", wb.Settings.JwtSecret, tt.permissions)
 			if w.Code != tt.want {
 				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
 			}

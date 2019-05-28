@@ -32,12 +32,12 @@ import (
 
 func TestLoginHandlerUSSORedirect(t *testing.T) {
 	// Mock the services
-	settings, _ := config.Config("../settings.yaml")
+	settings, _ := config.Config("../testing/memory.yaml")
 	db := memory.NewStore()
 	m := manage.NewMockManagement(db)
 	wb := NewService(settings, m)
 
-	w := sendRequest("GET", "/login", nil, wb, wb.Settings.JwtSecret, 100)
+	w := sendRequest("GET", "/login", nil, wb, "jamesj", wb.Settings.JwtSecret, 100)
 
 	if w.Code != http.StatusFound {
 		t.Errorf("Expected HTTP status '302', got: %v", w.Code)
@@ -46,11 +46,12 @@ func TestLoginHandlerUSSORedirect(t *testing.T) {
 	u, err := url.Parse(w.Header().Get("Location"))
 	if err != nil {
 		t.Errorf("Error Parsing the redirect URL: %v", u)
+		return
 	}
 
 	// Check that the redirect is to the Ubuntu SSO service
-	url := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
-	if url != usso.ProductionUbuntuSSOServer.LoginURL() {
-		t.Errorf("Unexpected redirect URL: %v", url)
+	ssoURL := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
+	if ssoURL != usso.ProductionUbuntuSSOServer.LoginURL() {
+		t.Errorf("Unexpected redirect URL: %v", ssoURL)
 	}
 }

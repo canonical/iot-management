@@ -29,4 +29,6 @@ type DataStore interface {
 	UserList() ([]User, error)
 
 	OrgUserAccess(orgID, username string, role int) bool
+	OrganizationsForUser(username string) ([]Organization, error)
+	OrganizationGet(orgID string) (Organization, error)
 }

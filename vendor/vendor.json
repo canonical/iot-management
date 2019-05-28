@@ -135,6 +135,24 @@
 			"revisionTime": "2019-02-11T10:18:09Z"
 		},
 		{
+			"checksumSHA1": "F6mCaMfANCOCP8pLnk94HmRyVpg=",
+			"path": "github.com/lib/pq",
+			"revision": "2ff3cb3adc01768e0a552b3a02575a6df38a9bea",
+			"revisionTime": "2019-05-07T19:18:18Z"
+		},
+		{
+			"checksumSHA1": "AU3fA8Sm33Vj9PBoRPSeYfxLRuE=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "2ff3cb3adc01768e0a552b3a02575a6df38a9bea",
+			"revisionTime": "2019-05-07T19:18:18Z"
+		},
+		{
+			"checksumSHA1": "ywel3wHXnu1eLhyT1/FolporeAc=",
+			"path": "github.com/lib/pq/scram",
+			"revision": "2ff3cb3adc01768e0a552b3a02575a6df38a9bea",
+			"revisionTime": "2019-05-07T19:18:18Z"
+		},
+		{
 			"checksumSHA1": "I7hloldMJZTqUx6hbVDp5nk9fZQ=",
 			"path": "github.com/pkg/errors",
 			"revision": "27936f6d90f9c8e1145f11ed52ffffbfdb9e0af7",

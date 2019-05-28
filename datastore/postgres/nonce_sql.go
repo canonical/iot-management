@@ -17,30 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package config
+package postgres
 
-import (
-	"os"
-	"testing"
-)
+const createNonceTableSQL = `
+ CREATE TABLE IF NOT EXISTS openidnonce (
+	 id             serial primary key,
+	 nonce          varchar(255) not null,
+	 endpoint       varchar(255) not null,
+	 timestamp      int not null
+ )
+`
 
-func TestReadConfig(t *testing.T) {
-	settings, err := Config("../testing/memory.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
-	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-}
-
-func TestReadConfigNew(t *testing.T) {
-	settings, err := Config("./settings.yaml")
-	if err != nil {
-		t.Errorf("Error reading config file: %v", err)
-	}
-	if len(settings.JwtSecret) == 0 {
-		t.Errorf("Error generating JWT secret: %v", err)
-	}
-	_ = os.Remove("./settings.yaml")
-}
+const createOpenidNonceSQL = "INSERT INTO openidnonce (nonce, endpoint, timestamp) VALUES ($1, $2, $3)"
+const deleteExpiredOpenidNonceSQL = "DELETE FROM openidnonce where timestamp<$1"

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: management
+spec:
+  selector:
+    matchLabels:
+      app: management
+      tier: frontend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: management
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+        - name: management
+          image: iot-management
+          imagePullPolicy: Never
+          env:
+            - name: DRIVER
+              value: "postgres"
+            - name: DATASOURCE
+              value: "dbname=management host=postgres user=manager password=m8v8l7IbOws81Kq sslmode=disable"
+            - name: HOST
+              value: "management:8010"
+            - name: SCHEME
+              value: "http"
+            - name: MQTTAPI
+              value: "http://devicetwin:8040/api/"
+            - name: STOREURL
+              value: "https://api.snapcraft.io/api/v1/"
+          ports:
+            - containerPort: 8010
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: management
+spec:
+  selector:
+    app: management
+    tier: frontend
+  ports:
+    - port: 8010
+      protocol: TCP

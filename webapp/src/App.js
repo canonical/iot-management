@@ -70,19 +70,19 @@ class App extends Component {
             var selectedAccount = this.state.selectedAccount;
 
             // Reset selected if we're not filtering accounts
-            if (!this.props.token.accountFilter) {
-              selectedAccount = {code: 'all'}
-            }
+            // if (!this.props.token.accountFilter) {
+            //   selectedAccount = {code: 'all'}
+            // }
 
-            if ((!this.state.selectedAccount.code) && (!getAccount().code) && (this.props.token.accountFilter)) {
+            if ((!this.state.selectedAccount.code) && (!getAccount().code)) {
               // Set to the first in the account list
-              if (response.data.accounts.length > 0) {
-                selectedAccount = response.data.accounts[0]
+              if (response.data.organizations.length > 0) {
+                selectedAccount = response.data.organizations[0]
                 saveAccount(selectedAccount)
               }
             }
 
-            this.setState({accounts: response.data.accounts, selectedAccount: selectedAccount})
+            this.setState({accounts: response.data.organizations, selectedAccount: selectedAccount})
             this.updateDataForRoute(selectedAccount, false)
         })
     }

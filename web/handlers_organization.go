@@ -19,6 +19,40 @@
 
 package web
 
+import (
+	"github.com/CanonicalLtd/iot-devicetwin/web"
+	"github.com/CanonicalLtd/iot-management/domain"
+	"net/http"
+)
+
+// OrganizationsResponse defines the response to list users
+type OrganizationsResponse struct {
+	web.StandardResponse
+	Organizations []domain.Organization `json:"organizations"`
+}
+
+func formatOrganizationsResponse(orgs []domain.Organization, w http.ResponseWriter) {
+	response := OrganizationsResponse{Organizations: orgs}
+	_ = encodeResponse(response, w)
+}
+
+// OrganizationListHandler returns the list of accounts
+func (wb Service) OrganizationListHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsStandardAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	orgs, err := wb.Manage.OrganizationsForUser(user.Username)
+	if err != nil {
+		formatStandardResponse("OrgList", err.Error(), w)
+		return
+	}
+	formatOrganizationsResponse(orgs, w)
+}
+
 //// AccountsResponse is the JSON response from the API Accounts method
 //type AccountsResponse struct {
 //	Success      bool                `json:"success"`
@@ -82,8 +116,8 @@ package web
 //	return nil
 //}
 //
-//// AccountListHandler returns the list of accounts
-//func (wb Service) AccountListHandler(w http.ResponseWriter, r *http.Request) {
+//// OrganizationListHandler returns the list of accounts
+//func (wb Service) OrganizationListHandler(w http.ResponseWriter, r *http.Request) {
 //	w.Header().Set("Content-Type", JSONHeader)
 //
 //	authUser, err := wb.checkIsStandardAndGetUserFromJWT(w, r)

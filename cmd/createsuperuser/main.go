@@ -20,17 +20,19 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"github.com/CanonicalLtd/iot-management/config"
+	"github.com/CanonicalLtd/iot-management/datastore"
 	"github.com/CanonicalLtd/iot-management/service/factory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
-	"github.com/CanonicalLtd/iot-management/twinapi"
-	"github.com/CanonicalLtd/iot-management/web"
 	"log"
+	"os"
 )
+
+var username, name, email string
 
 func main() {
 	// Parse the command line arguments
-	log.Println("Open config file", config.GetPath())
 	settings, err := config.Config(config.GetPath())
 	if err != nil {
 		log.Fatalf("Error parsing the config file: %v", err)
@@ -42,16 +44,36 @@ func main() {
 		log.Fatalf("Error accessing data store: %v", settings.Driver)
 	}
 
-	// Initialize the device twin client
-	twinAPI, err := twinapi.NewClientAdapter(settings.DeviceTwinAPIUrl)
+	// Get the command line parameters
+	parseFlags()
+
+	// Create the user
+	err = run(db, username, name, email)
 	if err != nil {
-		log.Fatalf("Error connecting to the device twin service: %v", err)
+		fmt.Println("Error creating user:", err.Error())
+		os.Exit(1)
+	}
+}
+
+func run(db datastore.DataStore, username, name, email string) error {
+	if len(username) == 0 {
+		return fmt.Errorf("the username must be supplied")
 	}
 
-	// Create the main services
-	srv := manage.NewManagement(settings, db, twinAPI)
+	// Create the user
+	user := datastore.User{
+		Username: username,
+		Name:     name,
+		Email:    email,
+		Role:     datastore.Superuser,
+	}
+	_, err := db.CreateUser(user)
+	return err
+}
 
-	// Start the web service
-	www := web.NewService(settings, srv)
-	log.Fatal(www.Run())
+var parseFlags = func() {
+	flag.StringVar(&username, "username", "", "Ubuntu SSO username of the user (https://login.ubuntu.com/)")
+	flag.StringVar(&name, "name", "Super User", "Full name of the user")
+	flag.StringVar(&email, "email", "user@example.com", "Email address of the user")
+	flag.Parse()
 }
