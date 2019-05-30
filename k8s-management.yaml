@@ -29,8 +29,8 @@ spec:
               value: "management:8010"
             - name: SCHEME
               value: "http"
-            - name: MQTTAPI
-              value: "http://devicetwin:8040/api/"
+            - name: DEVICETWINAPI
+              value: "http://devicetwin:8040/v1/"
             - name: STOREURL
               value: "https://api.snapcraft.io/api/v1/"
           ports:
