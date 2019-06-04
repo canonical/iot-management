@@ -21,6 +21,8 @@ package memory
 
 import (
 	"testing"
+
+	"github.com/CanonicalLtd/iot-management/datastore"
 )
 
 func TestStore_OrgUserAccess(t *testing.T) {
@@ -102,6 +104,50 @@ func TestStore_OrganizationGet(t *testing.T) {
 			}
 			if got.OrganizationID != tt.args.orgID {
 				t.Errorf("Store.OrganizationGet() = %v, want %v", got.OrganizationID, tt.args.orgID)
+			}
+		})
+	}
+}
+
+func TestStore_OrganizationCreate(t *testing.T) {
+	type args struct {
+		org datastore.Organization
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{datastore.Organization{"def", "Test Inc"}}, false},
+		{"invalid-duplicate", args{datastore.Organization{"abc", "Test Inc"}}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mem := NewStore()
+			if err := mem.OrganizationCreate(tt.args.org); (err != nil) != tt.wantErr {
+				t.Errorf("Store.OrganizationCreate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestStore_OrganizationUpdate(t *testing.T) {
+	type args struct {
+		org datastore.Organization
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{datastore.Organization{"abc", "Test Inc"}}, false},
+		{"invalid", args{datastore.Organization{"invalid", "Test Inc"}}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mem := NewStore()
+			if err := mem.OrganizationUpdate(tt.args.org); (err != nil) != tt.wantErr {
+				t.Errorf("Store.OrganizationUpdate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

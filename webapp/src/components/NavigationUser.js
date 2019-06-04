@@ -20,25 +20,8 @@ import {T, isLoggedIn} from './Utils'
 
 
 class NavigationUser extends Component {
-
-    handleAccountChange = (e) => {
-        e.preventDefault()
-
-        // Get the account
-        var accountId = parseInt(e.target.value, 10);
-        var account = this.props.accounts.filter(a => {
-            return a.id === accountId
-        })[0]
-
-        this.props.onAccountChange(account)
-    }
-
     renderAccounts(token) {
         if (!isLoggedIn(token)) {
-            return <span />
-        }
-
-        if (!token.accountFilter) {
             return <span />
         }
 

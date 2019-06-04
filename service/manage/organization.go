@@ -19,7 +19,10 @@
 
 package manage
 
-import "github.com/CanonicalLtd/iot-management/domain"
+import (
+	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/CanonicalLtd/iot-management/domain"
+)
 
 // OrganizationsForUser fetches the organizations for a user
 func (srv *Management) OrganizationsForUser(username string) ([]domain.Organization, error) {
@@ -48,4 +51,24 @@ func (srv *Management) OrganizationGet(orgID string) (domain.Organization, error
 		OrganizationID: org.OrganizationID,
 		Name:           org.Name,
 	}, nil
+}
+
+// OrganizationCreate creates a new organization
+func (srv *Management) OrganizationCreate(org domain.Organization) error {
+	o := datastore.Organization{
+		OrganizationID: org.OrganizationID,
+		Name:           org.Name,
+	}
+
+	return srv.DB.OrganizationCreate(o)
+}
+
+// OrganizationUpdate updates an organization
+func (srv *Management) OrganizationUpdate(org domain.Organization) error {
+	o := datastore.Organization{
+		OrganizationID: org.OrganizationID,
+		Name:           org.Name,
+	}
+
+	return srv.DB.OrganizationUpdate(o)
 }

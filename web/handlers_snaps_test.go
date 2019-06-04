@@ -36,7 +36,7 @@ func TestService_SnapListHandler(t *testing.T) {
 		wantErr     string
 	}{
 		{"valid", "/v1/device/abc/a111/snaps", 300, http.StatusOK, ""},
-		{"invalid-permissions", "/v1/device/abc/a111/snaps", 0, http.StatusOK, "UserAuth"},
+		{"invalid-permissions", "/v1/device/abc/a111/snaps", 0, http.StatusBadRequest, "UserAuth"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -69,17 +69,17 @@ func TestService_SnapWorkflow(t *testing.T) {
 		wantErr     string
 	}{
 		{"install-valid", "POST", "/v1/snaps/abc/a111/helloworld", nil, 300, http.StatusOK, ""},
-		{"install-invalid-permissions", "POST", "/v1/snaps/abc/a111/helloworld", nil, 0, http.StatusOK, "UserAuth"},
+		{"install-invalid-permissions", "POST", "/v1/snaps/abc/a111/helloworld", nil, 0, http.StatusBadRequest, "UserAuth"},
 		{"delete-valid", "DELETE", "/v1/snaps/abc/a111/helloworld", nil, 300, http.StatusOK, ""},
-		{"delete-invalid-permissions", "DELETE", "/v1/snaps/abc/a111/helloworld", nil, 0, http.StatusOK, "UserAuth"},
+		{"delete-invalid-permissions", "DELETE", "/v1/snaps/abc/a111/helloworld", nil, 0, http.StatusBadRequest, "UserAuth"},
 		{"update-valid-refresh", "PUT", "/v1/snaps/abc/a111/helloworld/refresh", nil, 300, http.StatusOK, ""},
 		{"update-valid-enable", "PUT", "/v1/snaps/abc/a111/helloworld/enable", nil, 300, http.StatusOK, ""},
 		{"update-valid-disable", "PUT", "/v1/snaps/abc/a111/helloworld/disable", nil, 300, http.StatusOK, ""},
 		{"update-action-invalid", "PUT", "/v1/snaps/abc/a111/helloworld/invalid", nil, 300, http.StatusBadRequest, "SnapUpdate"},
-		{"update-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/refresh", nil, 0, http.StatusOK, "UserAuth"},
+		{"update-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/refresh", nil, 0, http.StatusBadRequest, "UserAuth"},
 		{"config-valid", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 300, http.StatusOK, ""},
 		{"config-valid-empty", "PUT", "/v1/snaps/abc/a111/helloworld/settings", nil, 300, http.StatusOK, ""},
-		{"config-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 0, http.StatusOK, "UserAuth"},
+		{"config-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 0, http.StatusBadRequest, "UserAuth"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

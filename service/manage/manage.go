@@ -47,6 +47,8 @@ type Manage interface {
 
 	OrganizationsForUser(username string) ([]domain.Organization, error)
 	OrganizationGet(orgID string) (domain.Organization, error)
+	OrganizationCreate(org domain.Organization) error
+	OrganizationUpdate(org domain.Organization) error
 }
 
 // Management implementation of the management service use cases

@@ -114,13 +114,29 @@ func (m *MockManage) OrganizationsForUser(username string) ([]domain.Organizatio
 	return []domain.Organization{{OrganizationID: "abc", Name: "Example Org"}}, nil
 }
 
-// OrganizationGet mocks fetching a user
+// OrganizationGet mocks fetching an organization
 func (m *MockManage) OrganizationGet(orgID string) (domain.Organization, error) {
-	if orgID != "invalid" {
+	if orgID == "invalid" {
 		return domain.Organization{}, fmt.Errorf("MOCK error get")
 	}
 	if orgID != "abc" {
 		return domain.Organization{}, nil
 	}
 	return domain.Organization{OrganizationID: "abc", Name: "Example Org"}, nil
+}
+
+// OrganizationCreate mocks creating an organization
+func (m *MockManage) OrganizationCreate(org domain.Organization) error {
+	if org.OrganizationID == "abc" {
+		return fmt.Errorf("MOCK error create")
+	}
+	return nil
+}
+
+// OrganizationUpdate mocks updating an organization
+func (m *MockManage) OrganizationUpdate(org domain.Organization) error {
+	if org.OrganizationID != "abc" {
+		return fmt.Errorf("MOCK error update")
+	}
+	return nil
 }

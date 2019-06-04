@@ -35,7 +35,7 @@ func TestService_UserListHandler(t *testing.T) {
 		wantErr     string
 	}{
 		{"valid", "/v1/users", 300, http.StatusOK, ""},
-		{"invalid-permissions", "/v1/users", 200, http.StatusOK, "UserAuth"},
+		{"invalid-permissions", "/v1/users", 200, http.StatusBadRequest, "UserAuth"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

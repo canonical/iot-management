@@ -148,7 +148,7 @@ class App extends Component {
   renderAccounts(sectionId, subsection) {
     
     if (!sectionId) {
-      return <Accounts token={this.props.token} />
+      return <Accounts token={this.props.token} accounts={this.state.accounts} />
     }
 
     switch(sectionId) {

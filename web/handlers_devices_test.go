@@ -35,10 +35,10 @@ func TestService_DeviceHandlers(t *testing.T) {
 		wantErr     string
 	}{
 		{"valid", "/v1/abc/devices", 300, http.StatusOK, ""},
-		{"invalid-permissions", "/v1/abc/devices", 0, http.StatusOK, "UserAuth"},
+		{"invalid-permissions", "/v1/abc/devices", 0, http.StatusBadRequest, "UserAuth"},
 
 		{"valid", "/v1/abc/devices/a111", 300, http.StatusOK, ""},
-		{"invalid-permissions", "/v1/abc/devices/a111", 0, http.StatusOK, "UserAuth"},
+		{"invalid-permissions", "/v1/abc/devices/a111", 0, http.StatusBadRequest, "UserAuth"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

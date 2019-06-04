@@ -20,8 +20,11 @@
 package web
 
 import (
+	"encoding/json"
 	"github.com/CanonicalLtd/iot-devicetwin/web"
 	"github.com/CanonicalLtd/iot-management/domain"
+	"github.com/gorilla/mux"
+	"io"
 	"net/http"
 )
 
@@ -31,8 +34,19 @@ type OrganizationsResponse struct {
 	Organizations []domain.Organization `json:"organizations"`
 }
 
+// OrganizationResponse defines the response to list users
+type OrganizationResponse struct {
+	web.StandardResponse
+	Organization domain.Organization `json:"organization"`
+}
+
 func formatOrganizationsResponse(orgs []domain.Organization, w http.ResponseWriter) {
 	response := OrganizationsResponse{Organizations: orgs}
+	_ = encodeResponse(response, w)
+}
+
+func formatOrganizationResponse(org domain.Organization, w http.ResponseWriter) {
+	response := OrganizationResponse{Organization: org}
 	_ = encodeResponse(response, w)
 }
 
@@ -53,193 +67,84 @@ func (wb Service) OrganizationListHandler(w http.ResponseWriter, r *http.Request
 	formatOrganizationsResponse(orgs, w)
 }
 
-//// AccountsResponse is the JSON response from the API Accounts method
-//type AccountsResponse struct {
-//	Success      bool                `json:"success"`
-//	ErrorCode    string              `json:"error_code"`
-//	ErrorMessage string              `json:"message"`
-//	Accounts     []datastore.Account `json:"accounts"`
-//}
-//
-//// AccountResponse is the JSON response from the API Accounts method
-//type AccountResponse struct {
-//	Success      bool              `json:"success"`
-//	ErrorCode    string            `json:"error_code"`
-//	ErrorMessage string            `json:"message"`
-//	Account      datastore.Account `json:"account"`
-//}
-//
-//// UserAccount defines an account and whether it is selected for a user
-//type UserAccount struct {
-//	datastore.Account
-//	Selected bool `json:"selected"`
-//}
-//
-//// AccountsForUserResponse is the JSON response from the API Accounts method
-//type AccountsForUserResponse struct {
-//	Success      bool          `json:"success"`
-//	ErrorCode    string        `json:"error_code"`
-//	ErrorMessage string        `json:"message"`
-//	Accounts     []UserAccount `json:"accounts"`
-//}
+// OrganizationGetHandler fetches an organization
+func (wb Service) OrganizationGetHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
 
-//func formatAccountsResponse(success bool, errorCode, message string, accounts []datastore.Account, w http.ResponseWriter) error {
-//	response := AccountsResponse{Success: success, ErrorCode: errorCode, ErrorMessage: message, Accounts: accounts}
-//
-//	// Encode the response as JSON
-//	if err := json.NewEncoder(w).Encode(response); err != nil {
-//		log.Println("Error forming the accounts response.")
-//		return err
-//	}
-//	return nil
-//}
-//
-//func formatAccountResponse(success bool, errorCode, message string, account datastore.Account, w http.ResponseWriter) error {
-//	response := AccountResponse{Success: success, ErrorCode: errorCode, ErrorMessage: message, Account: account}
-//
-//	// Encode the response as JSON
-//	if err := json.NewEncoder(w).Encode(response); err != nil {
-//		log.Println("Error forming the account response.")
-//		return err
-//	}
-//	return nil
-//}
-//
-//func formatUserAccountsResponse(success bool, errorCode, message string, accounts []UserAccount, w http.ResponseWriter) error {
-//	response := AccountsForUserResponse{Success: success, ErrorCode: errorCode, ErrorMessage: message, Accounts: accounts}
-//
-//	// Encode the response as JSON
-//	if err := json.NewEncoder(w).Encode(response); err != nil {
-//		log.Println("Error forming the accounts response.")
-//		return err
-//	}
-//	return nil
-//}
-//
-//// OrganizationListHandler returns the list of accounts
-//func (wb Service) OrganizationListHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	authUser, err := wb.checkIsStandardAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatAccountsResponse(false, "error-auth", "", nil, w)
-//		return
-//	}
-//
-//	accounts, err := datastore.Environ.DB.ListAllowedAccounts(authUser, "")
-//	if err != nil {
-//		w.WriteHeader(http.StatusInternalServerError)
-//		formatAccountsResponse(false, "error-accounts-json", err.Error(), nil, w)
-//		return
-//	}
-//
-//	// Format the model for output and return JSON response
-//	w.WriteHeader(http.StatusOK)
-//	formatAccountsResponse(true, "", "", accounts, w)
-//
-//}
-//
-//// AccountGetHandler returns a single account
-//func (wb Service) AccountGetHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatAccountResponse(false, "error-auth", "", datastore.Account{}, w)
-//		return
-//	}
-//
-//	vars := mux.Vars(r)
-//	accountID, err := strconv.Atoi(vars["id"])
-//	if err != nil {
-//		w.WriteHeader(http.StatusNotFound)
-//		formatAccountResponse(false, "error-account-invalid", "Cannot find an account for the ID", datastore.Account{}, w)
-//		return
-//	}
-//
-//	account, err := datastore.Environ.DB.GetAccount(accountID)
-//	if err != nil {
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatAccountResponse(false, "error-account-invalid", err.Error(), datastore.Account{}, w)
-//		return
-//	}
-//
-//	// Format the model for output and return JSON response
-//	w.WriteHeader(http.StatusOK)
-//	formatAccountResponse(true, "", "", account, w)
-//
-//}
-//
-//// AccountCreateHandler handles account creation
-//func (wb Service) AccountCreateHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatAccountsResponse(false, "error-auth", "", nil, w)
-//		return
-//	}
-//
-//	account := datastore.Account{}
-//	err = json.NewDecoder(r.Body).Decode(&account)
-//	switch {
-//	// Check we have some data
-//	case err == io.EOF:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatAccountResponse(false, "error-account-data", "No account data supplied", account, w)
-//		return
-//		// Check for parsing errors
-//	case err != nil:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatAccountResponse(false, "error-data-json", err.Error(), account, w)
-//		return
-//	}
-//
-//	err = datastore.Environ.DB.CreateAccount(account)
-//	if err != nil {
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatAccountResponse(false, "error-account-create", err.Error(), account, w)
-//		return
-//	}
-//
-//	formatAccountResponse(true, "", "", account, w)
-//}
-//
-//// AccountUpdateHandler handles account update
-//func (wb Service) AccountUpdateHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatAccountsResponse(false, "error-auth", "", nil, w)
-//		return
-//	}
-//
-//	account := datastore.Account{}
-//	err = json.NewDecoder(r.Body).Decode(&account)
-//	switch {
-//	// Check we have some data
-//	case err == io.EOF:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatAccountResponse(false, "error-account-data", "No account data supplied", account, w)
-//		return
-//		// Check for parsing errors
-//	case err != nil:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatAccountResponse(false, "error-data-json", err.Error(), account, w)
-//		return
-//	}
-//
-//	account, err = datastore.Environ.DB.UpdateAccount(account)
-//	if err != nil {
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatAccountResponse(false, "error-account-update", err.Error(), account, w)
-//		return
-//	}
-//
-//	formatAccountResponse(true, "", "", account, w)
-//}
-//
+	vars := mux.Vars(r)
+
+	org, err := wb.Manage.OrganizationGet(vars["id"])
+	if err != nil {
+		formatStandardResponse("OrgGet", err.Error(), w)
+		return
+	}
+
+	formatOrganizationResponse(org, w)
+}
+
+// OrganizationCreateHandler creates a new organization
+func (wb Service) OrganizationCreateHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	org := domain.Organization{}
+	err = json.NewDecoder(r.Body).Decode(&org)
+	switch {
+	// Check we have some data
+	case err == io.EOF:
+		formatStandardResponse("OrgCreate", "No organization data supplied", w)
+		return
+		// Check for parsing errors
+	case err != nil:
+		formatStandardResponse("OrgCreate", err.Error(), w)
+		return
+	}
+
+	if err = wb.Manage.OrganizationCreate(org); err != nil {
+		formatStandardResponse("OrgCreate", err.Error(), w)
+		return
+	}
+	formatStandardResponse("", "", w)
+}
+
+// OrganizationUpdateHandler updates an organization
+func (wb Service) OrganizationUpdateHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	org := domain.Organization{}
+	err = json.NewDecoder(r.Body).Decode(&org)
+	switch {
+	// Check we have some data
+	case err == io.EOF:
+		formatStandardResponse("OrgUpdate", "No organization data supplied", w)
+		return
+		// Check for parsing errors
+	case err != nil:
+		formatStandardResponse("OrgUpdate", err.Error(), w)
+		return
+	}
+
+	if err = wb.Manage.OrganizationUpdate(org); err != nil {
+		formatStandardResponse("OrgUpdate", err.Error(), w)
+		return
+	}
+	formatStandardResponse("", "", w)
+}
+
 //// AccountsForUserHandler returns the list of accounts a user can access
 //func (wb Service) AccountsForUserHandler(w http.ResponseWriter, r *http.Request) {
 //	w.Header().Set("Content-Type", JSONHeader)

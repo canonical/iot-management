@@ -20,9 +20,10 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
 	"testing"
 
+	"github.com/CanonicalLtd/iot-management/datastore/memory"
+	"github.com/CanonicalLtd/iot-management/domain"
 	"github.com/CanonicalLtd/iot-management/twinapi"
 )
 
@@ -80,6 +81,49 @@ func TestManagement_OrganizationGet(t *testing.T) {
 			}
 			if got.OrganizationID != tt.args.orgID {
 				t.Errorf("Management.OrganizationGet() = %v, want %v", got.OrganizationID, tt.args.orgID)
+			}
+		})
+	}
+}
+
+func TestManagement_OrganizationCreate(t *testing.T) {
+	type args struct {
+		org domain.Organization
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{domain.Organization{"def", "Test Inc"}}, false},
+		{"invalid-duplicate", args{domain.Organization{"abc", "Test Inc"}}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			if err := srv.OrganizationCreate(tt.args.org); (err != nil) != tt.wantErr {
+				t.Errorf("Management.OrganizationCreate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestManagement_OrganizationUpdate(t *testing.T) {
+	type args struct {
+		org domain.Organization
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{domain.Organization{"abc", "Test Inc"}}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			if err := srv.OrganizationUpdate(tt.args.org); (err != nil) != tt.wantErr {
+				t.Errorf("Management.OrganizationUpdate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

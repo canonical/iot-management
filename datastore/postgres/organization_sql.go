@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS organization (
 	id            serial primary key,
 	code          varchar(200) not null unique,
 	name          varchar(200) not null,
-	active        bool
+	active        bool default true
 )
 `
 const createOrganizationUserTableSQL = `
@@ -37,6 +37,8 @@ CREATE TABLE IF NOT EXISTS organization_user (
 
 const getOrganizationSQL = "select code, name from organization where code=$1"
 
+const createOrganizationSQL = "insert into organization (code, name) values ($1, $2) returning id"
+
 const organizationUserAccessSQL = `
 SELECT EXISTS(
 	select ou.id from organization_user ou
@@ -45,10 +47,22 @@ SELECT EXISTS(
 	where o.code=$1 and u.username=$2
 )
 `
+
 const listUserOrganizationsSQL = `
 	select a.code, a.name
 	from organization a
 	inner join organization_user l on a.id = l.org_id
 	inner join userinfo u on l.user_id = u.id
 	where u.username=$1
+`
+const listOrganizationsSQL = `
+	select code, name
+	from organization
+	where $1 = $1
+`
+
+const updateOrganizationSQL = `
+	update organization
+	set name=$2
+	where code = $1
 `

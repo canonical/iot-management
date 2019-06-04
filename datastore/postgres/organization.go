@@ -21,6 +21,7 @@ package postgres
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/CanonicalLtd/iot-management/datastore"
 	"log"
 )
@@ -66,7 +67,22 @@ func (db *Store) OrgUserAccess(orgID, username string, role int) bool {
 
 // OrganizationsForUser returns the organizations a user can access
 func (db *Store) OrganizationsForUser(username string) ([]datastore.Organization, error) {
-	rows, err := db.Query(listUserOrganizationsSQL, username)
+	var s string
+
+	// Check if the user is a superuser
+	user, err := db.GetUser(username)
+	if err != nil {
+		return nil, fmt.Errorf("error finding user: %v", err)
+	}
+
+	// No restrictions for the superuser
+	if user.Role == datastore.Superuser {
+		s = listOrganizationsSQL
+	} else {
+		s = listUserOrganizationsSQL
+	}
+
+	rows, err := db.Query(s, username)
 
 	if err != nil {
 		log.Printf("Error retrieving database accounts: %v\n", err)
@@ -90,4 +106,22 @@ func rowsToOrganizations(rows *sql.Rows) ([]datastore.Organization, error) {
 	}
 
 	return orgs, nil
+}
+
+// OrganizationCreate creates a new organization
+func (db *Store) OrganizationCreate(org datastore.Organization) error {
+	var createdID int64
+
+	err := db.QueryRow(createOrganizationSQL, org.OrganizationID, org.Name).Scan(&createdID)
+	if err != nil {
+		log.Printf("Error creating organization `%s`: %v\n", org.OrganizationID, err)
+	}
+
+	return err
+}
+
+// OrganizationUpdate updates an organization
+func (db *Store) OrganizationUpdate(org datastore.Organization) error {
+	_, err := db.Exec(updateOrganizationSQL, org.OrganizationID, org.Name)
+	return err
 }

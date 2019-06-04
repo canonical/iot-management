@@ -86,3 +86,42 @@ func (mem *Store) organizationGet(orgID string) (datastore.Organization, error) 
 
 	return datastore.Organization{}, fmt.Errorf("error finding organization `%s`", orgID)
 }
+
+// OrganizationCreate creates a new organization
+func (mem *Store) OrganizationCreate(org datastore.Organization) error {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	_, err := mem.organizationGet(org.OrganizationID)
+	if err == nil {
+		return fmt.Errorf("organization already exists `%s`", org.OrganizationID)
+	}
+
+	mem.Orgs = append(mem.Orgs, org)
+	return nil
+}
+
+// OrganizationUpdate updates an organization
+func (mem *Store) OrganizationUpdate(org datastore.Organization) error {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	found := false
+	orgs := []datastore.Organization{}
+
+	for _, o := range mem.Orgs {
+		if o.OrganizationID == org.OrganizationID {
+			orgs = append(orgs, org)
+			found = true
+			continue
+		}
+		orgs = append(orgs, o)
+	}
+
+	if !found {
+		return fmt.Errorf("organization not found: %s", org.OrganizationID)
+	}
+
+	mem.Orgs = orgs
+	return nil
+}

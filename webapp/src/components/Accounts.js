@@ -17,26 +17,17 @@
 
 
 import React, {Component} from 'react';
-import api from '../models/api';
 import AlertBox from './AlertBox';
 import {T, isUserAdmin, isUserSuperuser} from './Utils';
 
 class Accounts extends Component {
     
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             message: null,
             accounts: [],
         };
-
-        this.getAccounts();
-    }
-
-    getAccounts () {
-        api.accountsList().then(response => {
-            this.setState({accounts: response.data.accounts})
-        })
     }
 
     renderTable(items) {
@@ -47,7 +38,7 @@ class Accounts extends Component {
                 <table>
                 <thead>
                     <tr>
-                    <th>{T('code')}</th><th>{T('name')}</th><th>{T('active')}</th>
+                    <th>{T('code')}</th><th>{T('name')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,12 +56,11 @@ class Accounts extends Component {
 
     renderRows(items) {
         return items.map((l) => {
-          var isSuperuser = isUserSuperuser(this.props.token)
+          let isSuperuser = isUserSuperuser(this.props.token);
           return (
             <tr key={l.id}>
-                <td>{isSuperuser ? <a href={'/accounts/' + l.id}>{l.code}</a> : l.code}</td>
+                <td>{isSuperuser ? <a href={'/accounts/' + l.orgid}>{l.orgid}</a> : l.orgid}</td>
                 <td>{l.name}</td>
-                <td>{l.active ? <i className="fa fa-check" /> :  <i className="fa fa-times" />}</td>
             </tr>
           );
         });
@@ -85,7 +75,7 @@ class Accounts extends Component {
                 </div>
             )
         }
-        var isSuperuser = isUserSuperuser(this.props.token)
+        let isSuperuser = isUserSuperuser(this.props.token);
 
         return (
             <div className="row">
@@ -108,7 +98,7 @@ class Accounts extends Component {
                 </section>
 
                 <section className="row">
-                    {this.renderTable(this.state.accounts)}
+                    {this.renderTable(this.props.accounts)}
                 </section>
             </div>
         )

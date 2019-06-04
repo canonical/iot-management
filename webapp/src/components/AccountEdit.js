@@ -24,7 +24,7 @@ import {T, isUserSuperuser, formatError} from './Utils';
 class AccountEdit extends Component {
     
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             title: null,
             error: null,
@@ -45,7 +45,7 @@ class AccountEdit extends Component {
 
     getAccount(id) {
         api.accountsGet(id).then(response => {
-            this.setState({account: response.data.account});
+            this.setState({account: response.data.organization});
         })
         .catch((e) => {
             this.setState({error: formatError(e.response.data), hideForm: true});
@@ -58,7 +58,7 @@ class AccountEdit extends Component {
 
     handleChangeCode = (e) => {
         var account = this.state.account;
-        account['code'] = e.target.value;
+        account['orgid'] = e.target.value;
         this.setState({account: account});
     }
 
@@ -111,6 +111,10 @@ class AccountEdit extends Component {
             )
         }
 
+        if (!this.state.account.orgid) {
+            return <div />
+        }
+
         return (
             <div className="row">
                 <section className="row">
@@ -122,15 +126,11 @@ class AccountEdit extends Component {
                         <fieldset>
                             <label htmlFor="code">{T('code')}:
                                 <input type="text" id="code" placeholder={T('account-code-desc')}
-                                    value={this.state.account['code']} onChange={this.handleChangeCode} />
+                                    value={this.state.account.orgid} onChange={this.handleChangeCode} />
                             </label>
                             <label htmlFor="name">{T('name')}:
                                 <input type="text" id="name" placeholder={T('account-name-desc')}
                                     value={this.state.account.name} onChange={this.handleChangeName}/>
-                            </label>
-                            <label htmlFor="active">{T('active')}
-                                <input type="checkbox" id="active" placeholder={T('account-active-desc')}
-                                    checked={this.state.account.active} onChange={this.handleChangeActive}/>
                             </label>
                         </fieldset>
                     </form>

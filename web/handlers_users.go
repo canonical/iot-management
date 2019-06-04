@@ -28,7 +28,7 @@ import (
 // UsersResponse defines the response to list users
 type UsersResponse struct {
 	web.StandardResponse
-	Users []domain.User
+	Users []domain.User `json:"users"`
 }
 
 // UserListHandler is the API method to list the users

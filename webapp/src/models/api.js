@@ -33,27 +33,27 @@ var service = {
     },
 
     accountsList: (query, cancelCallback) => {
-        return axios.get(constants.baseUrl + 'accounts');
+        return axios.get(constants.baseUrl + 'organizations');
     },
 
     accountsNew: (query, cancelCallback) => {
-        return axios.post(constants.baseUrl + 'accounts', query);
+        return axios.post(constants.baseUrl + 'organizations', query);
     },
 
     accountsGet: (id, cancelCallback) => {
-        return axios.get(constants.baseUrl + 'accounts/' + id);
+        return axios.get(constants.baseUrl + 'organizations/' + id);
     },
 
     accountsUpdate: (id, query, cancelCallback) => {
-        return axios.put(constants.baseUrl + 'accounts/' + id, query);
+        return axios.put(constants.baseUrl + 'organizations/' + id, query);
     },
 
     accountsForUsers: (username, cancelCallback) => {
-        return axios.get(constants.baseUrl + 'users/' + username + '/accounts');
+        return axios.get(constants.baseUrl + 'users/' + username + '/organizations');
     },
 
     accountsUpdateForUser: (userId, accountId, cancelCallback) => {
-        return axios.post(constants.baseUrl + 'users/' + userId + '/accounts/' + accountId);
+        return axios.post(constants.baseUrl + 'users/' + userId + '/organizations/' + accountId);
     },
 
     groupsList: (account, cancelCallback) => {

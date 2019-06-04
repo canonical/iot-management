@@ -19,7 +19,9 @@
 
 package datastore
 
-import "github.com/juju/usso/openid"
+import (
+	"github.com/juju/usso/openid"
+)
 
 // DataStore is the interfaces for the data repository
 type DataStore interface {
@@ -31,4 +33,6 @@ type DataStore interface {
 	OrgUserAccess(orgID, username string, role int) bool
 	OrganizationsForUser(username string) ([]Organization, error)
 	OrganizationGet(orgID string) (Organization, error)
+	OrganizationCreate(org Organization) error
+	OrganizationUpdate(org Organization) error
 }

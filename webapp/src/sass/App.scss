@@ -147,13 +147,20 @@ tbody tr.borderless {
     display: none;
 }
 
+form#account-form {
+    border-left: 1px solid #cdcdcd;
+    background-color: #4367a2;
+}
+
 form#account-form select {
     background-color: transparent;
     border: 0;
     margin-top: 0;
     color: #fff;
-    font-size: .875rem;
-    background-position-x: right 0.25rem;
+    font-size: 1.0rem;
+    background-position-x: right;
+    padding-top: 0.7rem;
+    padding-bottom: 0;
 }
 
 form#account-form option {

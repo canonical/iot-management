@@ -27,7 +27,11 @@ import (
 
 func formatStandardResponse(errorCode, message string, w http.ResponseWriter) {
 	response := dtwin.StandardResponse{Code: errorCode, Message: message}
-	encodeResponse(response, w)
+	if len(errorCode) > 0 {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	_ = encodeResponse(response, w)
 }
 
 // DevicesListHandler is the API method to list the registered devices
@@ -43,7 +47,7 @@ func (wb Service) DevicesListHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get the devices
 	response := wb.Manage.DeviceList(vars["orgid"], user.Username, user.Role)
-	encodeResponse(response, w)
+	_ = encodeResponse(response, w)
 }
 
 // DeviceGetHandler is the API method to get a registered device
@@ -59,5 +63,5 @@ func (wb Service) DeviceGetHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get the device
 	response := wb.Manage.DeviceGet(vars["orgid"], user.Username, user.Role, vars["deviceid"])
-	encodeResponse(response, w)
+	_ = encodeResponse(response, w)
 }
