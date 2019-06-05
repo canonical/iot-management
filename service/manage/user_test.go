@@ -23,6 +23,7 @@ import (
 	"testing"
 
 	"github.com/CanonicalLtd/iot-management/datastore/memory"
+	"github.com/CanonicalLtd/iot-management/domain"
 	"github.com/CanonicalLtd/iot-management/twinapi"
 )
 
@@ -81,6 +82,71 @@ func TestManagement_OpenIDNonceStore(t *testing.T) {
 			got := srv.OpenIDNonceStore()
 			if (got == nil) != tt.wantErr {
 				t.Errorf("Management.OpenIDNonceStore() = %v, want %v", got, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestManagement_CreateUser(t *testing.T) {
+	u1 := domain.User{Username: "jane", Name: "Jane Doe", Email: "jd@example.com", Role: 200}
+	type args struct {
+		user domain.User
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{u1}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			if err := srv.CreateUser(tt.args.user); (err != nil) != tt.wantErr {
+				t.Errorf("Management.CreateUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestManagement_UserUpdate(t *testing.T) {
+	u1 := domain.User{Username: "jamesj", Name: "James Jones", Email: "jj@example.com", Role: 200}
+	type args struct {
+		user domain.User
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{u1}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			if err := srv.UserUpdate(tt.args.user); (err != nil) != tt.wantErr {
+				t.Errorf("Management.UserUpdate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestManagement_UserDelete(t *testing.T) {
+	type args struct {
+		username string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{"jamesj"}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			if err := srv.UserDelete(tt.args.username); (err != nil) != tt.wantErr {
+				t.Errorf("Management.UserDelete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

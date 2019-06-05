@@ -68,13 +68,14 @@ func (wb Service) Router() *mux.Router {
 	router.Handle("/v1/organizations/{id}", Middleware(http.HandlerFunc(wb.OrganizationUpdateHandler))).Methods("PUT")
 	router.Handle("/v1/organizations", Middleware(http.HandlerFunc(wb.OrganizationCreateHandler))).Methods("POST")
 
-	//// API routes: users
+	// API routes: users
 	router.Handle("/v1/users", Middleware(http.HandlerFunc(wb.UserListHandler))).Methods("GET")
-	//router.Handle("/v1/users", Middleware(http.HandlerFunc(UserCreateHandler))).Methods("POST")
-	//router.Handle("/v1/users/{id}", Middleware(http.HandlerFunc(UserGetHandler))).Methods("GET")
-	//router.Handle("/v1/users/{id}", Middleware(http.HandlerFunc(UserUpdateHandler))).Methods("PUT")
-	//router.Handle("/v1/users/{username}/accounts", Middleware(http.HandlerFunc(AccountsForUserHandler))).Methods("GET")
-	//router.Handle("/v1/users/{user_id}/accounts/{account_id}", Middleware(http.HandlerFunc(AccountUpdateForUserHandler))).Methods("POST")
+	router.Handle("/v1/users", Middleware(http.HandlerFunc(wb.UserCreateHandler))).Methods("POST")
+	router.Handle("/v1/users/{username}", Middleware(http.HandlerFunc(wb.UserGetHandler))).Methods("GET")
+	router.Handle("/v1/users/{username}", Middleware(http.HandlerFunc(wb.UserUpdateHandler))).Methods("PUT")
+	router.Handle("/v1/users/{username}", Middleware(http.HandlerFunc(wb.UserDeleteHandler))).Methods("DELETE")
+	router.Handle("/v1/users/{username}/organizations", Middleware(http.HandlerFunc(wb.OrganizationsForUserHandler))).Methods("GET")
+	router.Handle("/v1/users/{username}/organizations/{orgid}", Middleware(http.HandlerFunc(wb.OrganizationUpdateForUserHandler))).Methods("POST")
 
 	// OpenID routes: using Ubuntu SSO
 	router.Handle("/login", Middleware(http.HandlerFunc(wb.LoginHandler)))

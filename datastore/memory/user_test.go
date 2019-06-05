@@ -20,8 +20,9 @@
 package memory
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore"
 	"testing"
+
+	"github.com/CanonicalLtd/iot-management/datastore"
 )
 
 func TestStore_UserWorkflow(t *testing.T) {
@@ -68,6 +69,44 @@ func TestStore_UserWorkflow(t *testing.T) {
 			}
 			if len(users) != tt.count {
 				t.Errorf("Store.UserList() = %v, want %v", len(users), tt.count)
+			}
+		})
+	}
+}
+
+func TestStore_UserUpdate(t *testing.T) {
+	tests := []struct {
+		name    string
+		user    datastore.User
+		wantErr bool
+	}{
+		{"valid", datastore.User{Username: "jamesj", Name: "James Jones", Role: 200}, false},
+		{"invalid", datastore.User{Username: "invalid", Name: "James Jones", Role: 200}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mem := NewStore()
+			if err := mem.UserUpdate(tt.user); (err != nil) != tt.wantErr {
+				t.Errorf("Store.UserUpdate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestStore_UserDelete(t *testing.T) {
+	tests := []struct {
+		name     string
+		username string
+		wantErr  bool
+	}{
+		{"valid", "jamesj", false},
+		{"invalid", "invalid", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mem := NewStore()
+			if err := mem.UserDelete(tt.username); (err != nil) != tt.wantErr {
+				t.Errorf("Store.UserDelete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

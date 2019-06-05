@@ -20,6 +20,7 @@
 package manage
 
 import (
+	"github.com/CanonicalLtd/iot-management/datastore"
 	"github.com/CanonicalLtd/iot-management/domain"
 	"github.com/juju/usso/openid"
 )
@@ -64,4 +65,35 @@ func (srv *Management) UserList() ([]domain.User, error) {
 		})
 	}
 	return uu, nil
+}
+
+// CreateUser creates a new user
+func (srv *Management) CreateUser(user domain.User) error {
+	u := datastore.User{
+		Username: user.Username,
+		Name:     user.Name,
+		Email:    user.Email,
+		Role:     user.Role,
+	}
+
+	_, err := srv.DB.CreateUser(u)
+	return err
+}
+
+// UserUpdate updates a new user
+func (srv *Management) UserUpdate(user domain.User) error {
+	u := datastore.User{
+		ID:       user.ID,
+		Username: user.Username,
+		Name:     user.Name,
+		Email:    user.Email,
+		Role:     user.Role,
+	}
+
+	return srv.DB.UserUpdate(u)
+}
+
+// UserDelete removes a user
+func (srv *Management) UserDelete(username string) error {
+	return srv.DB.UserDelete(username)
 }

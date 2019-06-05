@@ -95,8 +95,8 @@ func TestManagement_OrganizationCreate(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"valid", args{domain.Organization{"def", "Test Inc"}}, false},
-		{"invalid-duplicate", args{domain.Organization{"abc", "Test Inc"}}, true},
+		{"valid", args{domain.Organization{OrganizationID: "def", Name: "Test Inc"}}, false},
+		{"invalid-duplicate", args{domain.Organization{OrganizationID: "abc", Name: "Test Inc"}}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -117,13 +117,35 @@ func TestManagement_OrganizationUpdate(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"valid", args{domain.Organization{"abc", "Test Inc"}}, false},
+		{"valid", args{domain.Organization{OrganizationID: "abc", Name: "Test Inc"}}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
 			if err := srv.OrganizationUpdate(tt.args.org); (err != nil) != tt.wantErr {
 				t.Errorf("Management.OrganizationUpdate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestManagement_OrganizationForUserToggle(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{"abc", "jamesj"}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			if err := srv.OrganizationForUserToggle(tt.args.orgID, tt.args.username); (err != nil) != tt.wantErr {
+				t.Errorf("Management.OrganizationForUserToggle() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

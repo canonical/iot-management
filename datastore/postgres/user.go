@@ -43,6 +43,18 @@ func (db *Store) CreateUser(user datastore.User) (int64, error) {
 	return createdUserID, err
 }
 
+// UserUpdate updates a user
+func (db *Store) UserUpdate(user datastore.User) error {
+	_, err := db.Exec(updateUserSQL, user.Username, user.Name, user.Email, user.Role)
+	return err
+}
+
+// UserDelete removes a user
+func (db *Store) UserDelete(username string) error {
+	_, err := db.Exec(deleteUserSQL, username)
+	return err
+}
+
 // UserList lists existing users
 func (db *Store) UserList() ([]datastore.User, error) {
 	rows, err := db.Query(listUsersSQL)

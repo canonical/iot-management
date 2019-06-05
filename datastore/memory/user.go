@@ -55,3 +55,48 @@ func (mem *Store) GetUser(username string) (datastore.User, error) {
 
 	return datastore.User{}, fmt.Errorf("cannot find the user `%s`", username)
 }
+
+// UserUpdate updates a user
+func (mem *Store) UserUpdate(user datastore.User) error {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	var index = -1
+
+	for i, u := range mem.Users {
+		if u.Username == user.Username {
+			user.ID = u.ID
+			index = i
+			break
+		}
+	}
+
+	if index < 0 {
+		return fmt.Errorf("error finding user")
+	}
+	mem.Users[index] = user
+	return nil
+}
+
+// UserDelete removes a user
+func (mem *Store) UserDelete(username string) error {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	var index = -1
+
+	for i, u := range mem.Users {
+		if u.Username == username {
+			index = i
+			break
+		}
+	}
+
+	if index < 0 {
+		return fmt.Errorf("error finding user")
+	}
+
+	// Remove the element
+	mem.Users = append(mem.Users[:index], mem.Users[index+1:]...)
+	return nil
+}

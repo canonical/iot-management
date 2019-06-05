@@ -41,6 +41,11 @@ func (srv *Management) OrganizationsForUser(username string) ([]domain.Organizat
 	return oo, nil
 }
 
+// OrganizationForUserToggle toggles organization access for a user
+func (srv *Management) OrganizationForUserToggle(orgID, username string) error {
+	return srv.DB.OrganizationForUserToggle(orgID, username)
+}
+
 // OrganizationGet fetches an organization
 func (srv *Management) OrganizationGet(orgID string) (domain.Organization, error) {
 	org, err := srv.DB.OrganizationGet(orgID)

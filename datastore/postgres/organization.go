@@ -93,6 +93,29 @@ func (db *Store) OrganizationsForUser(username string) ([]datastore.Organization
 	return rowsToOrganizations(rows)
 }
 
+// OrganizationForUserToggle toggles the user access to an organization
+func (db *Store) OrganizationForUserToggle(orgID, username string) error {
+	result, err := db.Exec(deleteOrganizationUserAccessSQL, orgID, username)
+	if err != nil {
+		return err
+	}
+
+	count, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if count == 0 {
+		// Create the link
+		_, err := db.Exec(createOrganizationUserAccessSQL, orgID, username)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func rowsToOrganizations(rows *sql.Rows) ([]datastore.Organization, error) {
 	orgs := []datastore.Organization{}
 

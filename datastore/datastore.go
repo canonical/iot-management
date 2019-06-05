@@ -29,9 +29,12 @@ type DataStore interface {
 	CreateUser(user User) (int64, error)
 	GetUser(username string) (User, error)
 	UserList() ([]User, error)
+	UserUpdate(user User) error
+	UserDelete(username string) error
 
 	OrgUserAccess(orgID, username string, role int) bool
 	OrganizationsForUser(username string) ([]Organization, error)
+	OrganizationForUserToggle(orgID, username string) error
 	OrganizationGet(orgID string) (Organization, error)
 	OrganizationCreate(org Organization) error
 	OrganizationUpdate(org Organization) error

@@ -28,6 +28,7 @@ export default {
     'confirm-user-delete':      'Confirm user deletion',
     'created':                  'Created',
     'current-time':             'Current Time',
+    'delete-user':              'Delete User',
     'description':              'Description',
     'device-detail':            'Device Details',
     'device-name-desc':         'Unique name of the device',

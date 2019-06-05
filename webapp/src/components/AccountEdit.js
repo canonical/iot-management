@@ -111,7 +111,7 @@ class AccountEdit extends Component {
             )
         }
 
-        if (!this.state.account.orgid) {
+        if ((this.props.id) && (!this.state.account.orgid)) {
             return <div />
         }
 

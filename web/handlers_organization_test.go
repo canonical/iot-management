@@ -21,7 +21,6 @@ package web
 
 import (
 	"bytes"
-	"log"
 	"net/http"
 	"testing"
 
@@ -161,9 +160,74 @@ func TestService_OrganizationGetHandler(t *testing.T) {
 			if err != nil {
 				t.Errorf("Error parsing response: %v", err)
 			}
-			log.Println("---", resp.Message)
 			if resp.Code != tt.wantErr {
 				t.Errorf("Web.OrganizationGetHandler() got = %v, want %v", resp.Code, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestService_OrganizationsForUserHandler(t *testing.T) {
+	tests := []struct {
+		name        string
+		url         string
+		username    string
+		permissions int
+		want        int
+		wantErr     string
+	}{
+		{"valid", "/v1/users/jamesj/organizations", "jamesj", 300, http.StatusOK, ""},
+		{"invalid-org", "/v1/users/invalid/organizations", "jamesj", 300, http.StatusBadRequest, "OrgList"},
+		{"invalid-permissions", "/v1/users/jamesj/organizations", "jamesj", 200, http.StatusBadRequest, "UserAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db := memory.NewStore()
+			wb := NewService(getSettings(), manage.NewMockManagement(db))
+			w := sendRequest("GET", tt.url, nil, wb, tt.username, wb.Settings.JwtSecret, tt.permissions)
+			if w.Code != tt.want {
+				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
+			}
+
+			resp, err := parseStandardResponse(w.Body)
+			if err != nil {
+				t.Errorf("Error parsing response: %v", err)
+			}
+			if resp.Code != tt.wantErr {
+				t.Errorf("Web.OrganizationsForUserHandler() got = %v, want %v", resp.Code, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestService_OrganizationUpdateForUserHandler(t *testing.T) {
+	tests := []struct {
+		name        string
+		url         string
+		username    string
+		permissions int
+		want        int
+		wantErr     string
+	}{
+		{"valid", "/v1/users/jamesj/organizations/abc", "jamesj", 300, http.StatusOK, ""},
+		{"invalid-org", "/v1/users/invalid/organizations/abc", "jamesj", 300, http.StatusBadRequest, "UserOrg"},
+		{"invalid-permissions", "/v1/users/jamesj/organizations/abc", "jamesj", 200, http.StatusBadRequest, "UserAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db := memory.NewStore()
+			wb := NewService(getSettings(), manage.NewMockManagement(db))
+			w := sendRequest("POST", tt.url, nil, wb, tt.username, wb.Settings.JwtSecret, tt.permissions)
+			if w.Code != tt.want {
+				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
+			}
+
+			resp, err := parseStandardResponse(w.Body)
+			if err != nil {
+				t.Errorf("Error parsing response: %v", err)
+			}
+			if resp.Code != tt.wantErr {
+				t.Errorf("Web.OrganizationsForUserHandler() got = %v, want %v", resp.Code, tt.wantErr)
 			}
 		})
 	}

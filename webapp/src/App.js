@@ -169,7 +169,7 @@ class App extends Component {
       case 'new':
         return <UserEdit token={this.props.token} />
       default:
-        return <UserEdit token={this.props.token} id={sectionId} />
+        return <UserEdit token={this.props.token} username={sectionId} />
     }
   }
 

@@ -40,6 +40,18 @@ type OrganizationResponse struct {
 	Organization domain.Organization `json:"organization"`
 }
 
+// UserOrganization defines an organization and whether it is selected for a user
+type UserOrganization struct {
+	domain.Organization
+	Selected bool `json:"selected"`
+}
+
+// UserOrganizationsResponse defines the response to list users
+type UserOrganizationsResponse struct {
+	web.StandardResponse
+	Organizations []UserOrganization `json:"organizations"`
+}
+
 func formatOrganizationsResponse(orgs []domain.Organization, w http.ResponseWriter) {
 	response := OrganizationsResponse{Organizations: orgs}
 	_ = encodeResponse(response, w)
@@ -145,90 +157,60 @@ func (wb Service) OrganizationUpdateHandler(w http.ResponseWriter, r *http.Reque
 	formatStandardResponse("", "", w)
 }
 
-//// AccountsForUserHandler returns the list of accounts a user can access
-//func (wb Service) AccountsForUserHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	authUser, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatUserAccountsResponse(false, "error-auth", "", nil, w)
-//		return
-//	}
-//
-//	// Get the username from the parameters
-//	vars := mux.Vars(r)
-//	username := vars["username"]
-//	if len(username) == 0 {
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatUserAccountsResponse(false, "error-user-invalid", "Username not supplied", nil, w)
-//		return
-//	}
-//
-//	// Get the accounts that the user can access
-//	accountsForUser, err := datastore.Environ.DB.ListAllowedAccounts(authUser, username)
-//	if err != nil {
-//		w.WriteHeader(http.StatusInternalServerError)
-//		formatUserAccountsResponse(false, "error-accounts-json", err.Error(), nil, w)
-//		return
-//	}
-//
-//	// Get all the available accounts
-//	allAccounts, err := datastore.Environ.DB.ListAllowedAccounts(authUser, "")
-//	if err != nil {
-//		w.WriteHeader(http.StatusInternalServerError)
-//		formatUserAccountsResponse(false, "error-accounts-json", err.Error(), nil, w)
-//		return
-//	}
-//
-//	userAccounts := []UserAccount{}
-//	for _, a := range allAccounts {
-//		found := false
-//		for _, u := range accountsForUser {
-//			if a.Code == u.Code {
-//				found = true
-//				break
-//			}
-//		}
-//		ua := UserAccount{a, found}
-//		userAccounts = append(userAccounts, ua)
-//	}
-//
-//	// Format the model for output and return JSON response
-//	w.WriteHeader(http.StatusOK)
-//	formatUserAccountsResponse(true, "", "", userAccounts, w)
-//
-//}
-//
-//// AccountUpdateForUserHandler updates the account access for the user
-//func (wb Service) AccountUpdateForUserHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatResponse(false, "error-auth", "", w)
-//		return
-//	}
-//
-//	vars := mux.Vars(r)
-//	accountID, err := strconv.Atoi(vars["account_id"])
-//	if err != nil {
-//		w.WriteHeader(http.StatusNotFound)
-//		formatResponse(false, "error-account-invalid", "Cannot find an account for the ID", w)
-//		return
-//	}
-//
-//	userID, err := strconv.Atoi(vars["user_id"])
-//	if err != nil {
-//		w.WriteHeader(http.StatusNotFound)
-//		formatResponse(false, "error-user-invalid", "Cannot find an user for the ID", w)
-//		return
-//	}
-//
-//	// Toggle the account-user link
-//	err = datastore.Environ.DB.UpdateAccountUserToggle(accountID, userID)
-//	if err != nil {
-//		w.WriteHeader(http.StatusInternalServerError)
-//		formatResponse(false, "error-accounts-json", err.Error(), w)
-//		return
-//	}
-//}
+// OrganizationsForUserHandler fetches the organizations for a user
+func (wb Service) OrganizationsForUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	// Get the organization a user can access
+	userOrgs, err := wb.Manage.OrganizationsForUser(vars["username"])
+	if err != nil {
+		formatStandardResponse("OrgList", err.Error(), w)
+		return
+	}
+
+	// Get all the organizations
+	allOrgs, err := wb.Manage.OrganizationsForUser(user.Username)
+	if err != nil {
+		formatStandardResponse("OrgList", err.Error(), w)
+		return
+	}
+
+	oo := []UserOrganization{}
+	for _, o := range allOrgs {
+		found := false
+		for _, u := range userOrgs {
+			if o.OrganizationID == u.OrganizationID {
+				found = true
+				break
+			}
+		}
+		oo = append(oo, UserOrganization{o, found})
+	}
+
+	_ = encodeResponse(UserOrganizationsResponse{Organizations: oo}, w)
+}
+
+// OrganizationUpdateForUserHandler fetches the organizations for a user
+func (wb Service) OrganizationUpdateForUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	if err := wb.Manage.OrganizationForUserToggle(vars["orgid"], vars["username"]); err != nil {
+		formatStandardResponse("UserOrg", "", w)
+		return
+	}
+	formatStandardResponse("", "", w)
+}

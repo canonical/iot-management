@@ -44,25 +44,25 @@ class Users extends Component {
 
     getAccountsForUser (username, userId) {
         api.accountsForUsers(username).then(response => {
-            this.setState({accounts: response.data.accounts, showAccountsId: userId})
+            this.setState({accounts: response.data.organizations, showAccountsId: userId})
         })
     }
 
     handleDelete = (e) => {
         e.preventDefault();
-        this.setState({confirmDelete: parseInt(e.target.getAttribute('data-key'), 10)});
+        this.setState({confirmDelete: e.target.getAttribute('data-key')});
     }
 
     handleDeleteUser = (e) => {
         e.preventDefault();
         var users = this.state.users.filter((user) => {
-          return user.id === this.state.confirmDelete;
+          return user.username === this.state.confirmDelete;
         });
         if (users.length === 0) {
           return;
         }
     
-        api.deleteUser(users[0]).then(response => {
+        api.usersDelete(users[0].username).then(response => {
             window.location = '/users';
         })
         .catch((e) => {
@@ -81,7 +81,7 @@ class Users extends Component {
         var userId = parseInt(e.target.getAttribute('data-user'), 10);
         var username = e.target.getAttribute('data-username');
 
-        api.accountsUpdateForUser(userId, accountId).then(response => {
+        api.accountsUpdateForUser(username, accountId).then(response => {
             this.getAccountsForUser(username, userId)
         })
     }
@@ -121,13 +121,13 @@ class Users extends Component {
     }
 
     renderActions(user) {
-        if (user.id !== this.state.confirmDelete) {
+        if (user.username !== this.state.confirmDelete) {
             return (
                 <div>
-                    <a href={'/users/'.concat(user.id)} className="p-button--brand small" title={T('edit-user')}><i className="fa fa-edit" /></a>
+                    <a href={'/users/'.concat(user.username)} className="p-button--brand small" title={T('edit-user')}><i className="fa fa-edit" /></a>
                     &nbsp;
-                    <button onClick={this.handleDelete} data-key={user.id} className="p-button--neutral small" title={T('delete-user')}>
-                        <i className="fa fa-trash" data-key={user.id} /></button>
+                    <button onClick={this.handleDelete} data-key={user.username} className="p-button--neutral small" title={T('delete-user')}>
+                        <i className="fa fa-trash" data-key={user.username} /></button>
                 </div>
             );
         } else {
@@ -139,11 +139,11 @@ class Users extends Component {
 
     renderRows(items) {
         return items.map((l) => {
-          var c = "";
-          if (l.id === this.state.showAccountsId) {
+            var c = "";
+            if (l.id === this.state.showAccountsId) {
             c = 'borderless';
-          }
-          return (
+            }
+            return (
               <tbody>
                 <tr key={l.id} className={c}>
                     <td>
@@ -161,7 +161,7 @@ class Users extends Component {
                 </tr>
                 {this.renderAccounts(l)}
               </tbody>
-          );
+            );
         });
     }
     
@@ -171,7 +171,6 @@ class Users extends Component {
         }
 
         var style;
-
         var accounts = this.state.accounts.map(acc => {
             if (acc.selected) {
                 style = 'p-button--brand';
@@ -179,7 +178,7 @@ class Users extends Component {
                 style = 'p-button--neutral';
             }
             return (
-                <button key={acc.code} data-account={acc.id} data-user={item.id} data-username={item.username} onClick={this.handleClickAccount} className={style}>
+                <button key={acc.orgid} data-account={acc.orgid} data-user={item.id} data-username={item.username} onClick={this.handleClickAccount} className={style}>
                 {acc.name}
                 </button>
             )
@@ -193,7 +192,6 @@ class Users extends Component {
     }
 
     render () {
-
         if (!isUserAdmin(this.props.token)) {
             return (
                 <div className="row">
@@ -225,7 +223,6 @@ class Users extends Component {
             </div>
         )
     }
-
 }
 
 export default Users;

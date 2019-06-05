@@ -124,12 +124,16 @@ var service = {
         return axios.post(constants.baseUrl + 'users', query);
     },
 
-    usersGet: (id, cancelCallback) => {
-        return axios.get(constants.baseUrl + 'users/' + id);
+    usersGet: (username, cancelCallback) => {
+        return axios.get(constants.baseUrl + 'users/' + username);
     },
 
     usersUpdate: (id, query, cancelCallback) => {
         return axios.put(constants.baseUrl + 'users/' + id, query);
+    },
+
+    usersDelete: (username, cancelCallback) => {
+        return axios.delete(constants.baseUrl + 'users/' + username);
     }
 }
 

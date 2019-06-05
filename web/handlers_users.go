@@ -20,8 +20,11 @@
 package web
 
 import (
+	"encoding/json"
 	"github.com/CanonicalLtd/iot-identity/web"
 	"github.com/CanonicalLtd/iot-management/domain"
+	"github.com/gorilla/mux"
+	"io"
 	"net/http"
 )
 
@@ -29,6 +32,12 @@ import (
 type UsersResponse struct {
 	web.StandardResponse
 	Users []domain.User `json:"users"`
+}
+
+// UserResponse defines the response to get a user
+type UserResponse struct {
+	web.StandardResponse
+	User domain.User `json:"user"`
 }
 
 // UserListHandler is the API method to list the users
@@ -50,127 +59,109 @@ func (wb Service) UserListHandler(w http.ResponseWriter, r *http.Request) {
 	_ = encodeResponse(UsersResponse{web.StandardResponse{}, users}, w)
 }
 
-//// UsersHandler is the API method to list the users
-//func (wb Service) UsersHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatUsersResponse(false, "error-auth", "", nil, w)
-//		return
-//	}
-//
-//	users, err := datastore.Environ.DB.ListUsers()
-//	if err != nil {
-//		w.WriteHeader(http.StatusInternalServerError)
-//		formatUsersResponse(false, "error-fetch-users", err.Error(), nil, w)
-//		return
-//	}
-//
-//	// Return successful JSON response with the list of users
-//	w.WriteHeader(http.StatusOK)
-//	formatUsersResponse(true, "", "", users, w)
-//}
-//
-//// UserCreateHandler handles user creation
-//func (wb Service) UserCreateHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatUsersResponse(false, "error-auth", "", nil, w)
-//		return
-//	}
-//
-//	user := datastore.User{}
-//	err = json.NewDecoder(r.Body).Decode(&user)
-//	switch {
-//	// Check we have some data
-//	case err == io.EOF:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatUserResponse(false, "error-user-data", "No user data supplied", user, w)
-//		return
-//		// Check for parsing errors
-//	case err != nil:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatUserResponse(false, "error-data-json", err.Error(), user, w)
-//		return
-//	}
-//
-//	userID, err := datastore.Environ.DB.CreateUser(user)
-//	if err != nil {
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatUserResponse(false, "error-user-invalid", err.Error(), user, w)
-//		return
-//	}
-//	user.ID = userID
-//
-//	formatUserResponse(true, "", "", user, w)
-//}
-//
-//// UserGetHandler is the API method to retrieve user info
-//func (wb Service) UserGetHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatUserResponse(false, "error-auth", "", datastore.User{}, w)
-//		return
-//	}
-//
-//	vars := mux.Vars(r)
-//	id, err := strconv.ParseInt(vars["id"], 10, 64)
-//
-//	if err != nil {
-//		w.WriteHeader(http.StatusNotFound)
-//		errorMessage := fmt.Sprintf("%v", vars)
-//		formatUserResponse(false, "error-user-invalid", errorMessage, datastore.User{}, w)
-//		return
-//	}
-//
-//	user, err := datastore.Environ.DB.GetUser(id)
-//	if err != nil {
-//		w.WriteHeader(http.StatusNotFound)
-//		errorMessage := fmt.Sprintf("User ID: %d.", id)
-//		formatUserResponse(false, "error-get-user", errorMessage, datastore.User{ID: id}, w)
-//		return
-//	}
-//
-//	w.WriteHeader(http.StatusOK)
-//	formatUserResponse(true, "", "", user, w)
-//}
-//
-//// UserUpdateHandler handles user update
-//func (wb Service) UserUpdateHandler(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", JSONHeader)
-//
-//	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
-//	if err != nil {
-//		formatUsersResponse(false, "error-auth", "", nil, w)
-//		return
-//	}
-//
-//	user := datastore.User{}
-//	err = json.NewDecoder(r.Body).Decode(&user)
-//	switch {
-//	// Check we have some data
-//	case err == io.EOF:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatUserResponse(false, "error-user-data", "No user data supplied", user, w)
-//		return
-//		// Check for parsing errors
-//	case err != nil:
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatUserResponse(false, "error-data-json", err.Error(), user, w)
-//		return
-//	}
-//
-//	err = datastore.Environ.DB.UpdateUser(user)
-//	if err != nil {
-//		w.WriteHeader(http.StatusBadRequest)
-//		formatUserResponse(false, "error-user-invalid", err.Error(), user, w)
-//		return
-//	}
-//
-//	formatUserResponse(true, "", "", user, w)
-//}
+// UserGetHandler is the API method to fetch a user
+func (wb Service) UserGetHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	// Get the users
+	user, err := wb.Manage.GetUser(vars["username"])
+	if err != nil {
+		formatStandardResponse("UserAuth", err.Error(), w)
+		return
+	}
+
+	_ = encodeResponse(UserResponse{web.StandardResponse{}, user}, w)
+}
+
+// UserCreateHandler handles user creation
+func (wb Service) UserCreateHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	user := domain.User{}
+	err = json.NewDecoder(r.Body).Decode(&user)
+	switch {
+	// Check we have some data
+	case err == io.EOF:
+		w.WriteHeader(http.StatusBadRequest)
+		formatStandardResponse("UserAuth", "No user data supplied", w)
+		return
+	// Check for parsing errors
+	case err != nil:
+		w.WriteHeader(http.StatusBadRequest)
+		formatStandardResponse("UserAuth", err.Error(), w)
+		return
+	}
+
+	// Create the user
+	err = wb.Manage.CreateUser(user)
+	if err != nil {
+		formatStandardResponse("UserAuth", err.Error(), w)
+		return
+	}
+
+	formatStandardResponse("", "", w)
+}
+
+// UserUpdateHandler handles user update
+func (wb Service) UserUpdateHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	user := domain.User{}
+	err = json.NewDecoder(r.Body).Decode(&user)
+	switch {
+	// Check we have some data
+	case err == io.EOF:
+		w.WriteHeader(http.StatusBadRequest)
+		formatStandardResponse("UserAuth", "No user data supplied", w)
+		return
+	// Check for parsing errors
+	case err != nil:
+		w.WriteHeader(http.StatusBadRequest)
+		formatStandardResponse("UserAuth", err.Error(), w)
+		return
+	}
+
+	// Create the user
+	err = wb.Manage.UserUpdate(user)
+	if err != nil {
+		formatStandardResponse("UserUpdate", err.Error(), w)
+		return
+	}
+
+	formatStandardResponse("", "", w)
+}
+
+// UserDeleteHandler handles user deletion
+func (wb Service) UserDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	_, err := wb.checkIsSuperuserAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	if err := wb.Manage.UserDelete(vars["username"]); err != nil {
+		formatStandardResponse("UserDelete", err.Error(), w)
+		return
+	}
+	formatStandardResponse("", "", w)
+}

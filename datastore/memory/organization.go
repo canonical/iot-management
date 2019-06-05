@@ -125,3 +125,46 @@ func (mem *Store) OrganizationUpdate(org datastore.Organization) error {
 	mem.Orgs = orgs
 	return nil
 }
+
+//OrganizationForUserToggle toggles the user access for an organization
+func (mem *Store) OrganizationForUserToggle(orgID, username string) error {
+	err := mem.removeOrgUserAccess(orgID, username)
+	if err != nil {
+		// Create it as it didn't exist
+		return mem.addOrgUserAccess(orgID, username)
+	}
+	return nil
+}
+
+// removeOrgUserAccess remove access to an organization for a user
+func (mem *Store) removeOrgUserAccess(orgID, username string) error {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	found := false
+	oo := []datastore.OrganizationUser{}
+	for _, ou := range mem.OrgUsers {
+		if ou.OrganizationID == orgID && ou.Username == username {
+			found = true
+			continue
+		}
+		oo = append(oo, ou)
+	}
+	if !found {
+		return fmt.Errorf("record not found")
+	}
+	mem.OrgUsers = oo
+	return nil
+}
+
+// addOrgUserAccess adds access to an organization for a user
+func (mem *Store) addOrgUserAccess(orgID, username string) error {
+	mem.lock.Lock()
+	defer mem.lock.Unlock()
+
+	mem.OrgUsers = append(mem.OrgUsers, datastore.OrganizationUser{
+		OrganizationID: orgID,
+		Username:       username,
+	})
+	return nil
+}

@@ -31,8 +31,11 @@ import (
 // Manage interface for the service
 type Manage interface {
 	OpenIDNonceStore() openid.NonceStore
+	CreateUser(user domain.User) error
 	GetUser(username string) (domain.User, error)
 	UserList() ([]domain.User, error)
+	UserUpdate(user domain.User) error
+	UserDelete(username string) error
 
 	DeviceList(orgID, username string, role int) web.DevicesResponse
 	DeviceGet(orgID, username string, role int, deviceID string) web.DeviceResponse
@@ -46,6 +49,7 @@ type Manage interface {
 	GroupList(orgID, username string, role int) web.GroupsResponse
 
 	OrganizationsForUser(username string) ([]domain.Organization, error)
+	OrganizationForUserToggle(orgID, username string) error
 	OrganizationGet(orgID string) (domain.Organization, error)
 	OrganizationCreate(org domain.Organization) error
 	OrganizationUpdate(org domain.Organization) error

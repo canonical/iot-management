@@ -34,3 +34,8 @@ CREATE TABLE IF NOT EXISTS userinfo (
 const createUserSQL = "insert into userinfo (username, name, email, user_role) values ($1,$2,$3,$4) returning id"
 const listUsersSQL = "select id, username, name, email, user_role from userinfo order by username"
 const getUserSQL = "select id, username, name, email, user_role from userinfo where username=$1"
+const updateUserSQL = `
+update userinfo
+set name=$2, email=$3, user_role=$4
+where username=$1`
+const deleteUserSQL = "delete from userinfo where username=$1"

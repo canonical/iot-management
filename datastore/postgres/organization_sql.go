@@ -30,8 +30,9 @@ CREATE TABLE IF NOT EXISTS organization (
 const createOrganizationUserTableSQL = `
 CREATE TABLE IF NOT EXISTS organization_user (
 	id            serial primary key,
-	org_id        int not null,
-	user_id       int not null
+	org_id        varchar(200) not null,
+	username      varchar(200) not null,
+	UNIQUE(org_id,username)
 )
 `
 
@@ -41,19 +42,16 @@ const createOrganizationSQL = "insert into organization (code, name) values ($1,
 
 const organizationUserAccessSQL = `
 SELECT EXISTS(
-	select ou.id from organization_user ou
-	inner join organization o on o.id=ou.org_id
-	inner join userinfo u on u.id=ou.user_id
-	where o.code=$1 and u.username=$2
+	select id from organization_user
+	where org_id=$1 and username=$2
 )
 `
 
 const listUserOrganizationsSQL = `
 	select a.code, a.name
 	from organization a
-	inner join organization_user l on a.id = l.org_id
-	inner join userinfo u on l.user_id = u.id
-	where u.username=$1
+	inner join organization_user l on a.code = l.org_id
+	where l.username=$1
 `
 const listOrganizationsSQL = `
 	select code, name
@@ -65,4 +63,14 @@ const updateOrganizationSQL = `
 	update organization
 	set name=$2
 	where code = $1
+`
+
+const deleteOrganizationUserAccessSQL = `
+	delete from organization_user
+	where org_id=$1 and username=$2
+`
+
+const createOrganizationUserAccessSQL = `
+	insert into organization_user (org_id, username)
+	values ($1, $2)
 `

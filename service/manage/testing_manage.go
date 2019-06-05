@@ -59,6 +59,30 @@ func (m *MockManage) UserList() ([]domain.User, error) {
 	return []domain.User{{Username: "jamesj", Name: "JJ", Role: 300}}, nil
 }
 
+// UserDelete mocks removing a user
+func (m *MockManage) UserDelete(username string) error {
+	if username == "invalid" {
+		return fmt.Errorf("MOCK error delete")
+	}
+	return nil
+}
+
+// CreateUser mocks creating a user
+func (m *MockManage) CreateUser(user domain.User) error {
+	if user.Username == "invalid" {
+		return fmt.Errorf("MOCK error create")
+	}
+	return nil
+}
+
+// UserUpdate mocks updating a user
+func (m *MockManage) UserUpdate(user domain.User) error {
+	if user.Username == "invalid" {
+		return fmt.Errorf("MOCK error update")
+	}
+	return nil
+}
+
 // DeviceList mocks fetching devices
 func (m *MockManage) DeviceList(orgID, username string, role int) web.DevicesResponse {
 	twin := twinapi.NewMockClient("")
@@ -137,6 +161,14 @@ func (m *MockManage) OrganizationCreate(org domain.Organization) error {
 func (m *MockManage) OrganizationUpdate(org domain.Organization) error {
 	if org.OrganizationID != "abc" {
 		return fmt.Errorf("MOCK error update")
+	}
+	return nil
+}
+
+// OrganizationForUserToggle mocks toggling user access to an organization
+func (m *MockManage) OrganizationForUserToggle(orgID, username string) error {
+	if orgID != "abc" || username != "jamesj" {
+		return fmt.Errorf("MOCK error toggle")
 	}
 	return nil
 }

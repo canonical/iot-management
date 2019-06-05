@@ -33,9 +33,9 @@ class UserEdit extends Component {
     }
 
     componentDidMount() {
-        if (this.props.id) {
+        if (this.props.username) {
             this.setTitle('edit-user');
-            this.getUser(this.props.id);
+            this.getUser(this.props.username);
         } else {
             this.setTitle('new-user');
         }
@@ -84,9 +84,9 @@ class UserEdit extends Component {
     handleSaveClick = (e) => {
         e.preventDefault();
 
-        if (this.props.id) {
+        if (this.props.username) {
             // Update the existing user
-            api.usersUpdate(this.props.id, this.state.user).then(response => {
+            api.usersUpdate(this.props.username, this.state.user).then(response => {
                 window.location = '/users';
             })
             .catch(e => {

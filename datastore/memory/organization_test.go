@@ -118,8 +118,8 @@ func TestStore_OrganizationCreate(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"valid", args{datastore.Organization{"def", "Test Inc"}}, false},
-		{"invalid-duplicate", args{datastore.Organization{"abc", "Test Inc"}}, true},
+		{"valid", args{datastore.Organization{OrganizationID: "def", Name: "Test Inc"}}, false},
+		{"invalid-duplicate", args{datastore.Organization{OrganizationID: "abc", Name: "Test Inc"}}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -140,14 +140,57 @@ func TestStore_OrganizationUpdate(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"valid", args{datastore.Organization{"abc", "Test Inc"}}, false},
-		{"invalid", args{datastore.Organization{"invalid", "Test Inc"}}, true},
+		{"valid", args{datastore.Organization{OrganizationID: "abc", Name: "Test Inc"}}, false},
+		{"invalid", args{datastore.Organization{OrganizationID: "invalid", Name: "Test Inc"}}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mem := NewStore()
 			if err := mem.OrganizationUpdate(tt.args.org); (err != nil) != tt.wantErr {
 				t.Errorf("Store.OrganizationUpdate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestStore_OrganizationForUserToggle(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+		found    bool
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"valid", args{"abc", "jamesj", true}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mem := NewStore()
+
+			found := mem.OrgUserAccess(tt.args.orgID, tt.args.username, 200)
+			if found != tt.args.found {
+				t.Errorf("Store.OrganizationForUserToggle() found = %v, want %v", found, tt.args.found)
+			}
+
+			if err := mem.OrganizationForUserToggle(tt.args.orgID, tt.args.username); (err != nil) != tt.wantErr {
+				t.Errorf("Store.OrganizationForUserToggle() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			foundAfter := mem.OrgUserAccess(tt.args.orgID, tt.args.username, 200)
+			if foundAfter == tt.args.found {
+				t.Errorf("Store.OrganizationForUserToggle() foundAfter = %v, want %v", foundAfter, tt.args.found)
+			}
+
+			if err := mem.OrganizationForUserToggle(tt.args.orgID, tt.args.username); (err != nil) != tt.wantErr {
+				t.Errorf("Store.OrganizationForUserToggle() error2 = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			foundAfter = mem.OrgUserAccess(tt.args.orgID, tt.args.username, 200)
+			if foundAfter != tt.args.found {
+				t.Errorf("Store.OrganizationForUserToggle() foundAfter2 = %v, want %v", foundAfter, tt.args.found)
 			}
 		})
 	}
