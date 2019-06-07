@@ -203,3 +203,39 @@ func TestClientAdapter_SnapConfigSet(t *testing.T) {
 		})
 	}
 }
+
+func TestClientAdapter_SnapListOnDevice(t *testing.T) {
+	b1 := `{"code":"", "message":""}`
+	type fields struct {
+		URL string
+	}
+	type args struct {
+		orgID    string
+		deviceID string
+		snap     string
+		action   string
+		body     string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr string
+	}{
+		{"valid", fields{""}, args{"abc", "a111", "helloworld", "refresh", b1}, ""},
+		{"invalid-org", fields{""}, args{"invalid", "a111", "helloworld", "refresh", b1}, "MOCK error post"},
+		{"invalid-body", fields{""}, args{"abc", "a111", "helloworld", "refresh", ""}, "EOF"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockHTTP(tt.args.body)
+			a := &ClientAdapter{
+				URL: tt.fields.URL,
+			}
+			got := a.SnapListOnDevice(tt.args.orgID, tt.args.deviceID)
+			if got.Message != tt.wantErr {
+				t.Errorf("ClientAdapter.SnapListOnDevice() = %v, want %v", got, tt.wantErr)
+			}
+		})
+	}
+}

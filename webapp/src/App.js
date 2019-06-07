@@ -69,12 +69,14 @@ class App extends Component {
         api.accountsList().then(response => {
             var selectedAccount = this.state.selectedAccount;
 
+            console.log('---selected', selectedAccount)
+
             // Reset selected if we're not filtering accounts
             // if (!this.props.token.accountFilter) {
             //   selectedAccount = {code: 'all'}
             // }
 
-            if ((!this.state.selectedAccount.code) && (!getAccount().code)) {
+            if ((!getAccount().orgid) || (getAccount().orgid==='undefined')) {
               // Set to the first in the account list
               if (response.data.organizations.length > 0) {
                 selectedAccount = response.data.organizations[0]
@@ -88,30 +90,30 @@ class App extends Component {
     }
   }
 
-  getDevices(code) {
-    api.devicesList(code).then(response => {
+  getDevices(orgid) {
+    api.devicesList(orgid).then(response => {
         this.setState({devices: response.data.devices})
     })
   }
 
-  getClient (code, endpoint) {
-    api.clientsDetail(code, endpoint).then(response => {
+  getClient (orgid, endpoint) {
+    api.clientsDetail(orgid, endpoint).then(response => {
         this.setState({client: response.data})
     }).catch(e => {
         this.setState({message: formatError(e.response.data), client: {}});
     })
   }
 
-  getGroups (code) {
-    api.groupsList(code).then(response => {
+  getGroups (orgid) {
+    api.groupsList(orgid).then(response => {
         this.setState({groups: response.data.groups})
     }).catch(e => {
         this.setState({message: formatError(e.response.data), clients: []});
     })
   }
 
-  getSnaps(code, endpoint) {
-    api.snapsList(code, endpoint).then(response => {
+  getSnaps(orgid, endpoint) {
+    api.snapsList(orgid, endpoint).then(response => {
         this.setState({snaps: response.data.snaps})
     })
     .catch(e => {
@@ -132,10 +134,10 @@ class App extends Component {
         }
       }
 
-      if(r.section==='devices') {this.getDevices(selectedAccount.code)}
-      if((r.section==='devices') && (r.sectionId)) {this.getClient(selectedAccount.code, r.sectionId)}
-      if((r.section==='devices') && (r.sectionId) && (r.subsection==='snaps')) {this.getSnaps(selectedAccount.code, r.sectionId)}
-      if(r.section==='groups') {this.getGroups(selectedAccount.code)}
+      if(r.section==='devices') {this.getDevices(selectedAccount.orgid)}
+      if((r.section==='devices') && (r.sectionId)) {this.getClient(selectedAccount.orgid, r.sectionId)}
+      if((r.section==='devices') && (r.sectionId) && (r.subsection==='snaps')) {this.getSnaps(selectedAccount.orgid, r.sectionId)}
+      if(r.section==='groups') {this.getGroups(selectedAccount.orgid)}
   }
 
   handleAccountChange = (account) => {

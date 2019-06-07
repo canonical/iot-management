@@ -3,82 +3,82 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "+zFxHYGSpsq2Rs2/6aUistrTQYM=",
+			"checksumSHA1": "OPqyb3bsZvXuIsyXK1QkWRZeEng=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/config",
-			"revision": "51f209fce56f88daf3ba002972962e9ab1f5f3be",
-			"revisionTime": "2019-05-03T14:27:35Z"
+			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
+			"revisionTime": "2019-06-06T16:25:42Z"
 		},
 		{
-			"checksumSHA1": "JargZ1PGPcdSnHrHbT8xkdfLW0g=",
+			"checksumSHA1": "mlLidDa6O7adRxEtowVEGGbA0ZI=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/datastore",
-			"revision": "51f209fce56f88daf3ba002972962e9ab1f5f3be",
-			"revisionTime": "2019-05-03T14:27:35Z"
+			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
+			"revisionTime": "2019-06-06T16:25:42Z"
 		},
 		{
-			"checksumSHA1": "+DPWEa/uUoD1q48un87wr2QxBiQ=",
+			"checksumSHA1": "o5MzpZJULe2DmaCGswOezG/blIE=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/domain",
-			"revision": "51f209fce56f88daf3ba002972962e9ab1f5f3be",
-			"revisionTime": "2019-05-03T14:27:35Z"
+			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
+			"revisionTime": "2019-06-06T16:25:42Z"
 		},
 		{
-			"checksumSHA1": "ERpFC9XStLWs9SIHz52yKN6ehFA=",
+			"checksumSHA1": "s/r23c3XJTXXIEUANWedA+5XlJI=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/service/controller",
-			"revision": "51f209fce56f88daf3ba002972962e9ab1f5f3be",
-			"revisionTime": "2019-05-03T14:27:35Z"
+			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
+			"revisionTime": "2019-06-06T16:25:42Z"
 		},
 		{
-			"checksumSHA1": "7BYZ8wv4LASt2G6oioY1WWlcUC4=",
+			"checksumSHA1": "tf3ZHy2sSFF37E9rMF7yN/AthSg=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/service/devicetwin",
-			"revision": "51f209fce56f88daf3ba002972962e9ab1f5f3be",
-			"revisionTime": "2019-05-03T14:27:35Z"
+			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
+			"revisionTime": "2019-06-06T16:25:42Z"
 		},
 		{
 			"checksumSHA1": "0f3DYSkbdgsD+RToFfzmJuagSKU=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/service/mqtt",
-			"revision": "51f209fce56f88daf3ba002972962e9ab1f5f3be",
-			"revisionTime": "2019-05-03T14:27:35Z"
+			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
+			"revisionTime": "2019-06-06T16:25:42Z"
 		},
 		{
-			"checksumSHA1": "bxB3ZhG8A8ru/5LkXzxoA/FrcA0=",
+			"checksumSHA1": "5Ki9Q5AzlTfcdN7N5/9tf0PJb6w=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/web",
-			"revision": "51f209fce56f88daf3ba002972962e9ab1f5f3be",
-			"revisionTime": "2019-05-03T14:27:35Z"
+			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
+			"revisionTime": "2019-06-06T16:25:42Z"
 		},
 		{
-			"checksumSHA1": "zS87LwjI4OF6JY4JOn7bQ+IuN1c=",
+			"checksumSHA1": "RlRObmPP49Zrs5LOcG6RsmJPqUw=",
 			"path": "github.com/CanonicalLtd/iot-identity/config",
-			"revision": "04f7df89ec0dd0adf805c6b4d61f6e4736057c50",
-			"revisionTime": "2019-04-12T17:00:22Z"
+			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
+			"revisionTime": "2019-05-31T18:23:39Z"
 		},
 		{
 			"checksumSHA1": "HhEnnWkFGSjBJKAr3QA+DAjfbOU=",
 			"path": "github.com/CanonicalLtd/iot-identity/datastore",
-			"revision": "04f7df89ec0dd0adf805c6b4d61f6e4736057c50",
-			"revisionTime": "2019-04-12T17:00:22Z"
+			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
+			"revisionTime": "2019-05-31T18:23:39Z"
 		},
 		{
 			"checksumSHA1": "+ib228fG9axbhqkI1f8Lt61tp0w=",
 			"path": "github.com/CanonicalLtd/iot-identity/domain",
-			"revision": "04f7df89ec0dd0adf805c6b4d61f6e4736057c50",
-			"revisionTime": "2019-04-12T17:00:22Z"
+			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
+			"revisionTime": "2019-05-31T18:23:39Z"
 		},
 		{
 			"checksumSHA1": "sx64g2syJcO+2Enib1qMe/BOKJw=",
 			"path": "github.com/CanonicalLtd/iot-identity/service",
-			"revision": "04f7df89ec0dd0adf805c6b4d61f6e4736057c50",
-			"revisionTime": "2019-04-12T17:00:22Z"
+			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
+			"revisionTime": "2019-05-31T18:23:39Z"
 		},
 		{
 			"checksumSHA1": "f/w+3kuasJir1CQCf8WBAfNDur0=",
 			"path": "github.com/CanonicalLtd/iot-identity/service/cert",
-			"revision": "04f7df89ec0dd0adf805c6b4d61f6e4736057c50",
-			"revisionTime": "2019-04-12T17:00:22Z"
+			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
+			"revisionTime": "2019-05-31T18:23:39Z"
 		},
 		{
 			"checksumSHA1": "GEwX1q5O9J8ix8NdkRHFI/Xzt1E=",
 			"path": "github.com/CanonicalLtd/iot-identity/web",
-			"revision": "04f7df89ec0dd0adf805c6b4d61f6e4736057c50",
-			"revisionTime": "2019-04-12T17:00:22Z"
+			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
+			"revisionTime": "2019-05-31T18:23:39Z"
 		},
 		{
 			"checksumSHA1": "blOHP3HPYU+IeV6yWCalQuuM+zE=",
@@ -275,38 +275,38 @@
 		{
 			"checksumSHA1": "GtamqiJoL7PGHsN454AoffBFMa8=",
 			"path": "golang.org/x/net/context",
-			"revision": "3ec19112720433827bbce8be9342797f5a6aaaf9",
-			"revisionTime": "2019-05-12T12:16:34Z"
+			"revision": "9f648a60d9775ef5c977e7669d1673a7a67bef33",
+			"revisionTime": "2019-03-13T06:50:29Z"
 		},
 		{
-			"checksumSHA1": "bONEZcbkYKiPyABrecOLzHomjPU=",
+			"checksumSHA1": "qyU58wqixJNIOwqz2CXE2eMBNTk=",
 			"path": "golang.org/x/net/html",
-			"revision": "3ec19112720433827bbce8be9342797f5a6aaaf9",
-			"revisionTime": "2019-05-12T12:16:34Z"
+			"revision": "9f648a60d9775ef5c977e7669d1673a7a67bef33",
+			"revisionTime": "2019-03-13T06:50:29Z"
 		},
 		{
 			"checksumSHA1": "xwhqe/igHQrY3IhqDwzo6j7qpm8=",
 			"path": "golang.org/x/net/html/atom",
-			"revision": "3ec19112720433827bbce8be9342797f5a6aaaf9",
-			"revisionTime": "2019-05-12T12:16:34Z"
+			"revision": "9f648a60d9775ef5c977e7669d1673a7a67bef33",
+			"revisionTime": "2019-03-13T06:50:29Z"
 		},
 		{
 			"checksumSHA1": "f3Y7JIZH61oMmp8nphqe8Mg+XoU=",
 			"path": "golang.org/x/net/internal/socks",
-			"revision": "3ec19112720433827bbce8be9342797f5a6aaaf9",
-			"revisionTime": "2019-05-12T12:16:34Z"
+			"revision": "9f648a60d9775ef5c977e7669d1673a7a67bef33",
+			"revisionTime": "2019-03-13T06:50:29Z"
 		},
 		{
-			"checksumSHA1": "28Sn0XihdqNv3MysxyRalibC3Tg=",
+			"checksumSHA1": "mCMW3hvbWFW1k5il9yyO7ELOdws=",
 			"path": "golang.org/x/net/proxy",
-			"revision": "3ec19112720433827bbce8be9342797f5a6aaaf9",
-			"revisionTime": "2019-05-12T12:16:34Z"
+			"revision": "9f648a60d9775ef5c977e7669d1673a7a67bef33",
+			"revisionTime": "2019-03-13T06:50:29Z"
 		},
 		{
 			"checksumSHA1": "F+tqxPGFt5x7DKZakbbMmENX1oQ=",
 			"path": "golang.org/x/net/websocket",
-			"revision": "3ec19112720433827bbce8be9342797f5a6aaaf9",
-			"revisionTime": "2019-05-12T12:16:34Z"
+			"revision": "9f648a60d9775ef5c977e7669d1673a7a67bef33",
+			"revisionTime": "2019-03-13T06:50:29Z"
 		},
 		{
 			"checksumSHA1": "c2uqM0KcVJ2SFu/9Nt4w63GZ9xo=",

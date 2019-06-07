@@ -31,8 +31,9 @@ import (
 type Client interface {
 	DeviceList(orgID string) web.DevicesResponse
 	DeviceGet(orgID, deviceID string) web.DeviceResponse
-
 	SnapList(orgID, deviceID string) web.SnapsResponse
+
+	SnapListOnDevice(orgID, deviceID string) web.StandardResponse
 	SnapInstall(orgID, deviceID, snap string) web.StandardResponse
 	SnapRemove(orgID, deviceID, snap string) web.StandardResponse
 	SnapUpdate(orgID, deviceID, snap, action string) web.StandardResponse

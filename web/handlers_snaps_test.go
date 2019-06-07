@@ -68,6 +68,8 @@ func TestService_SnapWorkflow(t *testing.T) {
 		want        int
 		wantErr     string
 	}{
+		{"list-valid", "POST", "/v1/snaps/abc/a111/list", nil, 300, http.StatusOK, ""},
+		{"list-invalid-permissions", "POST", "/v1/snaps/abc/a111/list", nil, 0, http.StatusBadRequest, "UserAuth"},
 		{"install-valid", "POST", "/v1/snaps/abc/a111/helloworld", nil, 300, http.StatusOK, ""},
 		{"install-invalid-permissions", "POST", "/v1/snaps/abc/a111/helloworld", nil, 0, http.StatusBadRequest, "UserAuth"},
 		{"delete-valid", "DELETE", "/v1/snaps/abc/a111/helloworld", nil, 300, http.StatusOK, ""},

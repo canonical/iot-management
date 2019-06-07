@@ -101,6 +101,11 @@ func (m *MockClient) SnapList(orgID, deviceID string) web.SnapsResponse {
 	}
 }
 
+// SnapListOnDevice mocks the snap list
+func (m *MockClient) SnapListOnDevice(orgID, deviceID string) web.StandardResponse {
+	return web.StandardResponse{}
+}
+
 // SnapInstall mocks a snap installation
 func (m *MockClient) SnapInstall(orgID, deviceID, snap string) web.StandardResponse {
 	return web.StandardResponse{}

@@ -38,6 +38,19 @@ func (srv *Management) SnapList(orgID, username string, role int, deviceID strin
 	return srv.TwinAPI.SnapList(orgID, deviceID)
 }
 
+// SnapListOnDevice lists snaps on a device
+func (srv *Management) SnapListOnDevice(orgID, username string, role int, deviceID string) web.StandardResponse {
+	hasAccess := srv.DB.OrgUserAccess(orgID, username, role)
+	if !hasAccess {
+		return web.StandardResponse{
+			Code:    "SnapAuth",
+			Message: "the user does not have permissions for the organization",
+		}
+	}
+
+	return srv.TwinAPI.SnapListOnDevice(orgID, deviceID)
+}
+
 // SnapInstall installs a snap on a device
 func (srv *Management) SnapInstall(orgID, username string, role int, deviceID, snap string) web.StandardResponse {
 	hasAccess := srv.DB.OrgUserAccess(orgID, username, role)

@@ -20,6 +20,18 @@ import {T, isLoggedIn} from './Utils'
 
 
 class NavigationUser extends Component {
+    handleAccountChange = (e) => {
+        e.preventDefault()
+
+        // Get the account
+        var accountId = e.target.value;
+        var account = this.props.accounts.filter(a => {
+            return a.orgid === accountId
+        })[0]
+
+        this.props.onAccountChange(account)
+    }
+
     renderAccounts(token) {
         if (!isLoggedIn(token)) {
             return <span />
@@ -32,9 +44,9 @@ class NavigationUser extends Component {
         return (
             <li className="p-navigation__link">
                 <form id="account-form">
-                    <select value={this.props.selectedAccount.id} onChange={this.handleAccountChange}>
+                    <select value={this.props.selectedAccount.orgid} onChange={this.handleAccountChange}>
                         {this.props.accounts.map(a => {
-                            return <option key={a.id} value={a.id} selected={a.id===this.props.selectedAccount.id}>{a.name}</option>;
+                            return <option key={a.orgid} value={a.orgid} selected={a.orgid===this.props.selectedAccount.orgid}>{a.name}</option>;
                         })}
                     </select>
                 </form>

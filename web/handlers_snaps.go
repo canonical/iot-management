@@ -49,6 +49,22 @@ func (wb Service) SnapListHandler(w http.ResponseWriter, r *http.Request) {
 	encodeResponse(response, w)
 }
 
+// SnapListOnDevice lists snaps on the device
+func (wb Service) SnapListOnDevice(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsStandardAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	// Install a snap on a device
+	response := wb.Manage.SnapListOnDevice(vars["orgid"], user.Username, user.Role, vars["deviceid"])
+	encodeResponse(response, w)
+}
+
 // SnapInstallHandler installs a snap on the device
 func (wb Service) SnapInstallHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", JSONHeader)

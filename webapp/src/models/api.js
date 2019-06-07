@@ -60,28 +60,32 @@ var service = {
         return axios.get(constants.baseUrl + account + '/groups');
     },
 
-    snapsList: (account, query, cancelCallback) => {
-        return axios.get(constants.baseUrl + account + '/' + query + '/snaps');
+    snapsList: (account, device, cancelCallback) => {
+        return axios.get(constants.baseUrl + 'device/' + account + '/' + device + '/snaps');
+    },
+    
+    snapsInstallRefresh: (account, device, cancelCallback) => {
+        return axios.post(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/list');
     },
 
     snapsRemove: (account,device, snap, cancelCallback) => {
-        return axios.delete(constants.baseUrl + 'snaps/' + device.device.accountCode + '/' + device.device.name + '/' + device.device.serial + '/' + snap);
+        return axios.delete(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap);
     },
 
     snapsInstall: (account, device, snap, cancelCallback) => {
-        return axios.post(constants.baseUrl + 'snaps/' + device.device.accountCode + '/' + device.device.name + '/' + device.device.serial + '/' + snap);
+        return axios.post(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap);
     },
 
-    snapsUpdate: (account, device, snap, query, cancelCallback) => {
-        return axios.put(constants.baseUrl + 'snaps/' + device.device.accountCode + '/' + device.device.name + '/' + device.device.serial + '/' + snap, query);
+    snapsUpdate: (account, device, snap, action, cancelCallback) => {
+        return axios.put(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap + '/' + action);
     },
 
     snapsSettings: (account, device, snap, cancelCallback) => {
-        return axios.get(constants.baseUrl + 'snaps/' + device.device.accountCode + '/' + device.device.name + '/' + device.device.serial + '/' + snap + '/settings');
+        return axios.get(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap + '/settings');
     },
 
     snapsSettingsUpdate: (account, device, snap, settings, cancelCallback) => {
-        return axios.put(constants.baseUrl + 'snaps/' + device.device.accountCode + '/'  + device.device.name + '/' + device.device.serial + '/' + snap + '/settings', settings);
+        return axios.put(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap + '/settings', settings);
     },
 
     storeSearch: (snapName,cancelCallback) => {
@@ -92,8 +96,8 @@ var service = {
         return axios.get(constants.baseUrl + account + '/clients');
     },
 
-    clientsDetail: (account, query, cancelCallback) => {
-        return axios.get(constants.baseUrl + account + '/clients/' + query);
+    clientsDetail: (account, device, cancelCallback) => {
+        return axios.get(constants.baseUrl + account + '/devices/' + device);
     },
 
     clientsDeviceObject: (account, query, cancelCallback) => {

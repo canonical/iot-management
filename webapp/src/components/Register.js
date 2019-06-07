@@ -55,7 +55,7 @@ class Register extends Component {
                 <table>
                 <thead>
                     <tr>
-                        <th>{T('account')}</th><th>{T('model')}</th><th>{T('serial')}</th>
+                        <th>{T('brand')}</th><th>{T('model')}</th><th>{T('serial')}</th>
                         <th className="xsmall">{T('status')}</th>
                     </tr>
                 </thead>
@@ -76,9 +76,9 @@ class Register extends Component {
         return items.map((l) => {
           return (
             <tr key={l.registrationId}>
-                <td className="overflow"><a href={'/devices/' + l.id+ '/info'}>{l.accountCode}</a></td>
-                <td className="overflow"><a href={'/devices/' + l.id+ '/info'}>{l.name}</a></td>
-                <td className="overflow"><a href={'/devices/' + l.id+ '/info'}>{l.serial}</a></td>
+                <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.brand}</a></td>
+                <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.model}</a></td>
+                <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.serial}</a></td>
                 <td>
                     {this.getAge(l.lastRefresh)}
                 </td>

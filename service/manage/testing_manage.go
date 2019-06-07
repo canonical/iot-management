@@ -101,6 +101,11 @@ func (m *MockManage) SnapList(orgID, username string, role int, deviceID string)
 	return twin.SnapList(orgID, deviceID)
 }
 
+// SnapListOnDevice mocks listing snaps
+func (m *MockManage) SnapListOnDevice(orgID, username string, role int, deviceID string) web.StandardResponse {
+	return web.StandardResponse{}
+}
+
 // SnapInstall mocks installing a snap
 func (m *MockManage) SnapInstall(orgID, username string, role int, deviceID, snap string) web.StandardResponse {
 	return web.StandardResponse{}

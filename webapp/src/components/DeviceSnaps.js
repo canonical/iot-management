@@ -45,7 +45,12 @@ class DeviceSnaps extends Component {
 
     handleRefreshList = (e) => {
         e.preventDefault()
-        window.location.reload()
+        api.snapsInstallRefresh(this.props.account.orgid, this.props.device).then(response => {
+            this.setState({
+                message: 'Sent request to list snaps',
+                messageType: 'information',
+            })
+        })
     }
 
     handleInstall= (e) => {
@@ -54,7 +59,7 @@ class DeviceSnaps extends Component {
     }
 
     handleSnapInstall = (snap) => {
-        api.snapsInstall(this.props.account.code, this.props.device, snap).then(response => {
+        api.snapsInstall(this.props.account.orgid, this.props.device, snap).then(response => {
             this.setState({
                 message: 'Sent request to install snap: ' + snap,
                 messageType: 'information',
@@ -71,7 +76,7 @@ class DeviceSnaps extends Component {
         e.preventDefault()
 
         var snap = e.target.getAttribute('data-key')
-        api.snapsUpdate(this.props.account.code, this.props.device, snap, 'refresh').then(response => {
+        api.snapsUpdate(this.props.account.orgid, this.props.device, snap, 'refresh').then(response => {
             this.setState({message: 'Sent request to refresh snap: ' + snap, messageType: 'information'});
         })
     }
@@ -88,7 +93,7 @@ class DeviceSnaps extends Component {
             action = 'disable';
         }
 
-        api.snapsUpdate(this.props.account.code, this.props.device, snap, action).then(response => {
+        api.snapsUpdate(this.props.account.orgid, this.props.device, snap, action).then(response => {
             this.setState({message: 'Sent request to enable/disable snap: ' + snap, messageType: 'information'});
         })
     }
@@ -96,7 +101,7 @@ class DeviceSnaps extends Component {
     handleRemove = (e) => {
         e.preventDefault()
         var snap = e.target.getAttribute('data-key')
-        api.snapsRemove(this.props.account.code, this.props.device, snap).then(response => {
+        api.snapsRemove(this.props.account.orgid, this.props.device, snap).then(response => {
             this.setState({message: 'Sent request to remove snap: ' + snap, messageType: 'information'});
         })
     }
@@ -113,6 +118,9 @@ class DeviceSnaps extends Component {
             this.setState({snapSettings: null, settings: {}})
         } else {
             var s = this.findSnap(snap)
+            if (s.config.length===0) {
+                s.config = '{}'
+            }
             var settings = JSON.stringify( JSON.parse(s.config), null, 2) // pretty print
             this.setState({snapSettings: snap, settings: settings})
         }
@@ -127,7 +135,7 @@ class DeviceSnaps extends Component {
         e.preventDefault();
         var snap = e.target.getAttribute('data-key');
 
-        api.snapsSettingsUpdate(this.props.account.code, this.props.device, snap, this.state.settings).then(response => {
+        api.snapsSettingsUpdate(this.props.account.orgid, this.props.device, snap, this.state.settings).then(response => {
             this.setState({snapSettings: null, message: 'Sent request to update snap: ' + snap,
                     messageType: 'information',
             })
@@ -174,11 +182,11 @@ class DeviceSnaps extends Component {
             hide = 'hide';
         }
         var d = this.props.device;
-        if (!d.info) {return <div>Loading...</div>};
+        if (!d.device) {return <div>Loading...</div>};
 
         return (
             <div className="row">
-                <h1 className="tight">{d.device.accountCode} {d.device.name}</h1>
+                <h1 className="tight">{d.device.orgid} {d.device.model}</h1>
                 <h4 className="subtitle">{d.device.serial}</h4>
 
                 <section className="row spacer">
@@ -208,7 +216,7 @@ class DeviceSnaps extends Component {
                                 <thead>
                                     <tr>
                                         <th className={hide} />
-                                        <th className="small">{T('snap')}</th><th className="xsmall">{T('version')}</th><th>{T('summary')}</th><th className="xsmall">{T('status')}</th>
+                                        <th className="small">{T('snap')}</th><th className="small">{T('channel')}</th><th>{T('version')}</th><th className="xsmall">{T('status')}</th>
                                         <th className="xsmall">{T('settings')}</th>
                                     </tr>
                                 </thead>
@@ -232,8 +240,8 @@ class DeviceSnaps extends Component {
                                                 </button>
                                             </td>
                                             <td title={s.description}>{s.name}</td>
+                                            <td>{s.channel}</td>
                                             <td>{s.version}</td>
-                                            <td>{s.summary}</td>
                                             <td>{s.status}</td>
                                             <td>
                                                 <button className="p-button--neutral small" title={T('view-settings')} data-key={s.name} onClick={this.handleShowSettings}>

@@ -25,11 +25,11 @@ class Device extends Component {
 
     render () {
         var d = this.props.client;
-        if (!d.info) {return <div>Loading...</div>};
+        if (!d.device) {return <div>Loading...</div>};
 
         return (
             <div className="row">
-                <h1 className="tight">{d.device.accountCode} {d.device.name}</h1>
+                <h1 className="tight">{d.device.brand} {d.device.model}</h1>
                 <h4 className="subtitle">{d.device.serial}</h4>
 
                 <section className="row spacer">
@@ -60,28 +60,25 @@ class Device extends Component {
                             <table className="p-card__content">
                                 <tbody>
                                     <tr>
-                                        <td>{T('model')}:</td><td>{d.device.accountCode} {d.device.name}</td>
+                                        <td>{T('model')}:</td><td>{d.device.brand} {d.device.model}</td>
                                     </tr>
                                     <tr>
                                         <td>{T('serial-number')}:</td><td>{d.device.serial}</td>
                                     </tr>
                                     <tr>
-                                        <td>{T('software-version')}:</td><td>{d.info.softwareversion}</td>
+                                        <td>{T('os-version')}:</td><td>{d.device.version.osId} {d.device.version.osVersionId}</td>
                                     </tr>
                                     <tr>
-                                        <td>{T('firmware-version')}:</td><td>{d.info.firmwareversion}</td>
+                                        <td>{T('series')}:</td><td>{d.device.version.series}</td>
                                     </tr>
                                     <tr>
-                                        <td>{T('current-time')}:</td><td>{d.info.currenttime}</td>
+                                        <td>{T('version')}:</td><td>{d.device.version.version}</td>
                                     </tr>
                                     <tr>
-                                        <td>{T('utc-offset')}:</td><td>{d.info.utcoffset}</td>
+                                        <td>{T('kernel-version')}:</td><td>{d.device.version.kernelVersion}</td>
                                     </tr>
                                     <tr>
-                                        <td>{T('timezone')}:</td><td>{d.info.timezone}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{T('uptime')}:</td><td>{d.info.uptime}</td>
+                                        <td>{T('on-classic')}:</td><td>{d.device.version.onClassic}</td>
                                     </tr>
                                 </tbody>
                             </table>

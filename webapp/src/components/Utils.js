@@ -134,7 +134,7 @@ export function formatError(data) {
 
 export function saveAccount(account) {
     //sessionStorage.setItem('accountId', account.id);
-    sessionStorage.setItem('accountCode', account.code);
+    sessionStorage.setItem('accountCode', account.orgid);
     sessionStorage.setItem('accountName', account.name);
     //sessionStorage.setItem('accountActive', account.active);
 }
@@ -142,8 +142,7 @@ export function saveAccount(account) {
 export function getAccount() {
     return {
         //id: parseInt(sessionStorage.getItem('accountId'),10),
-        code: sessionStorage.getItem('accountCode'),
+        orgid: sessionStorage.getItem('accountCode'),
         name: sessionStorage.getItem('accountName'),
-        //active: sessionStorage.getItem('accountActive')==='true',
     }
 }

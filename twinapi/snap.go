@@ -44,6 +44,27 @@ func (a *ClientAdapter) SnapList(orgID, deviceID string) web.SnapsResponse {
 	return r
 }
 
+// SnapListOnDevice triggers snap list on a device
+func (a *ClientAdapter) SnapListOnDevice(orgID, deviceID string) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("device", orgID, deviceID, "snaps", "list")
+
+	resp, err := post(a.urlPath(p), nil)
+	if err != nil {
+		r.Code = "SnapList"
+		r.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Code = "SnapList"
+		r.Message = err.Error()
+	}
+	return r
+}
+
 // SnapInstall installs a snap on a device
 func (a *ClientAdapter) SnapInstall(orgID, deviceID, snap string) web.StandardResponse {
 	r := web.StandardResponse{}
