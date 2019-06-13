@@ -52,7 +52,6 @@ class NavigationUser extends Component {
                 </form>
             </li>
         )
-
     }
 
     renderUser(token) {

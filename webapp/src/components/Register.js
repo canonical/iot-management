@@ -16,9 +16,9 @@
  */
 
 import React, {Component} from 'react';
-import moment from 'moment';
 import AlertBox from './AlertBox';
-import {T} from './Utils';
+import {T, isUserSuperuser} from './Utils';
+import {Status} from './Constants';
 
 
 class Register extends Component {
@@ -30,18 +30,25 @@ class Register extends Component {
         };
     }
 
-    getAge(m) {
-        var start = moment(m);
-        var end = moment()
-        var dur = moment.duration(end.diff(start));
-        var d = dur.asMinutes()
-        if (d < 2) {
-            return <i className="fa fa-clock led-green" title={start.format('llll')} />
-        } else if (d < 5) {
-            return <i className="fa fa-clock led-orange" title={start.format('llll')} />
+    getStatus(s) {
+        let status = T(Status[s])
+        if (s === 1) {
+            return <span><i className="fa fa-clock led-orange" title={status} />&nbsp;{status}</span>
+        } else if (s === 2) {
+            return <span><i className="fa fa-clipboard-check led-green" title={status} />&nbsp;{status}</span>
         } else {
-            return <i className="fa fa-clock led-red" title={start.format('llll')} />
+            return <span><i className="fa fa-times-circle led-red" title={status} />&nbsp;{status}</span>
         }
+    }
+
+    copyToClipboard = (e) => {
+        e.preventDefault()
+        const el = document.createElement('textarea');
+        el.value = e.target.getAttribute('data-key');
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
     }
 
     renderTable(items) {
@@ -55,7 +62,7 @@ class Register extends Component {
                 <table>
                 <thead>
                     <tr>
-                        <th>{T('brand')}</th><th>{T('model')}</th><th>{T('serial')}</th>
+                        <th className="small" /><th>{T('id')}</th><th>{T('brand')}</th><th>{T('model')}</th><th>{T('serial')}</th><th className="overflow">{T('device-key')}</th>
                         <th className="xsmall">{T('status')}</th>
                     </tr>
                 </thead>
@@ -75,24 +82,42 @@ class Register extends Component {
     renderRows(items) {
         return items.map((l) => {
           return (
-            <tr key={l.registrationId}>
-                <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.brand}</a></td>
-                <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.model}</a></td>
-                <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.serial}</a></td>
+            <tr key={l.id}>
                 <td>
-                    {this.getAge(l.lastRefresh)}
+                    <a href={'/register/' + l.id} className="p-button--neutral small"><i className="fa fa-edit" /></a>
+                    {l.device.deviceKey ?
+                        <a href="" onClick={this.copyToClipboard} data-key={l.device.deviceKey} className="p-button--neutral small" title={T('copy-device-key')}>
+                        <i className="fa fa-clipboard" data-key={l.device.deviceKey} /></a> : ''}
                 </td>
+                <td className="overflow">{l.id}</td>
+                <td className="overflow">{l.device.brand}</td>
+                <td className="overflow">{l.device.model}</td>
+                <td className="overflow">{l.device.serial}</td>
+                <td className="overflow" title={l.device.deviceKey}>
+                    {l.device.deviceKey && l.device.deviceKey.substr(0,40) || ''}
+                </td>
+                <td>{this.getStatus(l.status)}</td>
             </tr>
           );
         });
     }
 
     render () {
+        console.log('---', this.props.devices)
+
         return (
             <div className="row">
                 <section className="row">
                     <h2>
                         {T('register-devices')}
+                        {isUserSuperuser(this.props.token) ?
+                            <div className="u-float-right">
+                                <a href="/register/new" className="p-button--brand" title={T('new-device')}>
+                                    <i className="fa fa-plus" aria-hidden="true" />
+                                </a>
+                            </div>
+                            : ''
+                        }
                     </h2>
                     <div className="col-12">
                         <AlertBox message={this.state.message} />

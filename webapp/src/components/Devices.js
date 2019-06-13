@@ -24,15 +24,28 @@ import {T} from './Utils';
 
 class Devices extends Component {
 
+    getAge(m) {
+        var start = moment(m);
+        var end = moment()
+        var dur = moment.duration(end.diff(start));
+        var d = dur.asMinutes()
+        if (d < 2) {
+            return <i className="fa fa-clock led-green" title={start.format('llll')} />
+        } else if (d < 5) {
+            return <i className="fa fa-clock led-orange" title={start.format('llll')} />
+        } else {
+            return <i className="fa fa-clock led-red" title={start.format('llll')} />
+        }
+    }
+
     renderTable(items) {
-        
         if (items.length > 0) {
             return (
             <div>
                 <table>
                 <thead>
                     <tr>
-                    <th>{T('name')}</th><th>{T('reg-date')}</th><th>{T('address')}</th><th>{T('last-update')}</th>
+                    <th>{T('brand')}</th><th>{T('model')}</th><th>{T('serial')}</th><th>{T('reg-date')}</th><th>{T('last-update')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,12 +64,17 @@ class Devices extends Component {
     renderRows(items) {
         return items.map((l) => {
           return (
-            <tr key={l.registrationId}>
-                <td><a href={'/devices/' + l.endpoint+ '/info'}>{l.endpoint}</a></td>
-                <td>{moment(l.registrationDate).format('llll')}</td>
-                <td>{l.address}</td>
-                <td>{moment(l.lastUpdate).format('llll')}</td>
-            </tr>
+              <tr key={l.registrationId}>
+                  <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.brand}</a></td>
+                  <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.model}</a></td>
+                  <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.serial}</a></td>
+                  <td className="overflow">{moment(l.created).format('lll')}</td>
+                  <td>
+                      {moment(l.lastRefresh).format('lll')}
+                      &nbsp;
+                      {this.getAge(l.lastRefresh)}
+                  </td>
+              </tr>
           );
         });
     }
@@ -65,14 +83,14 @@ class Devices extends Component {
         return (
             <div className="row">
                 <section className="row">
-                    <h2>{T('devices')}</h2>
+                    <h2>{T('devices-connected')}</h2>
                     <div className="col-12">
                         <AlertBox message={this.props.message} />
                     </div>
                 </section>
 
                 <section className="row spacer">
-                    {this.renderTable(this.props.clients)}
+                    {this.renderTable(this.props.devices)}
                 </section>
             </div>
         )

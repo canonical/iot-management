@@ -21,6 +21,7 @@ package main
 
 import (
 	"github.com/CanonicalLtd/iot-management/config"
+	"github.com/CanonicalLtd/iot-management/identityapi"
 	"github.com/CanonicalLtd/iot-management/service/factory"
 	"github.com/CanonicalLtd/iot-management/service/manage"
 	"github.com/CanonicalLtd/iot-management/twinapi"
@@ -48,8 +49,14 @@ func main() {
 		log.Fatalf("Error connecting to the device twin service: %v", err)
 	}
 
+	// Initialize the identity client
+	idAPI, err := identityapi.NewClientAdapter(settings.IdentityAPIUrl)
+	if err != nil {
+		log.Fatalf("Error connecting to the identity service: %v", err)
+	}
+
 	// Create the main services
-	srv := manage.NewManagement(settings, db, twinAPI)
+	srv := manage.NewManagement(settings, db, twinAPI, idAPI)
 
 	// Start the web service
 	www := web.NewService(settings, srv)

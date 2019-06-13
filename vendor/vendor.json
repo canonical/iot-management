@@ -47,38 +47,38 @@
 		{
 			"checksumSHA1": "RlRObmPP49Zrs5LOcG6RsmJPqUw=",
 			"path": "github.com/CanonicalLtd/iot-identity/config",
-			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
-			"revisionTime": "2019-05-31T18:23:39Z"
+			"revision": "6c46530f75fbbcd7372a2070f6c6985edcf60006",
+			"revisionTime": "2019-06-07T17:13:51Z"
 		},
 		{
-			"checksumSHA1": "HhEnnWkFGSjBJKAr3QA+DAjfbOU=",
+			"checksumSHA1": "J/WGYaQVZ1o5TPKq/4Bko6ShRn0=",
 			"path": "github.com/CanonicalLtd/iot-identity/datastore",
-			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
-			"revisionTime": "2019-05-31T18:23:39Z"
+			"revision": "6c46530f75fbbcd7372a2070f6c6985edcf60006",
+			"revisionTime": "2019-06-07T17:13:51Z"
 		},
 		{
-			"checksumSHA1": "+ib228fG9axbhqkI1f8Lt61tp0w=",
+			"checksumSHA1": "aI2dZzsSIW6EdiQPbaw4LZWGq8M=",
 			"path": "github.com/CanonicalLtd/iot-identity/domain",
-			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
-			"revisionTime": "2019-05-31T18:23:39Z"
+			"revision": "6c46530f75fbbcd7372a2070f6c6985edcf60006",
+			"revisionTime": "2019-06-07T17:13:51Z"
 		},
 		{
-			"checksumSHA1": "sx64g2syJcO+2Enib1qMe/BOKJw=",
+			"checksumSHA1": "IuJ7jRkrE4MK2B9tYvpfVIQiNRI=",
 			"path": "github.com/CanonicalLtd/iot-identity/service",
-			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
-			"revisionTime": "2019-05-31T18:23:39Z"
+			"revision": "6c46530f75fbbcd7372a2070f6c6985edcf60006",
+			"revisionTime": "2019-06-07T17:13:51Z"
 		},
 		{
 			"checksumSHA1": "f/w+3kuasJir1CQCf8WBAfNDur0=",
 			"path": "github.com/CanonicalLtd/iot-identity/service/cert",
-			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
-			"revisionTime": "2019-05-31T18:23:39Z"
+			"revision": "6c46530f75fbbcd7372a2070f6c6985edcf60006",
+			"revisionTime": "2019-06-07T17:13:51Z"
 		},
 		{
-			"checksumSHA1": "GEwX1q5O9J8ix8NdkRHFI/Xzt1E=",
+			"checksumSHA1": "CrmF+BxKlVg10hQpH5ekdgTf6Os=",
 			"path": "github.com/CanonicalLtd/iot-identity/web",
-			"revision": "2b4f92ff2581b492849254eac11f1ac37e799bba",
-			"revisionTime": "2019-05-31T18:23:39Z"
+			"revision": "6c46530f75fbbcd7372a2070f6c6985edcf60006",
+			"revisionTime": "2019-06-07T17:13:51Z"
 		},
 		{
 			"checksumSHA1": "blOHP3HPYU+IeV6yWCalQuuM+zE=",

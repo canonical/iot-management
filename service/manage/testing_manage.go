@@ -22,6 +22,8 @@ package manage
 import (
 	"fmt"
 	"github.com/CanonicalLtd/iot-devicetwin/web"
+	iddomain "github.com/CanonicalLtd/iot-identity/domain"
+	idweb "github.com/CanonicalLtd/iot-identity/web"
 	"github.com/CanonicalLtd/iot-management/datastore"
 	"github.com/CanonicalLtd/iot-management/domain"
 	"github.com/CanonicalLtd/iot-management/twinapi"
@@ -176,4 +178,54 @@ func (m *MockManage) OrganizationForUserToggle(orgID, username string) error {
 		return fmt.Errorf("MOCK error toggle")
 	}
 	return nil
+}
+
+// RegDeviceList mocks listing registered devices
+func (m *MockManage) RegDeviceList(orgID, username string, role int) idweb.DevicesResponse {
+	if orgID == "invalid" || role == 100 {
+		return idweb.DevicesResponse{
+			StandardResponse: idweb.StandardResponse{Code: "RegDeviceAuth", Message: "MOCK error devices"},
+			Devices:          nil,
+		}
+	}
+	return idweb.DevicesResponse{
+		StandardResponse: idweb.StandardResponse{},
+		Devices:          []iddomain.Enrollment{},
+	}
+}
+
+// RegisterDevice mocks registering a device
+func (m *MockManage) RegisterDevice(orgID, username string, role int, body []byte) idweb.RegisterResponse {
+	if orgID == "invalid" || role == 100 {
+		return idweb.RegisterResponse{
+			StandardResponse: idweb.StandardResponse{Code: "RegDeviceAuth", Message: "MOCK error register"},
+			ID:               "",
+		}
+	}
+	return idweb.RegisterResponse{
+		StandardResponse: idweb.StandardResponse{},
+		ID:               "d444",
+	}
+}
+
+// RegDeviceGet mocks fetching a registered device
+func (m *MockManage) RegDeviceGet(orgID, username string, role int, deviceID string) idweb.EnrollResponse {
+	if deviceID == "invalid" || role == 0 {
+		return idweb.EnrollResponse{
+			StandardResponse: idweb.StandardResponse{Code: "RegDeviceAuth", Message: "MOCK error get"},
+			Enrollment:       iddomain.Enrollment{},
+		}
+	}
+	return idweb.EnrollResponse{
+		StandardResponse: idweb.StandardResponse{},
+		Enrollment:       iddomain.Enrollment{},
+	}
+}
+
+// RegDeviceUpdate mocks updating a registered device
+func (m *MockManage) RegDeviceUpdate(orgID, username string, role int, deviceID string, body []byte) idweb.StandardResponse {
+	if deviceID == "invalid" {
+		return idweb.StandardResponse{Code: "RegDeviceUpdate", Message: "MOCK error update"}
+	}
+	return idweb.StandardResponse{}
 }

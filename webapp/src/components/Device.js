@@ -78,7 +78,7 @@ class Device extends Component {
                                         <td>{T('kernel-version')}:</td><td>{d.device.version.kernelVersion}</td>
                                     </tr>
                                     <tr>
-                                        <td>{T('on-classic')}:</td><td>{d.device.version.onClassic}</td>
+                                        <td>{T('on-classic')}:</td><td>{d.device.version.onClassic ? 'true': 'false'}</td>
                                     </tr>
                                 </tbody>
                             </table>

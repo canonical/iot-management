@@ -23,6 +23,7 @@ import api from '../models/api';
 
 
 const subLinks = {
+    register: ['register', 'devices'],
     devices: ['info', 'snaps']
 }
 
@@ -55,7 +56,7 @@ export function sectionNavLinks(section, sectionId) {
         return;
     }
     if ((section === 'devices') && (!sectionId)) {
-        return;
+        return subLinks['register']
     }
     return subLinks[section];
 }
@@ -125,7 +126,7 @@ export function getAuthToken(callback) {
 }
 
 export function formatError(data) {
-    var message = T(data.error_code);
+    var message = T(data.code);
     if (data.message) {
         message += ': ' + data.message;
     }

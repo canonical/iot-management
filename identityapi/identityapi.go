@@ -19,6 +19,56 @@
 
 package identityapi
 
+import (
+	"bytes"
+	"github.com/CanonicalLtd/iot-identity/web"
+	"net/http"
+	"net/url"
+	"path"
+)
+
 // Client is a client for the identity API
 type Client interface {
+	RegDeviceList(orgID string) web.DevicesResponse
+	RegisterDevice(body []byte) web.RegisterResponse
+	RegDeviceGet(orgID, deviceID string) web.EnrollResponse
+	RegDeviceUpdate(orgID, deviceID string, body []byte) web.StandardResponse
+}
+
+// ClientAdapter adapts our expectations to device twin API
+type ClientAdapter struct {
+	URL string
+}
+
+var adapter *ClientAdapter
+
+// NewClientAdapter creates an adapter to access the device twin service
+func NewClientAdapter(u string) (*ClientAdapter, error) {
+	if adapter == nil {
+		adapter = &ClientAdapter{URL: u}
+	}
+	return adapter, nil
+}
+
+func (a *ClientAdapter) urlPath(p string) string {
+	u, _ := url.Parse(a.URL)
+	u.Path = path.Join(u.Path, p)
+	return u.String()
+}
+
+var get = func(p string) (*http.Response, error) {
+	return http.Get(p)
+}
+
+var post = func(p string, data []byte) (*http.Response, error) {
+	return http.Post(p, "application/json", bytes.NewReader(data))
+}
+
+var put = func(p string, data []byte) (*http.Response, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPut, p, bytes.NewReader(data))
+	if err != nil {
+		return nil, err
+	}
+	return client.Do(req)
 }

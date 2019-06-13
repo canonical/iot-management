@@ -93,15 +93,27 @@ var service = {
     },
 
     clientsList: (account, query, cancelCallback) => {
-        return axios.get(constants.baseUrl + account + '/clients');
+        return axios.get(constants.baseUrl + account + '/register/devices');
     },
 
-    clientsDetail: (account, device, cancelCallback) => {
-        return axios.get(constants.baseUrl + account + '/devices/' + device);
+    clientsGet: (account, device, cancelCallback) => {
+        return axios.get(constants.baseUrl + account + '/register/devices/' + device);
+    },
+
+    clientsNew: (account, device, cancelCallback) => {
+        return axios.post(constants.baseUrl + account + '/register/devices', device);
     },
 
     clientsDeviceObject: (account, query, cancelCallback) => {
         return axios.get(constants.baseUrl + account + '/clients/' + query + '/device');
+    },
+
+    clientsUpdate: (account, deviceId, status, cancelCallback) => {
+        return axios.put(constants.baseUrl + account + '/register/devices/' + deviceId, {status: status});
+    },
+
+    devicesUpdate: (account, device, cancelCallback) => {
+        return axios.put(constants.baseUrl + device.accountCode + '/devices/' + device.id, device);
     },
 
     devicesList: (account, cancelCallback) => {
@@ -110,14 +122,6 @@ var service = {
 
     devicesGet: (account, id, cancelCallback) => {
         return axios.get(constants.baseUrl + account + '/devices/' + id);
-    },
-
-    devicesNew: (account, device, cancelCallback) => {
-        return axios.post(constants.baseUrl + account + '/devices', device);
-    },
-
-    devicesUpdate: (account, device, cancelCallback) => {
-        return axios.put(constants.baseUrl + device.accountCode + '/devices/' + device.id, device);
     },
 
     usersList: (query, cancelCallback) => {

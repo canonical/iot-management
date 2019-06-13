@@ -23,3 +23,9 @@ export const Role = {
 }
 
 export const LoadingImage = '/static/images/ajax-loader.gif'
+
+export const Status = {
+    1: 'waiting',
+    2: 'enrolled',
+    3: 'disabled',
+}

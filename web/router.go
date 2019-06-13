@@ -36,18 +36,15 @@ func (wb Service) Router() *mux.Router {
 	router.Handle("/v1/authtoken", Middleware(http.HandlerFunc(wb.TokenHandler))).Methods("GET")
 	router.Handle("/v1/version", Middleware(http.HandlerFunc(wb.VersionHandler))).Methods("GET")
 
-	// API routes: clients
-	//router.Handle("/v1/{account_code}/clients/{endpoint}", Middleware(http.HandlerFunc(DeviceGetByNameHandler))).Methods("GET")
-
-	//// API routes: client subsection
-	//router.Handle("/v1/{account_code}/clients/{endpoint}/device", Middleware(http.HandlerFunc(DeviceGetByNameHandler))).Methods("GET")
-	//router.Handle("/v1/{account_code}/devices/{endpoint}", Middleware(http.HandlerFunc(DeviceGetByNameHandler))).Methods("GET")
+	// API routes: registered devices
+	router.Handle("/v1/{orgid}/register/devices", Middleware(http.HandlerFunc(wb.RegDeviceList))).Methods("GET")
+	router.Handle("/v1/{orgid}/register/devices", Middleware(http.HandlerFunc(wb.RegisterDevice))).Methods("POST")
+	router.Handle("/v1/{orgid}/register/devices/{device}", Middleware(http.HandlerFunc(wb.RegDeviceGet))).Methods("GET")
+	router.Handle("/v1/{orgid}/register/devices/{device}", Middleware(http.HandlerFunc(wb.RegDeviceUpdate))).Methods("PUT")
 
 	// API routes: devices
 	router.Handle("/v1/{orgid}/devices", Middleware(http.HandlerFunc(wb.DevicesListHandler))).Methods("GET")
 	router.Handle("/v1/{orgid}/devices/{deviceid}", Middleware(http.HandlerFunc(wb.DeviceGetHandler))).Methods("GET")
-	//router.Handle("/v1/{account_code}/devices", Middleware(http.HandlerFunc(DeviceCreateHandler))).Methods("POST")
-	//router.Handle("/v1/{account_code}/devices/{id}", Middleware(http.HandlerFunc(DeviceUpdateHandler))).Methods("PUT")
 
 	// API routes: groups
 	router.Handle("/v1/{orgid}/groups", Middleware(http.HandlerFunc(wb.GroupListHandler))).Methods("GET")

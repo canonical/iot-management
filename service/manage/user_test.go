@@ -20,6 +20,7 @@
 package manage
 
 import (
+	"github.com/CanonicalLtd/iot-management/identityapi"
 	"testing"
 
 	"github.com/CanonicalLtd/iot-management/datastore/memory"
@@ -43,7 +44,7 @@ func TestManagement_UserWorkflow(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			got, err := srv.GetUser(tt.args.username)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Management.GetUser() error = %v, wantErr %v", err, tt.wantErr)
@@ -78,7 +79,7 @@ func TestManagement_OpenIDNonceStore(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			got := srv.OpenIDNonceStore()
 			if (got == nil) != tt.wantErr {
 				t.Errorf("Management.OpenIDNonceStore() = %v, want %v", got, tt.wantErr)
@@ -101,7 +102,7 @@ func TestManagement_CreateUser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			if err := srv.CreateUser(tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("Management.CreateUser() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -123,7 +124,7 @@ func TestManagement_UserUpdate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			if err := srv.UserUpdate(tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("Management.UserUpdate() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -144,7 +145,7 @@ func TestManagement_UserDelete(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			if err := srv.UserDelete(tt.args.username); (err != nil) != tt.wantErr {
 				t.Errorf("Management.UserDelete() error = %v, wantErr %v", err, tt.wantErr)
 			}

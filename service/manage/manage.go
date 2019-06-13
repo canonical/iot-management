@@ -21,9 +21,11 @@ package manage
 
 import (
 	"github.com/CanonicalLtd/iot-devicetwin/web"
+	idweb "github.com/CanonicalLtd/iot-identity/web"
 	"github.com/CanonicalLtd/iot-management/config"
 	"github.com/CanonicalLtd/iot-management/datastore"
 	"github.com/CanonicalLtd/iot-management/domain"
+	"github.com/CanonicalLtd/iot-management/identityapi"
 	"github.com/CanonicalLtd/iot-management/twinapi"
 	"github.com/juju/usso/openid"
 )
@@ -36,6 +38,11 @@ type Manage interface {
 	UserList() ([]domain.User, error)
 	UserUpdate(user domain.User) error
 	UserDelete(username string) error
+
+	RegDeviceList(orgID, username string, role int) idweb.DevicesResponse
+	RegisterDevice(orgID, username string, role int, body []byte) idweb.RegisterResponse
+	RegDeviceGet(orgID, username string, role int, deviceID string) idweb.EnrollResponse
+	RegDeviceUpdate(orgID, username string, role int, deviceID string, body []byte) idweb.StandardResponse
 
 	DeviceList(orgID, username string, role int) web.DevicesResponse
 	DeviceGet(orgID, username string, role int, deviceID string) web.DeviceResponse
@@ -58,16 +65,18 @@ type Manage interface {
 
 // Management implementation of the management service use cases
 type Management struct {
-	Settings *config.Settings
-	DB       datastore.DataStore
-	TwinAPI  twinapi.Client
+	Settings    *config.Settings
+	DB          datastore.DataStore
+	TwinAPI     twinapi.Client
+	IdentityAPI identityapi.Client
 }
 
 // NewManagement creates an implementation of the management use cases
-func NewManagement(settings *config.Settings, db datastore.DataStore, api twinapi.Client) *Management {
+func NewManagement(settings *config.Settings, db datastore.DataStore, api twinapi.Client, id identityapi.Client) *Management {
 	return &Management{
-		Settings: settings,
-		DB:       db,
-		TwinAPI:  api,
+		Settings:    settings,
+		DB:          db,
+		TwinAPI:     api,
+		IdentityAPI: id,
 	}
 }

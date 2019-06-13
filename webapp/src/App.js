@@ -25,6 +25,7 @@ import AccountEdit from './components/AccountEdit';
 import Users from './components/Users';
 import UserEdit from './components/UserEdit';
 import Device from './components/Device';
+import Devices from './components/Devices';
 import Register from './components/Register';
 import RegisterEdit from './components/RegisterEdit';
 import DeviceSnaps from './components/DeviceSnaps';
@@ -47,6 +48,7 @@ class App extends Component {
       token: props.token || {},
       accounts: [],
       selectedAccount: getAccount() || {},
+      reg_devices: [],
       devices: [],
       groups: [],
       clients: [],
@@ -69,13 +71,6 @@ class App extends Component {
         api.accountsList().then(response => {
             var selectedAccount = this.state.selectedAccount;
 
-            console.log('---selected', selectedAccount)
-
-            // Reset selected if we're not filtering accounts
-            // if (!this.props.token.accountFilter) {
-            //   selectedAccount = {code: 'all'}
-            // }
-
             if ((!getAccount().orgid) || (getAccount().orgid==='undefined')) {
               // Set to the first in the account list
               if (response.data.organizations.length > 0) {
@@ -88,6 +83,12 @@ class App extends Component {
             this.updateDataForRoute(selectedAccount, false)
         })
     }
+  }
+
+  getRegisteredDevices(orgid) {
+    api.clientsList(orgid).then(response => {
+        this.setState({reg_devices: response.data.devices})
+    })
   }
 
   getDevices(orgid) {
@@ -134,6 +135,7 @@ class App extends Component {
         }
       }
 
+      if(r.section==='register') {this.getRegisteredDevices(selectedAccount.orgid)}
       if(r.section==='devices') {this.getDevices(selectedAccount.orgid)}
       if((r.section==='devices') && (r.sectionId)) {this.getClient(selectedAccount.orgid, r.sectionId)}
       if((r.section==='devices') && (r.sectionId) && (r.subsection==='snaps')) {this.getSnaps(selectedAccount.orgid, r.sectionId)}
@@ -176,9 +178,8 @@ class App extends Component {
   }
 
   renderDevices(sectionId, subsection) {
-
     if (!sectionId) {
-      return <Register token={this.props.token} devices={this.state.devices} account={this.state.selectedAccount} />
+      return <Devices token={this.props.token} devices={this.state.devices} account={this.state.selectedAccount} />
     }
 
     switch(subsection) {
@@ -192,9 +193,8 @@ class App extends Component {
   }
 
   renderRegister(sectionId, subsection) {
-
     if (!sectionId) {
-        return <Register token={this.props.token} devices={this.state.devices} account={this.state.selectedAccount} />
+        return <Register token={this.props.token} devices={this.state.reg_devices} account={this.state.selectedAccount} />
     }
 
     switch(sectionId) {

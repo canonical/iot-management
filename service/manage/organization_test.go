@@ -20,6 +20,7 @@
 package manage
 
 import (
+	"github.com/CanonicalLtd/iot-management/identityapi"
 	"testing"
 
 	"github.com/CanonicalLtd/iot-management/datastore/memory"
@@ -43,7 +44,7 @@ func TestManagement_OrganizationsForUser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			got, err := srv.OrganizationsForUser(tt.args.username)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Management.OrganizationsForUser() error = %v, wantErr %v", err, tt.wantErr)
@@ -70,7 +71,7 @@ func TestManagement_OrganizationGet(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			got, err := srv.OrganizationGet(tt.args.orgID)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Management.OrganizationGet() error = %v, wantErr %v", err, tt.wantErr)
@@ -100,7 +101,7 @@ func TestManagement_OrganizationCreate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			if err := srv.OrganizationCreate(tt.args.org); (err != nil) != tt.wantErr {
 				t.Errorf("Management.OrganizationCreate() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -121,7 +122,7 @@ func TestManagement_OrganizationUpdate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			if err := srv.OrganizationUpdate(tt.args.org); (err != nil) != tt.wantErr {
 				t.Errorf("Management.OrganizationUpdate() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -143,7 +144,7 @@ func TestManagement_OrganizationForUserToggle(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			if err := srv.OrganizationForUserToggle(tt.args.orgID, tt.args.username); (err != nil) != tt.wantErr {
 				t.Errorf("Management.OrganizationForUserToggle() error = %v, wantErr %v", err, tt.wantErr)
 			}

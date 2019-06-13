@@ -32,16 +32,17 @@ import (
 
 // Version is the application version
 const (
-	Version           = "0.1"
-	paramsPath        = "."
-	paramsFilename    = "settings.yaml"
-	defaultURLHost    = "management:8010"
-	defaultURLScheme  = "http"
-	defaultLocalPort  = "8010"
-	defaultDriver     = "memory"
-	defaultDataSource = ""
-	defaultMQTTAPIUrl = "http://localhost:8040/api/"
-	defaultStoreURL   = "https://api.snapcraft.io/api/v1/"
+	Version               = "0.1"
+	paramsPath            = "."
+	paramsFilename        = "settings.yaml"
+	defaultURLHost        = "management:8010"
+	defaultURLScheme      = "http"
+	defaultLocalPort      = "8010"
+	defaultDriver         = "memory"
+	defaultDataSource     = ""
+	defaultMQTTAPIUrl     = "http://localhost:8040/v1/"
+	defaultIdentityAPIUrl = "http://localhost:8030/v1/"
+	defaultStoreURL       = "https://api.snapcraft.io/api/v1/"
 )
 
 // Settings defines the parsed config file settings.
@@ -51,6 +52,7 @@ type Settings struct {
 	JwtSecret        string `yaml:"jwtSecret"`
 	LocalPort        string `yaml:"localport"`
 	DeviceTwinAPIUrl string `yaml:"deviceTwinAPIServiceUrl"`
+	IdentityAPIUrl   string `yaml:"defaultIdentityAPIUrl"`
 	URLHost          string `yaml:"urlHost"`
 	URLScheme        string `yaml:"urlScheme"`
 	StoreURL         string `yaml:"storeURL"`
@@ -126,6 +128,7 @@ func parseArgs(c *Settings) {
 		urlHost          string
 		urlScheme        string
 		urlDeviceTwinAPI string
+		urlIdentityAPI   string
 		storeURL         string
 	)
 
@@ -154,6 +157,11 @@ func parseArgs(c *Settings) {
 	} else {
 		urlDeviceTwinAPI = defaultMQTTAPIUrl
 	}
+	if len(os.Getenv("IDENTITYAPI")) > 0 {
+		urlIdentityAPI = os.Getenv("IDENTITYAPI")
+	} else {
+		urlIdentityAPI = defaultIdentityAPIUrl
+	}
 	if len(os.Getenv("STOREURL")) > 0 {
 		storeURL = os.Getenv("STOREURL")
 	} else {
@@ -168,6 +176,7 @@ func parseArgs(c *Settings) {
 	c.URLHost = urlHost
 	c.URLScheme = urlScheme
 	c.DeviceTwinAPIUrl = urlDeviceTwinAPI
+	c.IdentityAPIUrl = urlIdentityAPI
 	c.StoreURL = storeURL
 }
 

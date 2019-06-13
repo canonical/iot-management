@@ -22,6 +22,7 @@ package manage
 import (
 	"github.com/CanonicalLtd/iot-management/config"
 	"github.com/CanonicalLtd/iot-management/datastore/memory"
+	"github.com/CanonicalLtd/iot-management/identityapi"
 	"testing"
 
 	"github.com/CanonicalLtd/iot-management/twinapi"
@@ -53,7 +54,7 @@ func TestManagement_DeviceList(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""))
+			srv := NewManagement(getSettings(), memory.NewStore(), twinapi.NewMockClient(""), &identityapi.MockIdentity{})
 			got := srv.DeviceList(tt.args.orgID, tt.args.username, tt.args.role)
 			if got.Code != tt.wantErr {
 				t.Errorf("Management.DeviceList() = %v, want %v", got.Code, tt.wantErr)

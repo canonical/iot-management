@@ -21,6 +21,9 @@ import AlertBox from './AlertBox';
 import {T, isUserAdmin, formatError} from './Utils';
 
 
+const statusOptions = [{id:1, name:'Waiting'}, {id:2, name:'Enrolled'}, {id:3, name:'Disabled'}]
+
+
 class RegisterEdit extends Component {
     
     constructor(props) {
@@ -29,7 +32,10 @@ class RegisterEdit extends Component {
             title: null,
             error: null,
             hideForm: false,
-            device: {active: true},
+            deviceId: '',
+            status: 0,
+            statusTo: 0,
+            device: {orgid: this.props.account.orgid},
         };
     }
 
@@ -43,8 +49,10 @@ class RegisterEdit extends Component {
     }
 
     getDevice(id) {
-        api.devicesGet(this.props.account.code, id).then(response => {
-            this.setState({device: response.data.device});
+        api.clientsGet(this.props.account.orgid, id).then(response => {
+            this.setState({device: response.data.enrollment.device,
+                status: response.data.enrollment.status, statusTo:response.data.enrollment.status,
+                deviceId: response.data.enrollment.id});
         })
         .catch((e) => {
             this.setState({error: formatError(e.response.data), hideForm: true});
@@ -55,33 +63,44 @@ class RegisterEdit extends Component {
         this.setState({title: T(title)});
     }
 
-    handleChangeName = (e) => {
+    handleChangeBrand = (e) => {
         var device = this.state.device;
-        device.name = e.target.value;
+        device.brand = e.target.value;
         this.setState({device: device});
     }
 
-    handleChangeActive = (e) => {
+    handleChangeModel = (e) => {
         var device = this.state.device;
-        device.active = e.target.checked;
+        device.model = e.target.value;
         this.setState({device: device});
     }
 
+    handleChangeSerial = (e) => {
+        var device = this.state.device;
+        device.serial = e.target.value;
+        this.setState({device: device});
+    }
+
+    handleChangeStatus = (e) => {
+        let status = parseInt(e.target.value, 10);
+        this.setState({statusTo: status});
+    }
+    
     handleSaveClick = (e) => {
         e.preventDefault();
 
         if (this.props.id) {
             // Update the existing device
-            api.devicesUpdate(this.props.account.code, this.state.device).then(response => {
-                window.location = '/devices';
+            api.clientsUpdate(this.props.account.orgid, this.state.deviceId, this.state.statusTo).then(response => {
+                window.location = '/register';
             })
             .catch(e => {
                 this.setState({error: formatError(e.response.data), hideForm: false});
             })
         } else {
             // Create a new device
-            api.devicesNew(this.props.account.code, this.state.device).then(response => {
-                window.location = '/devices';
+            api.clientsNew(this.props.account.orgid, this.state.device).then(response => {
+                window.location = '/register';
             })
             .catch(e => {
                 this.setState({error: formatError(e.response.data), hideForm: false});
@@ -90,7 +109,6 @@ class RegisterEdit extends Component {
     }
 
     render () {
-
         if (!isUserAdmin(this.props.token)) {
             return (
                 <div className="row">
@@ -107,30 +125,60 @@ class RegisterEdit extends Component {
             )
         }
 
+        let disabled = this.state.status ? true : false;
+
         return (
             <div className="row">
                 <section className="row">
                     <h2>{this.state.title}</h2>
+                    <div>{T('register-desc')}<br /></div>
 
                     <AlertBox message={this.state.error} />
 
                     <form>
                         <fieldset>
-                            <label htmlFor="name">{T('name')}:
-                                <input type="text" id="name" placeholder={T('device-name-desc')}
-                                    value={this.state.device.name} onChange={this.handleChangeName}/>
+                            {
+                                this.props.id ?
+                                    <label htmlFor="id">{T('id')}:
+                                        <input type="text" id="id"
+                                               value={this.state.deviceId} disabled={true} />
+                                    </label>
+                                    :
+                                    ''
+                            }
+
+                            <label htmlFor="brand">{T('brand')}:
+                                <input type="text" id="brand" placeholder={T('brand-desc')}
+                                    value={this.state.device.brand} onChange={this.handleChangeBrand} disabled={disabled} />
                             </label>
-                            <label htmlFor="active">{T('active')}
-                                <input type="checkbox" id="active"
-                                    checked={this.state.device.active} onChange={this.handleChangeActive}/>
+                            <label htmlFor="model">{T('model')}:
+                                <input type="text" id="model" placeholder={T('model-desc')}
+                                       value={this.state.device.model} onChange={this.handleChangeModel} disabled={disabled} />
+                            </label>
+                            <label htmlFor="serial">{T('serial')}:
+                                <input type="text" id="serial" placeholder={T('serial-desc')}
+                                       value={this.state.device.serial} onChange={this.handleChangeSerial} disabled={disabled} />
+                            </label>
+
+                            <label>
+                                {this.state.status > 0 ?
+                                    <select value={this.state.statusTo} onChange={this.handleChangeStatus}>
+                                        {statusOptions.map(a => {
+                                            return <option key={a.id} value={a.id}
+                                                           selected={a.id === this.state.statusTo}>{a.name}</option>;
+                                        })}
+                                    </select>
+                                    :
+                                    ''
+                                }
                             </label>
                         </fieldset>
                     </form>
 
                     <div>
-                        <a href='/devices' className="p-button--neutral">{T('cancel')}</a>
+                        <a href='/register' className="p-button--neutral">{T('cancel')}</a>
                         &nbsp;
-                        <a href='/devices' onClick={this.handleSaveClick} className="p-button--brand">{T('save')}</a>
+                        <a href='/register' onClick={this.handleSaveClick} className="p-button--brand">{T('save')}</a>
                     </div>
                 </section>
                 <br />
