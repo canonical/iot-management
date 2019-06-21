@@ -18,40 +18,120 @@
 
 import React, {Component} from 'react';
 import AlertBox from './AlertBox';
-import {T} from './Utils';
+import {formatError, T} from './Utils';
+import api from "../models/api";
 
 class Groups extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: null,
+            devices: [],
+            devicesExcluded: [],
+        }
+    }
 
-    renderRows(items) {
+    refresh(orgid, name) {
+        this.getGroupDevices(orgid, name)
+        this.getGroupExcludedDevices(orgid, name)
+    }
+
+    getGroupDevices(orgid, name) {
+        api.groupsGetDevices(orgid, name).then(response => {
+            this.setState({devices: response.data.devices})
+        }).catch(e => {
+            this.setState({message: formatError(e.response.data), devices: []});
+        })
+    }
+
+    getGroupExcludedDevices (orgid, name) {
+        api.groupsGetDevicesExcluded(orgid, name).then(response => {
+            this.setState({devicesExcluded: response.data.devices})
+        }).catch(e => {
+            this.setState({message: formatError(e.response.data), devicesExcluded: []});
+        })
+    }
+
+    handleGroupClick = (e) => {
+        e.preventDefault();
+
+        let selected = e.target.getAttribute('data-key')
+        if (this.state.name === selected) {
+            // Deselect the group
+            this.setState({name: null, devices: [], devicesExcluded: []})
+        } else {
+            // Select the group
+            this.setState({name: selected})
+            this.refresh(this.props.account.orgid, selected)
+        }
+    }
+
+    handleAddToGroup = (e) => {
+        e.preventDefault();
+        let deviceId = e.target.getAttribute('data-key')
+
+        api.groupsDeviceLink(this.props.account.orgid, this.state.name, deviceId).then(response => {
+            this.refresh(this.props.account.orgid, this.state.name)
+        }).catch(e => {
+            this.setState({message: formatError(e.response.data), devicesExcluded: []});
+        })
+    }
+
+    handleRemoveFromGroup = (e) => {
+        e.preventDefault();
+        let deviceId = e.target.getAttribute('data-key')
+
+        api.groupsDeviceUnlink(this.props.account.orgid, this.state.name, deviceId).then(response => {
+            this.refresh(this.props.account.orgid, this.state.name)
+        }).catch(e => {
+            this.setState({message: formatError(e.response.data), devicesExcluded: []});
+        })
+    }
+
+    renderRowsGroups(items) {
         return items.map((l) => {
-          console.log(l)
+          let selected = (l.name===this.state.name) ? 'p-button--brand' : 'p-button--neutral'
           return (
-            <tr key={l.id}>
+            <tr key={l.name}>
                 <td className="overflow">
-                    <button>{l.name}</button>
+                    <button className={selected} onClick={this.handleGroupClick} data-key={l.name}>{l.name}</button>
                 </td>
             </tr>
           );
         });
     }
 
+    renderRowsDevices(items, excluded) {
+        return items.map((l) => {
+            return (
+                <tr key={l.deviceId}>
+                    <td className="overflow">
+                        {excluded ? <button onClick={this.handleAddToGroup} data-key={l.deviceId} className="p-button--neutral xsmall"><i data-key={l.deviceId}  className="p-icon--plus" /></button>
+                            : <button onClick={this.handleRemoveFromGroup} data-key={l.deviceId}  className="p-button--neutral xsmall"><i data-key={l.deviceId}  className="p-icon--close" /></button>}
+                            &nbsp;
+                        {l.brand} {l.model} {l.serial}
+                    </td>
+                </tr>
+            );
+        });
+    }
 
-    renderTable(items) {
+    renderTableGroups(items) {
         
         if (!items) {
             return
         }
         if (items.length > 0) {
             return (
-            <div className="col-3">
+            <div className="col-4">
                 <table>
                 <thead>
                     <tr>
-                        <th>{T('name')}</th>
+                        <th>{T('groups')}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {this.renderRows(items)}
+                    {this.renderRowsGroups(items)}
                 </tbody>
                 </table>
             </div>
@@ -59,6 +139,80 @@ class Groups extends Component {
         } else {
             return (
             <p>{T('no-groups')}</p>
+            );
+        }
+    }
+
+    renderTableDevices(items) {
+        if (!items) {
+            return
+        }
+        if (items.length > 0) {
+            return (
+                <div className="col-4">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>{T('devices')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.renderRowsDevices(items, false)}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        } else {
+            return (
+                <div className="col-4">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>{T('devices')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>{T('no-devices')}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+    }
+
+    renderTableDevicesExcluded(items) {
+        if (!items) {
+            return
+        }
+        if (items.length > 0) {
+            return (
+                <div className="col-3">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>{T('devices-excluded')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.renderRowsDevices(items, true)}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        } else {
+            return (
+                <div className="col-4">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>{T('devices-excluded')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>{T('no-devices')}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             );
         }
     }
@@ -74,7 +228,9 @@ class Groups extends Component {
                 </section>
 
                 <section className="row spacer">
-                    {this.renderTable(this.props.groups)}
+                    {this.renderTableGroups(this.props.groups)}
+                    {this.renderTableDevices(this.state.devices)}
+                    {this.renderTableDevicesExcluded(this.state.devicesExcluded)}
                 </section>
             </div>
         )

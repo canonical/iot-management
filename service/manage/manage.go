@@ -55,6 +55,11 @@ type Manage interface {
 	SnapConfigSet(orgID, username string, role int, deviceID, snap string, config []byte) web.StandardResponse
 
 	GroupList(orgID, username string, role int) web.GroupsResponse
+	GroupCreate(orgID, username string, role int, body []byte) web.StandardResponse
+	GroupDevices(orgID, username string, role int, name string) web.DevicesResponse
+	GroupExcludedDevices(orgID, username string, role int, name string) web.DevicesResponse
+	GroupDeviceLink(orgID, username string, role int, name, deviceID string) web.StandardResponse
+	GroupDeviceUnlink(orgID, username string, role int, name, deviceID string) web.StandardResponse
 
 	OrganizationsForUser(username string) ([]domain.Organization, error)
 	OrganizationForUserToggle(orgID, username string) error

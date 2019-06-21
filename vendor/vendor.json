@@ -5,44 +5,44 @@
 		{
 			"checksumSHA1": "OPqyb3bsZvXuIsyXK1QkWRZeEng=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/config",
-			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
-			"revisionTime": "2019-06-06T16:25:42Z"
+			"revision": "1ab9dbd83eea2794a1d773a5c6c986721f656639",
+			"revisionTime": "2019-06-19T10:52:21Z"
 		},
 		{
 			"checksumSHA1": "mlLidDa6O7adRxEtowVEGGbA0ZI=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/datastore",
-			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
-			"revisionTime": "2019-06-06T16:25:42Z"
+			"revision": "1ab9dbd83eea2794a1d773a5c6c986721f656639",
+			"revisionTime": "2019-06-19T10:52:21Z"
 		},
 		{
-			"checksumSHA1": "o5MzpZJULe2DmaCGswOezG/blIE=",
+			"checksumSHA1": "smPO4s6NyZM3A+99IM27XZrMTDo=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/domain",
-			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
-			"revisionTime": "2019-06-06T16:25:42Z"
+			"revision": "1ab9dbd83eea2794a1d773a5c6c986721f656639",
+			"revisionTime": "2019-06-19T10:52:21Z"
 		},
 		{
-			"checksumSHA1": "s/r23c3XJTXXIEUANWedA+5XlJI=",
+			"checksumSHA1": "SKCRMft54ZnypWtVFnhlNpMMwhY=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/service/controller",
-			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
-			"revisionTime": "2019-06-06T16:25:42Z"
+			"revision": "1ab9dbd83eea2794a1d773a5c6c986721f656639",
+			"revisionTime": "2019-06-19T10:52:21Z"
 		},
 		{
 			"checksumSHA1": "tf3ZHy2sSFF37E9rMF7yN/AthSg=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/service/devicetwin",
-			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
-			"revisionTime": "2019-06-06T16:25:42Z"
+			"revision": "1ab9dbd83eea2794a1d773a5c6c986721f656639",
+			"revisionTime": "2019-06-19T10:52:21Z"
 		},
 		{
 			"checksumSHA1": "0f3DYSkbdgsD+RToFfzmJuagSKU=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/service/mqtt",
-			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
-			"revisionTime": "2019-06-06T16:25:42Z"
+			"revision": "1ab9dbd83eea2794a1d773a5c6c986721f656639",
+			"revisionTime": "2019-06-19T10:52:21Z"
 		},
 		{
-			"checksumSHA1": "5Ki9Q5AzlTfcdN7N5/9tf0PJb6w=",
+			"checksumSHA1": "n6ow2TufK7ZRfWmxhAO6NOYLjfQ=",
 			"path": "github.com/CanonicalLtd/iot-devicetwin/web",
-			"revision": "d93dd370ca7f68301032d4cb590dc550f5c90a6d",
-			"revisionTime": "2019-06-06T16:25:42Z"
+			"revision": "1ab9dbd83eea2794a1d773a5c6c986721f656639",
+			"revisionTime": "2019-06-19T10:52:21Z"
 		},
 		{
 			"checksumSHA1": "RlRObmPP49Zrs5LOcG6RsmJPqUw=",

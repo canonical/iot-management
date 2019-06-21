@@ -24,6 +24,11 @@ $button-text-color: #f7f7f7;
 
 @import 'node_modules/vanilla-framework/scss/build';
 
+/* no pesky blue border on buttons */
+button:focus {
+    outline:none !important;
+}
+
 * {font-family: Helvetica, Arial, sans-serif !important;}
 .fa, .far, .fas {
     font-family: "Font Awesome 5 Free" !important;
@@ -37,6 +42,11 @@ $button-text-color: #f7f7f7;
 
 .p-button--positive:hover {
     background: #4367A3; border: 1px solid #4367A3;
+}
+
+.p-button--neutral.xsmall {
+    padding-left: .5rem;
+    padding-right: .5rem;
 }
       
 

@@ -94,7 +94,7 @@ class Register extends Component {
                 <td className="overflow">{l.device.model}</td>
                 <td className="overflow">{l.device.serial}</td>
                 <td className="overflow" title={l.device.deviceKey}>
-                    {l.device.deviceKey && l.device.deviceKey.substr(0,40) || ''}
+                    {(l.device.deviceKey && l.device.deviceKey.substr(0,40)) || ''}
                 </td>
                 <td>{this.getStatus(l.status)}</td>
             </tr>

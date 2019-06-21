@@ -40,6 +40,11 @@ type Client interface {
 	SnapConfigSet(orgID, deviceID, snap string, config []byte) web.StandardResponse
 
 	GroupList(orgID string) web.GroupsResponse
+	GroupCreate(orgID string, body []byte) web.StandardResponse
+	GroupDevices(orgID, name string) web.DevicesResponse
+	GroupExcludedDevices(orgID, name string) web.DevicesResponse
+	GroupDeviceLink(orgID, name, deviceID string) web.StandardResponse
+	GroupDeviceUnlink(orgID, name, deviceID string) web.StandardResponse
 }
 
 // ClientAdapter adapts our expectations to device twin API

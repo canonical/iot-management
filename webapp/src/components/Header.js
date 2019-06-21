@@ -18,7 +18,6 @@
 import React, {Component} from 'react';
 import Navigation from './Navigation';
 import NavigationUser from './NavigationUser';
-import {T} from './Utils';
 
 class Header extends Component {
 

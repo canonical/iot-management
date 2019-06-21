@@ -134,6 +134,36 @@ func (m *MockManage) GroupList(orgID, username string, role int) web.GroupsRespo
 	return twin.GroupList(orgID)
 }
 
+// GroupCreate mocks creating a group
+func (m *MockManage) GroupCreate(orgID, username string, role int, body []byte) web.StandardResponse {
+	twin := twinapi.NewMockClient("")
+	return twin.GroupCreate(orgID, body)
+}
+
+// GroupDevices mocks listing devices for a group
+func (m *MockManage) GroupDevices(orgID, username string, role int, name string) web.DevicesResponse {
+	twin := twinapi.NewMockClient("")
+	return twin.GroupDevices(orgID, name)
+}
+
+// GroupExcludedDevices mocks listing devices not in a group
+func (m *MockManage) GroupExcludedDevices(orgID, username string, role int, name string) web.DevicesResponse {
+	twin := twinapi.NewMockClient("")
+	return twin.GroupExcludedDevices(orgID, name)
+}
+
+// GroupDeviceLink mocks linking a device to a group
+func (m *MockManage) GroupDeviceLink(orgID, username string, role int, name, deviceID string) web.StandardResponse {
+	twin := twinapi.NewMockClient("")
+	return twin.GroupDeviceLink(orgID, name, deviceID)
+}
+
+// GroupDeviceUnlink mocks unlinking a device from a group
+func (m *MockManage) GroupDeviceUnlink(orgID, username string, role int, name, deviceID string) web.StandardResponse {
+	twin := twinapi.NewMockClient("")
+	return twin.GroupDeviceUnlink(orgID, name, deviceID)
+}
+
 // OrganizationsForUser mocks organizations for a user
 func (m *MockManage) OrganizationsForUser(username string) ([]domain.Organization, error) {
 	if username == "invalid" {

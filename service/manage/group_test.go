@@ -20,9 +20,9 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
 	"testing"
 
+	"github.com/CanonicalLtd/iot-management/datastore/memory"
 	"github.com/CanonicalLtd/iot-management/twinapi"
 )
 
@@ -54,6 +54,176 @@ func TestManagement_GroupList(t *testing.T) {
 			}
 			if len(got.Groups) != tt.want {
 				t.Errorf("Management.GroupList() = %v, want %v", len(got.Groups), tt.want)
+			}
+		})
+	}
+}
+
+func TestManagement_GroupCreate(t *testing.T) {
+	d1 := []byte(`{"orgid":"abc", "name":"new-group"}`)
+	type args struct {
+		orgID    string
+		username string
+		role     int
+		body     []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr string
+	}{
+		{"valid", args{"abc", "jamesj", 300, d1}, ""},
+		{"invalid-user", args{"abc", "invalid", 200, d1}, "GroupAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := &Management{
+				Settings: getSettings(),
+				DB:       memory.NewStore(),
+				TwinAPI:  twinapi.NewMockClient(""),
+			}
+			got := srv.GroupCreate(tt.args.orgID, tt.args.username, tt.args.role, tt.args.body)
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupCreate() = %v, want %v", got.Code, tt.wantErr)
+			}
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupCreate() = %v, want %v", len(got.Code), tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestManagement_GroupDevices(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+		role     int
+		name     string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    int
+		wantErr string
+	}{
+		{"valid", args{"abc", "jamesj", 300, "workshop"}, 1, ""},
+		{"invalid-user", args{"abc", "invalid", 200, "workshop"}, 0, "GroupAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := &Management{
+				Settings: getSettings(),
+				DB:       memory.NewStore(),
+				TwinAPI:  twinapi.NewMockClient(""),
+			}
+			got := srv.GroupDevices(tt.args.orgID, tt.args.username, tt.args.role, tt.args.name)
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupDevices() = %v, want %v", got.Code, tt.wantErr)
+			}
+			if len(got.Devices) != tt.want {
+				t.Errorf("Management.GroupDevices() = %v, want %v", len(got.Devices), tt.want)
+			}
+		})
+	}
+}
+
+func TestManagement_GroupExcludedDevices(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+		role     int
+		name     string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    int
+		wantErr string
+	}{
+		{"valid", args{"abc", "jamesj", 300, "workshop"}, 2, ""},
+		{"invalid-user", args{"abc", "invalid", 200, "workshop"}, 0, "GroupAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := &Management{
+				Settings: getSettings(),
+				DB:       memory.NewStore(),
+				TwinAPI:  twinapi.NewMockClient(""),
+			}
+			got := srv.GroupExcludedDevices(tt.args.orgID, tt.args.username, tt.args.role, tt.args.name)
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupExcludedDevices() = %v, want %v", got.Code, tt.wantErr)
+			}
+			if len(got.Devices) != tt.want {
+				t.Errorf("Management.GroupExcludedDevices() = %v, want %v", len(got.Devices), tt.want)
+			}
+		})
+	}
+}
+
+func TestManagement_GroupDeviceLink(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+		role     int
+		name     string
+		deviceID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr string
+	}{
+		{"valid", args{"abc", "jamesj", 300, "workshop", "a111"}, ""},
+		{"invalid-user", args{"abc", "invalid", 200, "workshop", "a111"}, "GroupAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := &Management{
+				Settings: getSettings(),
+				DB:       memory.NewStore(),
+				TwinAPI:  twinapi.NewMockClient(""),
+			}
+			got := srv.GroupDeviceLink(tt.args.orgID, tt.args.username, tt.args.role, tt.args.name, tt.args.deviceID)
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupDeviceLink() = %v, want %v", got.Code, tt.wantErr)
+			}
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupDeviceLink() = %v, want %v", got.Code, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestManagement_GroupDeviceUnlink(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+		role     int
+		name     string
+		deviceID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr string
+	}{
+		{"valid", args{"abc", "jamesj", 300, "workshop", "a111"}, ""},
+		{"invalid-user", args{"abc", "invalid", 200, "workshop", "a111"}, "GroupAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := &Management{
+				Settings: getSettings(),
+				DB:       memory.NewStore(),
+				TwinAPI:  twinapi.NewMockClient(""),
+			}
+			got := srv.GroupDeviceUnlink(tt.args.orgID, tt.args.username, tt.args.role, tt.args.name, tt.args.deviceID)
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupDeviceUnlink() = %v, want %v", got.Code, tt.wantErr)
+			}
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.GroupDeviceUnlink() = %v, want %v", got.Code, tt.wantErr)
 			}
 		})
 	}

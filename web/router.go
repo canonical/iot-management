@@ -48,6 +48,11 @@ func (wb Service) Router() *mux.Router {
 
 	// API routes: groups
 	router.Handle("/v1/{orgid}/groups", Middleware(http.HandlerFunc(wb.GroupListHandler))).Methods("GET")
+	router.Handle("/v1/{orgid}/groups/{name}/{device}", Middleware(http.HandlerFunc(wb.GroupDeviceLinkHandler))).Methods("POST")
+	router.Handle("/v1/{orgid}/groups/{name}/{device}", Middleware(http.HandlerFunc(wb.GroupDeviceUnlinkHandler))).Methods("DELETE")
+	router.Handle("/v1/{orgid}/groups/{name}/devices", Middleware(http.HandlerFunc(wb.GroupDevicesHandler))).Methods("GET")
+	router.Handle("/v1/{orgid}/groups/{name}/devices/excluded", Middleware(http.HandlerFunc(wb.GroupExcludedDevicesHandler))).Methods("GET")
+	router.Handle("/v1/{orgid}/groups", Middleware(http.HandlerFunc(wb.GroupCreateHandler))).Methods("POST")
 
 	// API routes: snap functionality
 	router.Handle("/v1/device/{orgid}/{deviceid}/snaps", Middleware(http.HandlerFunc(wb.SnapListHandler))).Methods("GET")

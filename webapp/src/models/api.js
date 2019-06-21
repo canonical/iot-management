@@ -60,6 +60,34 @@ var service = {
         return axios.get(constants.baseUrl + account + '/groups');
     },
 
+    groupsGet: (account, name, cancelCallback) => {
+        return axios.get(constants.baseUrl + account + '/groups/' + name);
+    },
+
+    groupsGetDevices: (account, name, cancelCallback) => {
+        return axios.get(constants.baseUrl + account + '/groups/' + name + '/devices');
+    },
+
+    groupsGetDevicesExcluded: (account, name, cancelCallback) => {
+        return axios.get(constants.baseUrl + account + '/groups/' + name + '/devices/excluded');
+    },
+
+    groupsCreate: (account, name, cancelCallback) => {
+        return axios.post(constants.baseUrl + account + '/groups', {orgid: account, name: name});
+    },
+
+    groupsUpdate: (account, nameFrom, nameTo, cancelCallback) => {
+        return axios.put(constants.baseUrl + account + '/groups', {orgid: account, nameFrom: nameFrom, nameTo: nameTo});
+    },
+
+    groupsDeviceLink: (account, name, deviceId, cancelCallback) => {
+        return axios.post(constants.baseUrl + account + '/groups/' + name + '/' + deviceId);
+    },
+
+    groupsDeviceUnlink: (account, name, deviceId, cancelCallback) => {
+        return axios.delete(constants.baseUrl + account + '/groups/' + name + '/' + deviceId);
+    },
+
     snapsList: (account, device, cancelCallback) => {
         return axios.get(constants.baseUrl + 'device/' + account + '/' + device + '/snaps');
     },

@@ -43,3 +43,98 @@ func (a *ClientAdapter) GroupList(orgID string) web.GroupsResponse {
 	}
 	return r
 }
+
+// GroupCreate creates a device group
+func (a *ClientAdapter) GroupCreate(orgID string, body []byte) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("group", orgID)
+
+	resp, err := post(a.urlPath(p), body)
+	if err != nil {
+		r.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Message = err.Error()
+	}
+	return r
+}
+
+// GroupDevices lists the devices for a group
+func (a *ClientAdapter) GroupDevices(orgID, name string) web.DevicesResponse {
+	r := web.DevicesResponse{}
+	p := path.Join("group", orgID, name, "devices")
+
+	resp, err := get(a.urlPath(p))
+	if err != nil {
+		r.StandardResponse.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.StandardResponse.Message = err.Error()
+	}
+	return r
+}
+
+// GroupExcludedDevices lists the devices for a group
+func (a *ClientAdapter) GroupExcludedDevices(orgID, name string) web.DevicesResponse {
+	r := web.DevicesResponse{}
+	p := path.Join("group", orgID, name, "devices", "excluded")
+
+	resp, err := get(a.urlPath(p))
+	if err != nil {
+		r.StandardResponse.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.StandardResponse.Message = err.Error()
+	}
+	return r
+}
+
+// GroupDeviceLink links a device with a group
+func (a *ClientAdapter) GroupDeviceLink(orgID, name, deviceID string) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("group", orgID, name, deviceID)
+
+	resp, err := post(a.urlPath(p), []byte(""))
+	if err != nil {
+		r.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Message = err.Error()
+	}
+	return r
+}
+
+// GroupDeviceUnlink unlinks a device from a group
+func (a *ClientAdapter) GroupDeviceUnlink(orgID, name, deviceID string) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("group", orgID, name, deviceID)
+
+	resp, err := delete(a.urlPath(p))
+	if err != nil {
+		r.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Message = err.Error()
+	}
+	return r
+}

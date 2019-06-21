@@ -133,3 +133,45 @@ func (m *MockClient) GroupList(orgID string) web.GroupsResponse {
 		Groups:           []domain.Group{{OrganizationID: "abc", Name: "workshop"}},
 	}
 }
+
+// GroupDevices mocks listing devices for a groups
+func (m *MockClient) GroupDevices(orgID, name string) web.DevicesResponse {
+	return web.DevicesResponse{
+		StandardResponse: web.StandardResponse{},
+		Devices: []domain.Device{
+			{OrganizationID: "abc", DeviceID: "a111", Brand: "example", Model: "drone-1000", SerialNumber: "DR1000A111", DeviceKey: "AAAAAAAAA", StoreID: "example-store"},
+		},
+	}
+}
+
+// GroupExcludedDevices mocks listing devices not in a groups
+func (m *MockClient) GroupExcludedDevices(orgID, name string) web.DevicesResponse {
+	return web.DevicesResponse{
+		StandardResponse: web.StandardResponse{},
+		Devices: []domain.Device{
+			{OrganizationID: "abc", DeviceID: "b222", Brand: "example", Model: "drone-1000", SerialNumber: "DR1000B222", DeviceKey: "BBBBBBBBB", StoreID: "example-store"},
+			{OrganizationID: "abc", DeviceID: "c333", Brand: "canonical", Model: "ubuntu-core-18-amd64", SerialNumber: "d75f7300-abbf-4c11-bf0a-8b7103038490", DeviceKey: "CCCCCCCCC"},
+		},
+	}
+}
+
+// GroupCreate mocks creating a device groups
+func (m *MockClient) GroupCreate(orgID string, body []byte) web.StandardResponse {
+	return web.StandardResponse{}
+}
+
+// GroupDeviceLink mocks linking a device to a group
+func (m *MockClient) GroupDeviceLink(orgID, name, deviceID string) web.StandardResponse {
+	if orgID == "invalid" || deviceID == "invalid" {
+		return web.StandardResponse{Code: "GroupDevice", Message: "MOCK error link"}
+	}
+	return web.StandardResponse{}
+}
+
+// GroupDeviceUnlink mocks unlinking a device from a group
+func (m *MockClient) GroupDeviceUnlink(orgID, name, deviceID string) web.StandardResponse {
+	if orgID == "invalid" || deviceID == "invalid" {
+		return web.StandardResponse{Code: "GroupDevice", Message: "MOCK error unlink"}
+	}
+	return web.StandardResponse{}
+}

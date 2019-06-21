@@ -30,6 +30,7 @@ import Register from './components/Register';
 import RegisterEdit from './components/RegisterEdit';
 import DeviceSnaps from './components/DeviceSnaps';
 import Groups from './components/Groups';
+import GroupEdit from './components/GroupEdit';
 import If from './components/If';
 import Index from './components/Index';
 import api from './models/api';
@@ -109,7 +110,7 @@ class App extends Component {
     api.groupsList(orgid).then(response => {
         this.setState({groups: response.data.groups})
     }).catch(e => {
-        this.setState({message: formatError(e.response.data), clients: []});
+        this.setState({message: formatError(e.response.data), groups: []});
     })
   }
 
@@ -208,15 +209,15 @@ class App extends Component {
   renderGroups(sectionId, subsection) {
 
     if (!sectionId) {
-        return <Groups token={this.props.token} groups={this.state.groups} account={this.state.selectedAccount} />
+        return (<Groups token={this.props.token} groups={this.state.groups} account={this.state.selectedAccount} />)
     }
 
-    // switch(sectionId) {
-    //   case 'new':
-    //     return <RegisterEdit token={this.props.token} account={this.state.selectedAccount} />
-    //   default:
-    //     return <RegisterEdit token={this.props.token} account={this.state.selectedAccount} id={sectionId} />
-    // }
+    switch(sectionId) {
+      case 'new':
+        return <GroupEdit token={this.props.token} account={this.state.selectedAccount} />
+      default:
+        return <GroupEdit token={this.props.token} account={this.state.selectedAccount} name={sectionId} />
+    }
   }
 
   renderSubnav(currentSection, sectionId, subsection) {
