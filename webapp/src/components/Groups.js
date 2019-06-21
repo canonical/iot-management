@@ -117,7 +117,6 @@ class Groups extends Component {
     }
 
     renderTableGroups(items) {
-        
         if (!items) {
             return
         }
@@ -229,8 +228,12 @@ class Groups extends Component {
 
                 <section className="row spacer">
                     {this.renderTableGroups(this.props.groups)}
-                    {this.renderTableDevices(this.state.devices)}
-                    {this.renderTableDevicesExcluded(this.state.devicesExcluded)}
+                    {this.state.name ?
+                        this.renderTableDevices(this.state.devices) : ''
+                    }
+                    {this.state.name ?
+                        this.renderTableDevicesExcluded(this.state.devicesExcluded) : ''
+                    }
                 </section>
             </div>
         )

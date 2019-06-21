@@ -91,6 +91,7 @@ func (wb Service) Router() *mux.Router {
 	router.PathPrefix("/notfound").Handler(Middleware(http.HandlerFunc(wb.IndexHandler)))
 	router.PathPrefix("/accounts").Handler(Middleware(http.HandlerFunc(wb.IndexHandler)))
 	router.PathPrefix("/devices").Handler(Middleware(http.HandlerFunc(wb.IndexHandler)))
+	router.PathPrefix("/actions").Handler(Middleware(http.HandlerFunc(wb.IndexHandler)))
 	router.PathPrefix("/groups").Handler(Middleware(http.HandlerFunc(wb.IndexHandler)))
 	router.PathPrefix("/register").Handler(Middleware(http.HandlerFunc(wb.IndexHandler)))
 	router.PathPrefix("/users").Handler(Middleware(http.HandlerFunc(wb.IndexHandler)))

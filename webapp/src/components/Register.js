@@ -103,8 +103,6 @@ class Register extends Component {
     }
 
     render () {
-        console.log('---', this.props.devices)
-
         return (
             <div className="row">
                 <section className="row">

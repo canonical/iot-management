@@ -24,7 +24,9 @@ import api from '../models/api';
 
 const subLinks = {
     register: ['register', 'devices'],
-    devices: ['info', 'snaps']
+    devices: ['info', 'snaps'],
+    groups: ['groups', 'actions'],
+    actions: ['groups', 'actions'],
 }
 
 export function T(message) {
@@ -115,7 +117,6 @@ export function getAuthToken(callback) {
             return
         }
         var token = jwtDecode(jwt)
-        console.log('---token:', token)
 
         if (!token) {
             callback({})
@@ -134,15 +135,12 @@ export function formatError(data) {
 }
 
 export function saveAccount(account) {
-    //sessionStorage.setItem('accountId', account.id);
     sessionStorage.setItem('accountCode', account.orgid);
     sessionStorage.setItem('accountName', account.name);
-    //sessionStorage.setItem('accountActive', account.active);
 }
 
 export function getAccount() {
     return {
-        //id: parseInt(sessionStorage.getItem('accountId'),10),
         orgid: sessionStorage.getItem('accountCode'),
         name: sessionStorage.getItem('accountName'),
     }

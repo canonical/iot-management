@@ -30,6 +30,7 @@ import Register from './components/Register';
 import RegisterEdit from './components/RegisterEdit';
 import DeviceSnaps from './components/DeviceSnaps';
 import Groups from './components/Groups';
+import Actions from './components/Actions';
 import GroupEdit from './components/GroupEdit';
 import If from './components/If';
 import Index from './components/Index';
@@ -141,6 +142,7 @@ class App extends Component {
       if((r.section==='devices') && (r.sectionId)) {this.getClient(selectedAccount.orgid, r.sectionId)}
       if((r.section==='devices') && (r.sectionId) && (r.subsection==='snaps')) {this.getSnaps(selectedAccount.orgid, r.sectionId)}
       if(r.section==='groups') {this.getGroups(selectedAccount.orgid)}
+      if(r.section==='actions') {this.getGroups(selectedAccount.orgid)}
   }
 
   handleAccountChange = (account) => {
@@ -220,6 +222,19 @@ class App extends Component {
     }
   }
 
+  renderActions(sectionId, subsection) {
+    if (!sectionId) {
+        return (<Actions token={this.props.token} groups={this.state.groups} account={this.state.selectedAccount} />)
+    }
+
+    // switch(sectionId) {
+    //     case 'new':
+    //         return <GroupEdit token={this.props.token} account={this.state.selectedAccount} />
+    //     default:
+    //         return <GroupEdit token={this.props.token} account={this.state.selectedAccount} name={sectionId} />
+    // }
+  }
+
   renderSubnav(currentSection, sectionId, subsection) {
     var l = sectionNavLinks(currentSection, sectionId);
     if (l) {
@@ -267,6 +282,7 @@ class App extends Component {
             {r.section==='groups'? this.renderGroups(r.sectionId, r.subsection) : ''}
             {r.section==='accounts'? this.renderAccounts(r.sectionId, r.subsection) : ''}
             {r.section==='users'? this.renderUsers(r.sectionId, r.subsection) : ''}
+            {r.section==='actions'? this.renderActions(r.sectionId, r.subsection) : ''}
           </div>
         </If>
         

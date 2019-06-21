@@ -19,6 +19,7 @@ export default {
     'account-name-desc':        'Name of the company',
     'account-code-desc':        'Account ID from the Ubuntu Store',
     'accounts':                 'Accounts',
+    'actions':                  'Actions',
     'active':                   'Active',
     'address':                  'Address',
     'brand':                    'Brand',
