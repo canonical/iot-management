@@ -100,7 +100,7 @@ class App extends Component {
   }
 
   getClient (orgid, endpoint) {
-    api.clientsDetail(orgid, endpoint).then(response => {
+    api.devicesGet(orgid, endpoint).then(response => {
         this.setState({client: response.data})
     }).catch(e => {
         this.setState({message: formatError(e.response.data), client: {}});

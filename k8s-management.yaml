@@ -18,17 +18,21 @@ spec:
     spec:
       containers:
         - name: management
-          image: iot-management
-          imagePullPolicy: Never
+          image: sonicblue/iot-management
           env:
             - name: DRIVER
               value: "postgres"
             - name: DATASOURCE
-              value: "dbname=management host=postgres user=manager password=m8v8l7IbOws81Kq sslmode=disable"
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: DATASOURCE
             - name: HOST
               value: "management:8010"
             - name: SCHEME
               value: "http"
+            - name: IDENTITYAPI
+              value: "http://identity:8030/v1/"
             - name: DEVICETWINAPI
               value: "http://devicetwin:8040/v1/"
             - name: STOREURL
