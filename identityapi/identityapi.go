@@ -33,6 +33,8 @@ type Client interface {
 	RegisterDevice(body []byte) web.RegisterResponse
 	RegDeviceGet(orgID, deviceID string) web.EnrollResponse
 	RegDeviceUpdate(orgID, deviceID string, body []byte) web.StandardResponse
+	RegisterOrganization(body []byte) web.RegisterResponse
+	RegOrganizationList() web.OrganizationsResponse
 }
 
 // ClientAdapter adapts our expectations to device twin API

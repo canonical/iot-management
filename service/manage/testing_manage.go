@@ -187,10 +187,7 @@ func (m *MockManage) OrganizationGet(orgID string) (domain.Organization, error) 
 }
 
 // OrganizationCreate mocks creating an organization
-func (m *MockManage) OrganizationCreate(org domain.Organization) error {
-	if org.OrganizationID == "abc" {
-		return fmt.Errorf("MOCK error create")
-	}
+func (m *MockManage) OrganizationCreate(org domain.OrganizationCreate) error {
 	return nil
 }
 

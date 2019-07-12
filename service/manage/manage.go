@@ -64,7 +64,7 @@ type Manage interface {
 	OrganizationsForUser(username string) ([]domain.Organization, error)
 	OrganizationForUserToggle(orgID, username string) error
 	OrganizationGet(orgID string) (domain.Organization, error)
-	OrganizationCreate(org domain.Organization) error
+	OrganizationCreate(org domain.OrganizationCreate) error
 	OrganizationUpdate(org domain.Organization) error
 }
 

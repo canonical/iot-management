@@ -89,15 +89,14 @@ func TestManagement_OrganizationGet(t *testing.T) {
 
 func TestManagement_OrganizationCreate(t *testing.T) {
 	type args struct {
-		org domain.Organization
+		org domain.OrganizationCreate
 	}
 	tests := []struct {
 		name    string
 		args    args
 		wantErr bool
 	}{
-		{"valid", args{domain.Organization{OrganizationID: "def", Name: "Test Inc"}}, false},
-		{"invalid-duplicate", args{domain.Organization{OrganizationID: "abc", Name: "Test Inc"}}, true},
+		{"valid", args{domain.OrganizationCreate{Name: "Test Inc", Country: "GB"}}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

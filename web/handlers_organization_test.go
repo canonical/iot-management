@@ -72,9 +72,8 @@ func TestService_OrganizationCreateHandler(t *testing.T) {
 		want        int
 		wantErr     string
 	}{
-		{"valid", "/v1/organizations", "jamesj", 300, []byte(`{"orgid":"def","name":"Test Inc"}`), http.StatusOK, ""},
-		{"invalid-duplicate", "/v1/organizations", "jamesj", 300, []byte(`{"orgid":"abc","name":"Test Inc"}`), http.StatusBadRequest, "OrgCreate"},
-		{"invalid-permissions", "/v1/organizations", "jamesj", 200, []byte(`{"orgid":"def","name":"Test Inc"}`), http.StatusBadRequest, "UserAuth"},
+		{"valid", "/v1/organizations", "jamesj", 300, []byte(`{"country":"GB","name":"Test Inc"}`), http.StatusOK, ""},
+		{"invalid-permissions", "/v1/organizations", "jamesj", 200, []byte(`{"country":"GB","name":"Test Inc"}`), http.StatusBadRequest, "UserAuth"},
 		{"invalid-data", "/v1/organizations", "jamesj", 300, []byte(`\u1000`), http.StatusBadRequest, "OrgCreate"},
 		{"invalid-data-empty", "/v1/organizations", "jamesj", 300, []byte(``), http.StatusBadRequest, "OrgCreate"},
 	}

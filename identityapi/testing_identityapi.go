@@ -20,9 +20,41 @@
 package identityapi
 
 import (
+	"fmt"
 	"github.com/CanonicalLtd/iot-identity/domain"
 	"github.com/CanonicalLtd/iot-identity/web"
+	"io/ioutil"
+	"net/http"
+	"strings"
 )
+
+func mockHTTP(body string) {
+	// Mock the HTTP methods
+	get = func(p string) (*http.Response, error) {
+		if strings.Contains(p, "invalid") {
+			return nil, fmt.Errorf("MOCK error get")
+		}
+		return &http.Response{
+			Body: ioutil.NopCloser(strings.NewReader(body)),
+		}, nil
+	}
+	post = func(p string, data []byte) (*http.Response, error) {
+		if strings.Contains(p, "invalid") {
+			return nil, fmt.Errorf("MOCK error post")
+		}
+		return &http.Response{
+			Body: ioutil.NopCloser(strings.NewReader(body)),
+		}, nil
+	}
+	put = func(p string, data []byte) (*http.Response, error) {
+		if strings.Contains(p, "invalid") {
+			return nil, fmt.Errorf("MOCK error put")
+		}
+		return &http.Response{
+			Body: ioutil.NopCloser(strings.NewReader(body)),
+		}, nil
+	}
+}
 
 // MockIdentity mocks the identity API client
 type MockIdentity struct{}
@@ -69,4 +101,20 @@ func (m *MockIdentity) RegDeviceUpdate(orgID, deviceID string, body []byte) web.
 		return web.StandardResponse{Code: "RegDeviceUpdate", Message: "MOCK error update"}
 	}
 	return web.StandardResponse{}
+}
+
+// RegOrganizationList mocks listing registered organizations
+func (m *MockIdentity) RegOrganizationList() web.OrganizationsResponse {
+	return web.OrganizationsResponse{
+		StandardResponse: web.StandardResponse{},
+		Organizations:    []domain.Organization{},
+	}
+}
+
+// RegisterOrganization mocks registering an organization
+func (m *MockIdentity) RegisterOrganization(body []byte) web.RegisterResponse {
+	return web.RegisterResponse{
+		StandardResponse: web.StandardResponse{},
+		ID:               "def",
+	}
 }

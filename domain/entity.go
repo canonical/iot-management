@@ -33,3 +33,9 @@ type Organization struct {
 	OrganizationID string `json:"orgid"`
 	Name           string `json:"name"`
 }
+
+// OrganizationCreate holds details of the organization creation request
+type OrganizationCreate struct {
+	Name    string `json:"name"`
+	Country string `json:"country"`
+}

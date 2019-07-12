@@ -108,7 +108,7 @@ func (wb Service) OrganizationCreateHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	org := domain.Organization{}
+	org := domain.OrganizationCreate{}
 	err = json.NewDecoder(r.Body).Decode(&org)
 	switch {
 	// Check we have some data

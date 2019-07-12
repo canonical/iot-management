@@ -20,6 +20,8 @@
 package manage
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/CanonicalLtd/iot-management/datastore"
 	"github.com/CanonicalLtd/iot-management/domain"
 )
@@ -59,12 +61,24 @@ func (srv *Management) OrganizationGet(orgID string) (domain.Organization, error
 }
 
 // OrganizationCreate creates a new organization
-func (srv *Management) OrganizationCreate(org domain.Organization) error {
-	o := datastore.Organization{
-		OrganizationID: org.OrganizationID,
-		Name:           org.Name,
+func (srv *Management) OrganizationCreate(org domain.OrganizationCreate) error {
+	// Serialize the request
+	b, err := json.Marshal(org)
+	if err != nil {
+		return err
 	}
 
+	// Register the organization with the identity service
+	resp := srv.IdentityAPI.RegisterOrganization(b)
+	if len(resp.Message) > 0 {
+		return fmt.Errorf("error registering organization: %v", resp.Message)
+	}
+
+	// Create the organization in the local database with the generated ID
+	o := datastore.Organization{
+		OrganizationID: resp.ID,
+		Name:           org.Name,
+	}
 	return srv.DB.OrganizationCreate(o)
 }
 

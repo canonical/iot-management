@@ -56,7 +56,7 @@ class Devices extends Component {
             );
         } else {
             return (
-            <p>{T('no-devices')}</p>
+            <p>{T('no-devices-connected')}</p>
             );
         }
     }

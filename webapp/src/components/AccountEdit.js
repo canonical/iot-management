@@ -30,6 +30,7 @@ class AccountEdit extends Component {
             error: null,
             hideForm: false,
             account: {active: true},
+            country: '',
         };
     }
 
@@ -68,10 +69,8 @@ class AccountEdit extends Component {
         this.setState({account: account});
     }
 
-    handleChangeActive = (e) => {
-        var account = this.state.account;
-        account['active'] = e.target.checked;
-        this.setState({account: account});
+    handleChangeCountry = (e) => {
+        this.setState({country: e.target.value});
     }
 
     handleSaveClick = (e) => {
@@ -124,14 +123,24 @@ class AccountEdit extends Component {
 
                     <form>
                         <fieldset>
-                            <label htmlFor="code">{T('code')}:
-                                <input type="text" id="code" placeholder={T('account-code-desc')}
-                                    value={this.state.account.orgid} onChange={this.handleChangeCode} />
-                            </label>
+                            {this.props.id ?
+                                <label htmlFor="code">{T('code')}:
+                                    <input type="text" id="code" disabled="disabled"
+                                           value={this.state.account.orgid} onChange={this.handleChangeCode}/>
+                                </label>
+                                : ''
+                            }
                             <label htmlFor="name">{T('name')}:
                                 <input type="text" id="name" placeholder={T('account-name-desc')}
                                     value={this.state.account.name} onChange={this.handleChangeName}/>
                             </label>
+                            {!this.props.id ?
+                                <label htmlFor="country">{T('country')}:
+                                    <input type="text" id="country" placeholder={T('country-desc')}
+                                        value={this.state.country} onChange={this.handleChangeCountry}/>
+                                </label>
+                                : ''
+                            }
                         </fieldset>
                     </form>
 
