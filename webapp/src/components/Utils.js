@@ -71,6 +71,10 @@ export function isUserStandard(token) {
     return isUser(Role.Standard, token)
 }
 
+export function canUserAdministrate(token) {
+    return isUser(Role.Admin, token) || isUser(Role.Superuser, token)
+}
+
 export function isUserAdmin(token) {
     return isUser(Role.Admin, token)
 }

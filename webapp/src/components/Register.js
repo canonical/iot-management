@@ -17,7 +17,7 @@
 
 import React, {Component} from 'react';
 import AlertBox from './AlertBox';
-import {T, isUserSuperuser} from './Utils';
+import {T, canUserAdministrate} from './Utils';
 import {Status} from './Constants';
 
 
@@ -108,7 +108,7 @@ class Register extends Component {
                 <section className="row">
                     <h2>
                         {T('register-devices')}
-                        {isUserSuperuser(this.props.token) ?
+                        {canUserAdministrate(this.props.token) ?
                             <div className="u-float-right">
                                 <a href="/register/new" className="p-button--brand" title={T('new-device')}>
                                     <i className="fa fa-plus" aria-hidden="true" />

@@ -18,7 +18,7 @@
 
 import React, {Component} from 'react';
 import AlertBox from './AlertBox';
-import {formatError, T} from './Utils';
+import {canUserAdministrate, formatError, T} from './Utils';
 import api from "../models/api";
 
 class Groups extends Component {
@@ -220,7 +220,17 @@ class Groups extends Component {
         return (
             <div className="row">
                 <section className="row">
-                    <h2>{T('groups')}</h2>
+                    <h2>
+                        {T('groups')}
+                        {canUserAdministrate(this.props.token) ?
+                            <div className="u-float-right">
+                                <a href="/groups/new" className="p-button--brand" title={T('new-group')}>
+                                    <i className="fa fa-plus" aria-hidden="true" />
+                                </a>
+                            </div>
+                            : ''
+                        }
+                    </h2>
                     <div className="col-12">
                         <AlertBox message={this.props.message} />
                     </div>
