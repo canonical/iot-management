@@ -24,7 +24,6 @@ import (
 	"github.com/CanonicalLtd/iot-management/datastore/memory"
 	"github.com/CanonicalLtd/iot-management/service/manage"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 	"testing"
@@ -56,7 +55,6 @@ func TestService_StoreSearchHandler(t *testing.T) {
 func mockGET(body string) {
 	// Mock the HTTP methods
 	get = func(p string) (*http.Response, error) {
-		log.Println("---", p)
 		if strings.Contains(p, "invalid") {
 			return nil, fmt.Errorf("MOCK error get")
 		}

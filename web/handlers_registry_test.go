@@ -163,3 +163,28 @@ func TestService_RegDeviceUpdate(t *testing.T) {
 		})
 	}
 }
+
+func TestService_RegDeviceGetDownload(t *testing.T) {
+	tests := []struct {
+		name        string
+		url         string
+		username    string
+		permissions int
+		want        int
+		wantErr     string
+	}{
+		{"valid", "/v1/abc/register/devices/a111/download", "jamesj", 300, http.StatusOK, ""},
+		{"invalid-org", "/v1/abc/register/devices/invalid/download", "jamesj", 300, http.StatusBadRequest, "RegDeviceAuth"},
+		{"invalid-permissions", "/v1/abc/register/devices/a111/download", "jamesj", 0, http.StatusBadRequest, "UserAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db := memory.NewStore()
+			wb := NewService(getSettings(), manage.NewMockManagement(db))
+			w := sendRequest("GET", tt.url, nil, wb, tt.username, wb.Settings.JwtSecret, tt.permissions)
+			if w.Code != tt.want {
+				t.Errorf("Expected HTTP status '%d', got: %v", tt.want, w.Code)
+			}
+		})
+	}
+}

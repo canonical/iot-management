@@ -41,6 +41,7 @@ func (wb Service) Router() *mux.Router {
 	router.Handle("/v1/{orgid}/register/devices", Middleware(http.HandlerFunc(wb.RegisterDevice))).Methods("POST")
 	router.Handle("/v1/{orgid}/register/devices/{device}", Middleware(http.HandlerFunc(wb.RegDeviceGet))).Methods("GET")
 	router.Handle("/v1/{orgid}/register/devices/{device}", Middleware(http.HandlerFunc(wb.RegDeviceUpdate))).Methods("PUT")
+	router.Handle("/v1/{orgid}/register/devices/{device}/download", Middleware(http.HandlerFunc(wb.RegDeviceGetDownload))).Methods("GET")
 
 	// API routes: devices
 	router.Handle("/v1/{orgid}/devices", Middleware(http.HandlerFunc(wb.DevicesListHandler))).Methods("GET")

@@ -128,6 +128,10 @@ var service = {
         return axios.get(constants.baseUrl + account + '/register/devices/' + device);
     },
 
+    clientsGetDownloadHREF: (account, device) => {
+        return constants.baseUrl + account + '/register/devices/' + device + '/download';
+    },
+
     clientsNew: (account, device, cancelCallback) => {
         return axios.post(constants.baseUrl + account + '/register/devices', device);
     },
@@ -136,8 +140,8 @@ var service = {
         return axios.get(constants.baseUrl + account + '/clients/' + query + '/device');
     },
 
-    clientsUpdate: (account, deviceId, status, cancelCallback) => {
-        return axios.put(constants.baseUrl + account + '/register/devices/' + deviceId, {status: status});
+    clientsUpdate: (account, deviceId, status, deviceData, cancelCallback) => {
+        return axios.put(constants.baseUrl + account + '/register/devices/' + deviceId, {status: status, deviceData: deviceData});
     },
 
     devicesUpdate: (account, device, cancelCallback) => {

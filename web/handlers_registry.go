@@ -20,10 +20,14 @@
 package web
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"github.com/CanonicalLtd/iot-identity/service"
 	"github.com/gorilla/mux"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -57,12 +61,46 @@ func (wb Service) RegDeviceGet(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	// Get the devices
+	// Get the device
 	response := wb.Manage.RegDeviceGet(vars["orgid"], user.Username, user.Role, vars["device"])
 	if len(response.Code) > 0 {
 		w.WriteHeader(http.StatusBadRequest)
 	}
+
 	_ = encodeResponse(response, w)
+}
+
+// RegDeviceGetDownload provides the download of the device data
+func (wb Service) RegDeviceGetDownload(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsStandardAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	// Fetch the device
+	response := wb.Manage.RegDeviceGet(vars["orgid"], user.Username, user.Role, vars["device"])
+	if len(response.Code) > 0 {
+		formatStandardResponse(response.Code, response.Message, w)
+		return
+	}
+
+	// Set the download headers and body for the file
+	w.Header().Set("Content-Disposition", "attachment; filename=devicedata-"+response.Enrollment.ID)
+	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
+
+	// Decode the base64 file
+	data, err := base64.StdEncoding.DecodeString(response.Enrollment.DeviceData)
+	if err != nil {
+		log.Println("Error decoding the device data:", err)
+		formatStandardResponse("DeviceData", "Error decoding the file", w)
+		return
+	}
+
+	io.Copy(w, bytes.NewReader(data))
 }
 
 // RegDeviceUpdate is the API method to update a registered device status

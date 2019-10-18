@@ -152,6 +152,10 @@ class App extends Component {
     this.updateDataForRoute(account, true)
   }
 
+  handleLogin = (e) => {
+    window.location.pathname = '/login'
+  }
+
   renderAccounts(sectionId, subsection) {
     
     if (!sectionId) {
@@ -290,7 +294,7 @@ class App extends Component {
           <div className="page-content">
               <div className="row">
                 <AlertBox message={T('error-no-auth')} />
-                <a href="/login" className="p-button--brand">{T('login')}</a>
+                <button onClick={this.handleLogin} className="p-button--brand col-1">{T('login')}</button>
               </div>
           </div>
         </If>

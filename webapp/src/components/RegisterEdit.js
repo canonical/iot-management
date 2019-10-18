@@ -35,6 +35,7 @@ class RegisterEdit extends Component {
             deviceId: '',
             status: 0,
             statusTo: 0,
+            deviceData: '',
             device: {orgid: this.props.account.orgid},
         };
     }
@@ -52,6 +53,7 @@ class RegisterEdit extends Component {
         api.clientsGet(this.props.account.orgid, id).then(response => {
             this.setState({device: response.data.enrollment.device,
                 status: response.data.enrollment.status, statusTo:response.data.enrollment.status,
+                deviceData: response.data.enrollment.deviceData,
                 deviceId: response.data.enrollment.id});
         })
         .catch((e) => {
@@ -91,7 +93,7 @@ class RegisterEdit extends Component {
 
         if (this.props.id) {
             // Update the existing device
-            api.clientsUpdate(this.props.account.orgid, this.state.deviceId, this.state.statusTo).then(response => {
+            api.clientsUpdate(this.props.account.orgid, this.state.deviceId, this.state.statusTo, this.state.deviceData).then(response => {
                 window.location = '/register';
             })
             .catch(e => {
@@ -99,13 +101,28 @@ class RegisterEdit extends Component {
             })
         } else {
             // Create a new device
-            api.clientsNew(this.props.account.orgid, this.state.device).then(response => {
+            let device = this.state.device
+            device.deviceData = this.state.deviceData
+            api.clientsNew(this.props.account.orgid, device).then(response => {
                 window.location = '/register';
             })
             .catch(e => {
                 this.setState({error: formatError(e.response.data), hideForm: false});
             })
         }
+    }
+
+    handleFileUpload = (e) => {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onload = (upload) => {
+            this.setState({
+                deviceData: upload.target.result.split(',')[1]
+            });
+        }
+
+        reader.readAsDataURL(file);
     }
 
     render () {
@@ -158,6 +175,11 @@ class RegisterEdit extends Component {
                             <label htmlFor="serial">{T('serial')}:
                                 <input type="text" id="serial" placeholder={T('serial-desc')}
                                        value={this.state.device.serial} onChange={this.handleChangeSerial} disabled={disabled} />
+                            </label>
+
+                            <label htmlFor="key">{T('device-data')}:
+                                {this.state.deviceData ? <a href={api.clientsGetDownloadHREF(this.props.account.orgid,this.state.deviceId)} className="p-button--base" title={T('download-file')}><i className="fa fa-paperclip" /></a> : ''}
+                                <input type="file" onChange={this.handleFileUpload} className="p-button--base"/>
                             </label>
 
                             <label>

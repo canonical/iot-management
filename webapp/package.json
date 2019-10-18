@@ -3,26 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "0.19.0",
     "history": "^4.7.2",
     "jwt-decode": "^2.2.0",
     "moment": "^2.22.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "^2.1.1"
+    "react-scripts": "3.2.0"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",
     "start": "npm run build-css && react-scripts start",
     "buildonly": "react-scripts build",
-    "build": "npm run build-css && react-scripts build",
+    "build": "npm run build-css&& react-scripts build",
     "test": "npm run build-css && react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "filesize": "^3.6.1",
+    "filesize": "5.0.3",
     "node-sass": "^4.10.0",
-    "vanilla-framework": "^1.8.0"
+    "vanilla-framework": "2.4.0"
   },
   "browserslist": [
     ">0.2%",

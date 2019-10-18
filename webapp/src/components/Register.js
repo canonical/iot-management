@@ -86,7 +86,7 @@ class Register extends Component {
                 <td>
                     <a href={'/register/' + l.id} className="p-button--neutral small"><i className="fa fa-edit" /></a>
                     {l.device.deviceKey ?
-                        <a href="" onClick={this.copyToClipboard} data-key={l.device.deviceKey} className="p-button--neutral small" title={T('copy-device-key')}>
+                        <a href="#" onClick={this.copyToClipboard} data-key={l.device.deviceKey} className="p-button--neutral small" title={T('copy-device-key')}>
                         <i className="fa fa-clipboard" data-key={l.device.deviceKey} /></a> : ''}
                 </td>
                 <td className="overflow">{l.id}</td>

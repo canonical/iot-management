@@ -31,13 +31,17 @@ class Index extends Component {
     }
   }
 
+  handleLogin = (e) => {
+    window.location.pathname = '/login'
+  }
+
   renderUser() {
     if (isLoggedIn(this.props.token)) {
       return <div />
     } else {
       return (
         <div>
-          <a href="/login" className="p-button--brand">{T('login')}</a>
+          <button onClick={this.handleLogin} className="p-button--brand">{T('login')}</button>
         </div>
       )
     }
@@ -54,7 +58,6 @@ class Index extends Component {
   render() {
     return (
         <div className="row">
-
 
           <section className="row">
             <h2>{T('title')}</h2>

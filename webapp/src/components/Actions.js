@@ -18,8 +18,7 @@
 
 import React, {Component} from 'react';
 import AlertBox from './AlertBox';
-import {formatError, T} from './Utils';
-import api from "../models/api";
+import {T} from './Utils';
 
 class Actions extends Component {
     constructor(props) {
