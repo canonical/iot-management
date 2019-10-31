@@ -57,6 +57,7 @@ class App extends Component {
       client: {},
       clientObject: {},
       snaps: [],
+      actions: [],
     }
 
     history.listen(this.handleNavigation.bind(this))
@@ -124,6 +125,16 @@ class App extends Component {
     })
   }
 
+  getActions(orgid, endpoint) {
+      api.actionsList(orgid, endpoint).then(response => {
+          this.setState({actions: response.data.actions})
+      })
+      .catch(e => {
+          console.log('---',e)
+          this.setState({message: formatError(e.response), actions: []});
+      })
+  }
+
   // Get the data that's conditional on the route
   updateDataForRoute(selectedAccount, accountChanged) {
       const r = parseRoute()
@@ -140,6 +151,7 @@ class App extends Component {
       if(r.section==='register') {this.getRegisteredDevices(selectedAccount.orgid)}
       if(r.section==='devices') {this.getDevices(selectedAccount.orgid)}
       if((r.section==='devices') && (r.sectionId)) {this.getClient(selectedAccount.orgid, r.sectionId)}
+      if((r.section==='devices') && (r.sectionId)) {this.getActions(selectedAccount.orgid, r.sectionId)}
       if((r.section==='devices') && (r.sectionId) && (r.subsection==='snaps')) {this.getSnaps(selectedAccount.orgid, r.sectionId)}
       if(r.section==='groups') {this.getGroups(selectedAccount.orgid)}
       if(r.section==='actions') {this.getGroups(selectedAccount.orgid)}
@@ -195,7 +207,8 @@ class App extends Component {
                   device={this.state.client} snaps={this.state.snaps} />
       default:
         return <Device token={this.props.token} endpoint={sectionId} message={this.state.message}
-                  client={this.state.client} clientObject={this.state.clientObject} account={this.state.selectedAccount} />
+                       actions={this.state.actions}
+                       client={this.state.client} clientObject={this.state.clientObject} account={this.state.selectedAccount} />
     }
   }
 

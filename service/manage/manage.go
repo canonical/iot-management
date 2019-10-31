@@ -46,6 +46,7 @@ type Manage interface {
 
 	DeviceList(orgID, username string, role int) web.DevicesResponse
 	DeviceGet(orgID, username string, role int, deviceID string) web.DeviceResponse
+	ActionList(orgID, username string, role int, deviceID string) web.ActionsResponse
 
 	SnapList(orgID, username string, role int, deviceID string) web.SnapsResponse
 	SnapListOnDevice(orgID, username string, role int, deviceID string) web.StandardResponse

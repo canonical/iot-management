@@ -31,6 +31,7 @@ import (
 type Client interface {
 	DeviceList(orgID string) web.DevicesResponse
 	DeviceGet(orgID, deviceID string) web.DeviceResponse
+	ActionList(orgID, deviceID string) web.ActionsResponse
 	SnapList(orgID, deviceID string) web.SnapsResponse
 
 	SnapListOnDevice(orgID, deviceID string) web.StandardResponse

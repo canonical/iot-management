@@ -65,3 +65,19 @@ func (wb Service) DeviceGetHandler(w http.ResponseWriter, r *http.Request) {
 	response := wb.Manage.DeviceGet(vars["orgid"], user.Username, user.Role, vars["deviceid"])
 	_ = encodeResponse(response, w)
 }
+
+// ActionListHandler is the API method to get actions for a device
+func (wb Service) ActionListHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsAdminAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	// Get the device
+	response := wb.Manage.ActionList(vars["orgid"], user.Username, user.Role, vars["deviceid"])
+	_ = encodeResponse(response, w)
+}

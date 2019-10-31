@@ -156,6 +156,10 @@ var service = {
         return axios.get(constants.baseUrl + account + '/devices/' + id);
     },
 
+    actionsList: (account, id, cancelCallback) => {
+        return axios.get(constants.baseUrl + account + '/devices/' + id + '/actions');
+    },
+
     usersList: (query, cancelCallback) => {
         return axios.get(constants.baseUrl + 'users');
     },

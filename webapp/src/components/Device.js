@@ -23,6 +23,39 @@ import {T} from './Utils';
 
 class Device extends Component {
 
+    renderActions() {
+        if ((!this.props.actions) || (this.props.actions.length===0)) {
+            return <p>{T('no-actions')}</p>
+        }
+
+        return (
+            <table className="p-card__content">
+                <thead>
+                    <tr>
+                        <th className="small">{T('created')}</th>
+                        <th className="small">{T('modified')}</th>
+                        <th className="small">{T('action')}</th>
+                        <th className="small">{T('status')}</th>
+                        <th className="overflow">{T('result')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {this.props.actions.map(a => {
+                    return (
+                        <tr>
+                            <td>{moment(a.created).format('llll')}</td>
+                            <td>{moment(a.modified).format('llll')}</td>
+                            <td>{a.action}</td>
+                            <td>{a.status}</td>
+                            <td>{a.message}</td>
+                        </tr>
+                    )
+                })}
+                </tbody>
+            </table>
+        )
+    }
+
     render () {
         var d = this.props.client;
         if (!d.device) {return <div>Loading...</div>};
@@ -84,8 +117,19 @@ class Device extends Component {
                             </table>
                         </div>
                     </section>
+
+                    <section className="row spacer">
+                        <div className="p-card">
+                            <h3 className="p-card__title">{T('actions')}</h3>
+                            {this.renderActions()}
+                        </div>
+                    </section>
+
                 </If>
             </div>
+
+
+
         )
     }
 }

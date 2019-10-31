@@ -93,6 +93,16 @@ func (m *MockClient) DeviceGet(orgID, deviceID string) web.DeviceResponse {
 	}
 }
 
+// ActionList mocks the action list
+func (m *MockClient) ActionList(orgID, deviceID string) web.ActionsResponse {
+	return web.ActionsResponse{
+		StandardResponse: web.StandardResponse{},
+		Actions: []domain.Action{
+			{OrganizationID: "abc", DeviceID: "b222", Action: "list", Status: "complete"},
+		},
+	}
+}
+
 // SnapList mocks the snap list
 func (m *MockClient) SnapList(orgID, deviceID string) web.SnapsResponse {
 	return web.SnapsResponse{

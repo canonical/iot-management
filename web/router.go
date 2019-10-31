@@ -46,6 +46,7 @@ func (wb Service) Router() *mux.Router {
 	// API routes: devices
 	router.Handle("/v1/{orgid}/devices", Middleware(http.HandlerFunc(wb.DevicesListHandler))).Methods("GET")
 	router.Handle("/v1/{orgid}/devices/{deviceid}", Middleware(http.HandlerFunc(wb.DeviceGetHandler))).Methods("GET")
+	router.Handle("/v1/{orgid}/devices/{deviceid}/actions", Middleware(http.HandlerFunc(wb.ActionListHandler))).Methods("GET")
 
 	// API routes: groups
 	router.Handle("/v1/{orgid}/groups", Middleware(http.HandlerFunc(wb.GroupListHandler))).Methods("GET")

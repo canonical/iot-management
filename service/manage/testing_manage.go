@@ -97,6 +97,12 @@ func (m *MockManage) DeviceGet(orgID, username string, role int, deviceID string
 	return twin.DeviceGet(orgID, deviceID)
 }
 
+// ActionList mocks fetching action list
+func (m *MockManage) ActionList(orgID, username string, role int, deviceID string) web.ActionsResponse {
+	twin := twinapi.NewMockClient("")
+	return twin.ActionList(orgID, deviceID)
+}
+
 // SnapList mocks listing snaps
 func (m *MockManage) SnapList(orgID, username string, role int, deviceID string) web.SnapsResponse {
 	twin := twinapi.NewMockClient("")
