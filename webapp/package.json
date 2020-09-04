@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "filesize": "5.0.3",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.13.1",
     "vanilla-framework": "2.4.0"
   },
   "browserslist": [
