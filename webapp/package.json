@@ -9,7 +9,7 @@
     "moment": "^2.22.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "3.2.0"
+    "react-scripts": "^3.4.3"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "filesize": "5.0.3",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.14.1",
     "vanilla-framework": "2.4.0"
   },
   "browserslist": [
