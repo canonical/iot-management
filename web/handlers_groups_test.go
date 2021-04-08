@@ -24,8 +24,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
+	"github.com/canonical/iot-management/datastore/memory"
+	"github.com/canonical/iot-management/service/manage"
 )
 
 func TestService_GroupListHandler(t *testing.T) {

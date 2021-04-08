@@ -21,11 +21,12 @@ package twinapi
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-devicetwin/domain"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/canonical/iot-devicetwin/domain"
+	"github.com/canonical/iot-devicetwin/web"
 )
 
 // MockClient mocks the device twin client

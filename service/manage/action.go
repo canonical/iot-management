@@ -19,7 +19,7 @@
 
 package manage
 
-import "github.com/CanonicalLtd/iot-devicetwin/web"
+import "github.com/canonical/iot-devicetwin/web"
 
 // ActionList gets the actions for a device
 func (srv *Management) ActionList(orgID, username string, role int, deviceID string) web.ActionsResponse {

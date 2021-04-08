@@ -21,7 +21,8 @@ package memory
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
+
+	"github.com/canonical/iot-management/datastore"
 )
 
 // UserList lists existing users

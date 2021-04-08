@@ -22,7 +22,7 @@ package factory
 import (
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/config"
+	"github.com/canonical/iot-management/config"
 )
 
 func TestCreateDataStore(t *testing.T) {

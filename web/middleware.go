@@ -21,11 +21,12 @@ package web
 
 import (
 	"errors"
-	"github.com/CanonicalLtd/iot-management/web/usso"
-	"github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/canonical/iot-management/web/usso"
+	"github.com/dgrijalva/jwt-go"
 )
 
 // Logger Handle logging for the web web

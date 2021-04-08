@@ -4,79 +4,79 @@
 	"package": [
 		{
 			"checksumSHA1": "qrDj2H0Ha9n6U1il6oRKTR+hg6g=",
-			"path": "github.com/CanonicalLtd/iot-devicetwin/config",
+			"path": "github.com/canonical/iot-devicetwin/config",
 			"revision": "206f4bf58197c5d0baa6c4c36413e45f151fc258",
 			"revisionTime": "2019-10-31T17:48:35Z"
 		},
 		{
 			"checksumSHA1": "xI1KxpCBMsTOb0zTfNGGO7rYfdw=",
-			"path": "github.com/CanonicalLtd/iot-devicetwin/datastore",
+			"path": "github.com/canonical/iot-devicetwin/datastore",
 			"revision": "206f4bf58197c5d0baa6c4c36413e45f151fc258",
 			"revisionTime": "2019-10-31T17:48:35Z"
 		},
 		{
 			"checksumSHA1": "kP6Twt9+f/43GnC0kiC/3szvCR8=",
-			"path": "github.com/CanonicalLtd/iot-devicetwin/domain",
+			"path": "github.com/canonical/iot-devicetwin/domain",
 			"revision": "206f4bf58197c5d0baa6c4c36413e45f151fc258",
 			"revisionTime": "2019-10-31T17:48:35Z"
 		},
 		{
 			"checksumSHA1": "8Bl3pxT6MseoJPviNeNbd/a2Ua4=",
-			"path": "github.com/CanonicalLtd/iot-devicetwin/service/controller",
+			"path": "github.com/canonical/iot-devicetwin/service/controller",
 			"revision": "206f4bf58197c5d0baa6c4c36413e45f151fc258",
 			"revisionTime": "2019-10-31T17:48:35Z"
 		},
 		{
 			"checksumSHA1": "Wdzb56j8754wm1AOC0mgy/aaDbA=",
-			"path": "github.com/CanonicalLtd/iot-devicetwin/service/devicetwin",
+			"path": "github.com/canonical/iot-devicetwin/service/devicetwin",
 			"revision": "206f4bf58197c5d0baa6c4c36413e45f151fc258",
 			"revisionTime": "2019-10-31T17:48:35Z"
 		},
 		{
 			"checksumSHA1": "0f3DYSkbdgsD+RToFfzmJuagSKU=",
-			"path": "github.com/CanonicalLtd/iot-devicetwin/service/mqtt",
+			"path": "github.com/canonical/iot-devicetwin/service/mqtt",
 			"revision": "206f4bf58197c5d0baa6c4c36413e45f151fc258",
 			"revisionTime": "2019-10-31T17:48:35Z"
 		},
 		{
 			"checksumSHA1": "DimoVv5xe+Dvjd0DpPiHHDaxECY=",
-			"path": "github.com/CanonicalLtd/iot-devicetwin/web",
+			"path": "github.com/canonical/iot-devicetwin/web",
 			"revision": "206f4bf58197c5d0baa6c4c36413e45f151fc258",
 			"revisionTime": "2019-10-31T17:48:35Z"
 		},
 		{
 			"checksumSHA1": "RlRObmPP49Zrs5LOcG6RsmJPqUw=",
-			"path": "github.com/CanonicalLtd/iot-identity/config",
+			"path": "github.com/canonical/iot-identity/config",
 			"revision": "bc2d7e8c347e9192928e3f282128b854bc0602bd",
 			"revisionTime": "2019-10-17T17:15:10Z"
 		},
 		{
 			"checksumSHA1": "eTAFZduQzX1z1rKOR/Pp6se3WPY=",
-			"path": "github.com/CanonicalLtd/iot-identity/datastore",
+			"path": "github.com/canonical/iot-identity/datastore",
 			"revision": "bc2d7e8c347e9192928e3f282128b854bc0602bd",
 			"revisionTime": "2019-10-17T17:15:10Z"
 		},
 		{
 			"checksumSHA1": "wlagYTYWkV7rMKVWIm5BPcrZ4rU=",
-			"path": "github.com/CanonicalLtd/iot-identity/domain",
+			"path": "github.com/canonical/iot-identity/domain",
 			"revision": "bc2d7e8c347e9192928e3f282128b854bc0602bd",
 			"revisionTime": "2019-10-17T17:15:10Z"
 		},
 		{
 			"checksumSHA1": "gQkm+V2u6GUtTNtS9ZdyKj93yH4=",
-			"path": "github.com/CanonicalLtd/iot-identity/service",
+			"path": "github.com/canonical/iot-identity/service",
 			"revision": "bc2d7e8c347e9192928e3f282128b854bc0602bd",
 			"revisionTime": "2019-10-17T17:15:10Z"
 		},
 		{
 			"checksumSHA1": "f/w+3kuasJir1CQCf8WBAfNDur0=",
-			"path": "github.com/CanonicalLtd/iot-identity/service/cert",
+			"path": "github.com/canonical/iot-identity/service/cert",
 			"revision": "bc2d7e8c347e9192928e3f282128b854bc0602bd",
 			"revisionTime": "2019-10-17T17:15:10Z"
 		},
 		{
 			"checksumSHA1": "jfxDE3NV22/v+DqIanOO3NtdNtI=",
-			"path": "github.com/CanonicalLtd/iot-identity/web",
+			"path": "github.com/canonical/iot-identity/web",
 			"revision": "bc2d7e8c347e9192928e3f282128b854bc0602bd",
 			"revisionTime": "2019-10-17T17:15:10Z"
 		},
@@ -345,5 +345,5 @@
 			"revisionTime": "2018-11-15T11:05:04Z"
 		}
 	],
-	"rootPath": "github.com/CanonicalLtd/iot-management"
+	"rootPath": "github.com/canonical/iot-management"
 }

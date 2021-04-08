@@ -21,8 +21,9 @@ package identityapi
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-identity/web"
 	"path"
+
+	"github.com/canonical/iot-identity/web"
 )
 
 // RegisterOrganization registers a new organization

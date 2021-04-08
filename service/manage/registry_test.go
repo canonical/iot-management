@@ -22,9 +22,9 @@ package manage
 import (
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/identityapi"
-	"github.com/CanonicalLtd/iot-management/twinapi"
+	"github.com/canonical/iot-management/datastore/memory"
+	"github.com/canonical/iot-management/identityapi"
+	"github.com/canonical/iot-management/twinapi"
 )
 
 func TestManagement_RegDeviceList(t *testing.T) {

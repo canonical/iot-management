@@ -21,10 +21,11 @@ package twinapi
 
 import (
 	"bytes"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
 	"net/http"
 	"net/url"
 	"path"
+
+	"github.com/canonical/iot-devicetwin/web"
 )
 
 // Client is a client for the device twin API

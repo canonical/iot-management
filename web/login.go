@@ -20,11 +20,12 @@
 package web
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/CanonicalLtd/iot-management/web/usso"
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/canonical/iot-management/datastore"
+	"github.com/canonical/iot-management/web/usso"
 )
 
 // LoginHandler processes the login for Ubuntu SSO

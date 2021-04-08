@@ -22,8 +22,9 @@ package manage
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/CanonicalLtd/iot-management/domain"
+
+	"github.com/canonical/iot-management/datastore"
+	"github.com/canonical/iot-management/domain"
 )
 
 // OrganizationsForUser fetches the organizations for a user

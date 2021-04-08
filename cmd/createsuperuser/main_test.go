@@ -20,8 +20,9 @@
 package main
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
 	"testing"
+
+	"github.com/canonical/iot-management/datastore/memory"
 )
 
 func Test_run_success(t *testing.T) {

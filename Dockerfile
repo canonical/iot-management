@@ -1,6 +1,6 @@
 FROM golang:1.12 as builder1
-COPY . ./src/github.com/CanonicalLtd/iot-management
-WORKDIR /go/src/github.com/CanonicalLtd/iot-management
+COPY . ./src/github.com/canonical/iot-management
+WORKDIR /go/src/github.com/canonical/iot-management
 RUN ./get-deps.sh
 RUN CGO_ENABLED=1 GOOS=linux go build -a -o /go/bin/management -ldflags='-extldflags "-static"' cmd/management/main.go
 RUN CGO_ENABLED=1 GOOS=linux go build -a -o /go/bin/createsuperuser -ldflags='-extldflags "-static"' cmd/createsuperuser/main.go
@@ -34,7 +34,7 @@ RUN apt-get update
 RUN apt-get install -y ca-certificates
 COPY --from=builder1 /go/bin/management .
 COPY --from=builder1 /go/bin/createsuperuser .
-COPY --from=builder1 /go/src/github.com/CanonicalLtd/iot-management/static ./static
+COPY --from=builder1 /go/src/github.com/canonical/iot-management/static ./static
 COPY --from=builder2 build/static/css ./static/css
 COPY --from=builder2 build/static/js ./static/js
 COPY --from=builder2 build/index.html ./static/app.html

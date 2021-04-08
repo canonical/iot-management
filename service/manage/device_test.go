@@ -20,12 +20,13 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/identityapi"
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/twinapi"
+	"github.com/canonical/iot-management/config"
+	"github.com/canonical/iot-management/datastore/memory"
+	"github.com/canonical/iot-management/identityapi"
+
+	"github.com/canonical/iot-management/twinapi"
 )
 
 var settings *config.Settings

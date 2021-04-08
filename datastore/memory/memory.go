@@ -20,9 +20,10 @@
 package memory
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/juju/usso/openid"
 	"sync"
+
+	"github.com/canonical/iot-management/datastore"
+	"github.com/juju/usso/openid"
 )
 
 // Store implements an in-memory store for testing

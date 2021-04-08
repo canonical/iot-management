@@ -21,9 +21,10 @@ package web
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/service/manage"
 	"net/http"
+
+	"github.com/canonical/iot-management/config"
+	"github.com/canonical/iot-management/service/manage"
 )
 
 // JSONHeader is the content-type header for JSON responses

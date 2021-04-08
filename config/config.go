@@ -21,11 +21,12 @@ package config
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/crypt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
+
+	"github.com/canonical/iot-management/crypt"
 
 	"gopkg.in/yaml.v2"
 )

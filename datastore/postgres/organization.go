@@ -22,8 +22,9 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
 	"log"
+
+	"github.com/canonical/iot-management/datastore"
 )
 
 // createOrganizationTable creates the database table for devices with its indexes.

@@ -21,11 +21,12 @@ package postgres
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/juju/usso/openid"
-	"gopkg.in/errgo.v1"
 	"log"
 	"time"
+
+	"github.com/canonical/iot-management/datastore"
+	"github.com/juju/usso/openid"
+	"gopkg.in/errgo.v1"
 )
 
 // NonceStore is a nonce store backed by database

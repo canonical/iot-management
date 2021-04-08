@@ -21,11 +21,12 @@ package usso
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/config"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/canonical/iot-management/config"
 
 	"github.com/juju/usso"
 	"github.com/juju/usso/openid"
