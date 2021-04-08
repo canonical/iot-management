@@ -21,10 +21,11 @@ package web
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/canonical/iot-devicetwin/web"
+	"github.com/gorilla/mux"
 )
 
 const (

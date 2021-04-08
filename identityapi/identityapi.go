@@ -21,10 +21,11 @@ package identityapi
 
 import (
 	"bytes"
-	"github.com/CanonicalLtd/iot-identity/web"
 	"net/http"
 	"net/url"
 	"path"
+
+	"github.com/canonical/iot-identity/web"
 )
 
 // Client is a client for the identity API

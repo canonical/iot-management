@@ -20,7 +20,7 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-devicetwin/web"
+	"github.com/canonical/iot-devicetwin/web"
 )
 
 // SnapList lists the snaps for a device

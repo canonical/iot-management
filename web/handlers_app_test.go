@@ -20,10 +20,11 @@
 package web
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
 	"net/http"
 	"testing"
+
+	"github.com/canonical/iot-management/datastore/memory"
+	"github.com/canonical/iot-management/service/manage"
 )
 
 func TestService_IndexHandler(t *testing.T) {

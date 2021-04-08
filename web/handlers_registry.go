@@ -23,12 +23,13 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-identity/service"
-	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/canonical/iot-identity/service"
+	"github.com/gorilla/mux"
 )
 
 // RegDeviceList is the API method to list the registered devices

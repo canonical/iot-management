@@ -21,11 +21,12 @@ package web
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-identity/web"
-	"github.com/CanonicalLtd/iot-management/domain"
-	"github.com/gorilla/mux"
 	"io"
 	"net/http"
+
+	"github.com/canonical/iot-identity/web"
+	"github.com/canonical/iot-management/domain"
+	"github.com/gorilla/mux"
 )
 
 // UsersResponse defines the response to list users

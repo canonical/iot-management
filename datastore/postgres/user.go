@@ -21,8 +21,9 @@ package postgres
 
 import (
 	"database/sql"
-	"github.com/CanonicalLtd/iot-management/datastore"
 	"log"
+
+	"github.com/canonical/iot-management/datastore"
 )
 
 // createUserTable creates the database table for devices with its indexes.

@@ -20,13 +20,14 @@
 package main
 
 import (
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/identityapi"
-	"github.com/CanonicalLtd/iot-management/service/factory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
-	"github.com/CanonicalLtd/iot-management/twinapi"
-	"github.com/CanonicalLtd/iot-management/web"
 	"log"
+
+	"github.com/canonical/iot-management/config"
+	"github.com/canonical/iot-management/identityapi"
+	"github.com/canonical/iot-management/service/factory"
+	"github.com/canonical/iot-management/service/manage"
+	"github.com/canonical/iot-management/twinapi"
+	"github.com/canonical/iot-management/web"
 )
 
 func main() {

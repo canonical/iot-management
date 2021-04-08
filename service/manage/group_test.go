@@ -22,8 +22,8 @@ package manage
 import (
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/twinapi"
+	"github.com/canonical/iot-management/datastore/memory"
+	"github.com/canonical/iot-management/twinapi"
 )
 
 func TestManagement_GroupList(t *testing.T) {

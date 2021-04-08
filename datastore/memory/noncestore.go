@@ -21,9 +21,10 @@ package memory
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"gopkg.in/errgo.v1"
 	"time"
+
+	"github.com/canonical/iot-management/datastore"
+	"gopkg.in/errgo.v1"
 )
 
 // NonceStore is a nonce store backed by database

@@ -22,14 +22,15 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/web/usso"
-	"github.com/juju/usso/openid"
 	"io"
 	"log"
 	"net/http"
 	"net/http/httptest"
+
+	"github.com/canonical/iot-devicetwin/web"
+	"github.com/canonical/iot-management/config"
+	"github.com/canonical/iot-management/web/usso"
+	"github.com/juju/usso/openid"
 )
 
 var settings *config.Settings

@@ -21,13 +21,14 @@ package web
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
-	"github.com/juju/usso"
 	"net/http"
 	"net/url"
 	"testing"
+
+	"github.com/canonical/iot-management/config"
+	"github.com/canonical/iot-management/datastore/memory"
+	"github.com/canonical/iot-management/service/manage"
+	"github.com/juju/usso"
 )
 
 func TestLoginHandlerUSSORedirect(t *testing.T) {

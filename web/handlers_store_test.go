@@ -21,12 +21,13 @@ package web
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/canonical/iot-management/datastore/memory"
+	"github.com/canonical/iot-management/service/manage"
 )
 
 func TestService_StoreSearchHandler(t *testing.T) {

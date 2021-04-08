@@ -20,9 +20,10 @@
 package web
 
 import (
-	dtwin "github.com/CanonicalLtd/iot-devicetwin/web"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	dtwin "github.com/canonical/iot-devicetwin/web"
+	"github.com/gorilla/mux"
 )
 
 func formatStandardResponse(errorCode, message string, w http.ResponseWriter) {

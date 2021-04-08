@@ -21,11 +21,12 @@ package identityapi
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-identity/domain"
-	"github.com/CanonicalLtd/iot-identity/web"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/canonical/iot-identity/domain"
+	"github.com/canonical/iot-identity/web"
 )
 
 func mockHTTP(body string) {

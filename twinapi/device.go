@@ -21,8 +21,9 @@ package twinapi
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
 	"path"
+
+	"github.com/canonical/iot-devicetwin/web"
 )
 
 // DeviceList lists the devices for an account

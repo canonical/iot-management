@@ -1,5 +1,5 @@
 language: go
-go_import_path: github.com/CanonicalLtd/iot-management
+go_import_path: github.com/canonical/iot-management
 go:
   - 1.12
 env:
@@ -9,7 +9,6 @@ env:
 
 before_install:
     - go get golang.org/x/lint/golint
-    - sh ./get-deps.sh
 
 install:
     - echo $GOPATH
