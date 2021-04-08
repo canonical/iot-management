@@ -1,7 +1,6 @@
 FROM golang:1.12 as builder1
 COPY . ./src/github.com/canonical/iot-management
 WORKDIR /go/src/github.com/canonical/iot-management
-RUN ./get-deps.sh
 RUN CGO_ENABLED=1 GOOS=linux go build -a -o /go/bin/management -ldflags='-extldflags "-static"' cmd/management/main.go
 RUN CGO_ENABLED=1 GOOS=linux go build -a -o /go/bin/createsuperuser -ldflags='-extldflags "-static"' cmd/createsuperuser/main.go
 
