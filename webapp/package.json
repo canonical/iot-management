@@ -12,7 +12,7 @@
     "react-scripts": "^3.4.3"
   },
   "scripts": {
-    "build-css": "node-sass src/ -o src/",
+    "build-css": "sass --load-path=. src:src",
     "start": "npm run build-css && react-scripts start",
     "buildonly": "react-scripts build",
     "build": "npm run build-css&& react-scripts build",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "filesize": "5.0.3",
-    "node-sass": "^4.14.1",
+    "sass": "^1.32.11",
     "vanilla-framework": "2.4.0"
   },
   "browserslist": [
