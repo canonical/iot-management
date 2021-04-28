@@ -1,0 +1,99 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: management-config
+  labels:
+    app: management
+data:
+  HOST: "${HOST}"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: management
+spec:
+  selector:
+    matchLabels:
+      app: management
+      tier: frontend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: management
+        tier: frontend
+        track: stable
+    spec:
+      volumes:
+        - name: sql
+          configMap:
+            name: postgres-config-man
+            items:
+            - key: DB_CREATE_SQL
+              path: create-db.sql
+      initContainers:
+        - name: create-db
+          image: jbergknoff/postgresql-client
+          command: ["psql", "-d", "$(DATASOURCE)", "-f", "/sql/create-db.sql"]
+          env:
+            - name: DATASOURCE
+              valueFrom:
+                  configMapKeyRef:
+                    name: postgres-config-admin
+                    key: DATASOURCE
+          volumeMounts:
+          - name: sql
+            mountPath: /sql
+      containers:
+        - name: management
+          imagePullPolicy: Always
+          image: ${IMAGE}
+          env:
+            - name: DRIVER
+              value: "postgres"
+            - name: DATASOURCE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-man
+                  key: DATASOURCE
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: management-config
+                  key: HOST
+            - name: SCHEME
+              value: "https"
+            - name: IDENTITYAPI
+              value: "http://identity:8030/v1/"
+            - name: DEVICETWINAPI
+              value: "http://devicetwin:8040/v1/"
+            - name: STOREURL
+              value: "https://api.snapcraft.io/api/v1/"
+          ports:
+            - containerPort: 8010
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: management
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: ${CERT_ARN}
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+spec:
+  selector:
+    app: management
+    tier: frontend
+  ports:
+    - name: https
+      port: 443
+      targetPort: 8010
+      protocol: TCP
+  type: LoadBalancer
+  loadBalancerSourceRanges:
+    %{ for ip in IP_WHITELIST ~}
+    - ${ip}
+    %{ endfor ~}
+
+
+
