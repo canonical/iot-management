@@ -1,0 +1,7 @@
+{
+    "state_kms_alias": "alias/my-kms-key",
+    "state_key": "iot-management/default/terraform.tfstate",
+    "state_dm_key": "device-management/path/to/terraform.tfstate",
+    "state_bucket": "my-state-bucket",
+    "region": "us-east-1"
+}
