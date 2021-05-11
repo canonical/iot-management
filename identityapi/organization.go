@@ -21,7 +21,7 @@ package identityapi
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-identity/web"
+	"github.com/everactive/iot-identity/web"
 	"path"
 )
 

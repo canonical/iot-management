@@ -21,7 +21,7 @@ package twinapi
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
+	"github.com/everactive/iot-devicetwin/web"
 	"path"
 )
 
@@ -59,6 +59,25 @@ func (a *ClientAdapter) DeviceGet(orgID, deviceID string) web.DeviceResponse {
 	err = json.NewDecoder(resp.Body).Decode(&r)
 	if err != nil {
 		r.StandardResponse.Message = err.Error()
+	}
+	return r
+}
+
+// DeviceDelete fetches a device for an account
+func (a *ClientAdapter) DeviceDelete(deviceID string) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("device", deviceID)
+
+	resp, err := delete(a.urlPath(p))
+	if err != nil {
+		r.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Message = err.Error()
 	}
 	return r
 }

@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-identity/service"
+	"github.com/everactive/iot-identity/service"
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"

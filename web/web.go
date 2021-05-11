@@ -21,8 +21,8 @@ package web
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/service/manage"
+	"github.com/everactive/iot-management/config"
+	"github.com/everactive/iot-management/service/manage"
 	"net/http"
 )
 

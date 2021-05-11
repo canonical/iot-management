@@ -21,8 +21,8 @@ package web
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-identity/web"
-	"github.com/CanonicalLtd/iot-management/domain"
+	"github.com/everactive/iot-identity/web"
+	"github.com/everactive/iot-management/domain"
 	"github.com/gorilla/mux"
 	"io"
 	"net/http"

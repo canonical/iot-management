@@ -20,13 +20,13 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-devicetwin/web"
-	idweb "github.com/CanonicalLtd/iot-identity/web"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/CanonicalLtd/iot-management/domain"
-	"github.com/CanonicalLtd/iot-management/identityapi"
-	"github.com/CanonicalLtd/iot-management/twinapi"
+	"github.com/everactive/iot-devicetwin/web"
+	idweb "github.com/everactive/iot-identity/web"
+	"github.com/everactive/iot-management/config"
+	"github.com/everactive/iot-management/datastore"
+	"github.com/everactive/iot-management/domain"
+	"github.com/everactive/iot-management/identityapi"
+	"github.com/everactive/iot-management/twinapi"
 	"github.com/juju/usso/openid"
 )
 
@@ -46,6 +46,7 @@ type Manage interface {
 
 	DeviceList(orgID, username string, role int) web.DevicesResponse
 	DeviceGet(orgID, username string, role int, deviceID string) web.DeviceResponse
+	DeviceDelete(orgID, username string, role int, deviceID string) web.StandardResponse
 	ActionList(orgID, username string, role int, deviceID string) web.ActionsResponse
 
 	SnapList(orgID, username string, role int, deviceID string) web.SnapsResponse
@@ -54,6 +55,7 @@ type Manage interface {
 	SnapRemove(orgID, username string, role int, deviceID, snap string) web.StandardResponse
 	SnapUpdate(orgID, username string, role int, deviceID, snap, action string) web.StandardResponse
 	SnapConfigSet(orgID, username string, role int, deviceID, snap string, config []byte) web.StandardResponse
+	SnapServiceAction(orgID, username string, role int, deviceID, snap, action string, body []byte) web.StandardResponse
 
 	GroupList(orgID, username string, role int) web.GroupsResponse
 	GroupCreate(orgID, username string, role int, body []byte) web.StandardResponse

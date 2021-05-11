@@ -17,8 +17,10 @@
 
 import React, {Component} from 'react';
 import AlertBox from './AlertBox';
-import {T, canUserAdministrate} from './Utils';
+import {T, canUserAdministrate, formatError} from './Utils';
 import {Status} from './Constants';
+import DialogBox from "./DialogBox";
+import api from "../models/api";
 
 
 class Register extends Component {
@@ -27,7 +29,9 @@ class Register extends Component {
         super(props)
         this.state = {
             message: null,
+            confirmDelete: null,
         };
+
     }
 
     getStatus(s) {
@@ -79,6 +83,47 @@ class Register extends Component {
         }
     }
 
+    handleDelete = (e) => {
+        e.preventDefault();
+        this.setState({confirmDelete: e.target.getAttribute('data-key')});
+    }
+
+    handleDeleteDevice = (e) => {
+        e.preventDefault();
+        var devices = this.props.devices.filter((device) => {
+            return device.id === this.state.confirmDelete;
+        });
+        if (devices.length === 0) {
+            console.log("devices.length == 0")
+            return;
+        }
+
+        api.deviceDelete(this.props.account.id, devices[0].id).then(response => {
+            window.location = '/register';
+        })
+            .catch((e) => {
+                this.setState({error: formatError(e.response.data)});
+            })
+    }
+
+    handleDeleteDeviceCancel = (e) => {
+        e.preventDefault();
+        this.setState({confirmDelete: null});
+    }
+
+    renderDelete(device) {
+        if (device.id !== this.state.confirmDelete) {
+            return (
+                <a href="#" onClick={this.handleDelete} data-key={device.id} className="p-button--neutral small" title={T('delete-device')}>
+                    <i className="fa fa-trash" data-key={device.id} /></a>
+            );
+        } else {
+            return (
+                <DialogBox message={T('confirm-device-delete')} handleYesClick={this.handleDeleteDevice} handleCancelClick={this.handleDeleteDeviceCancel} />
+            );
+        }
+    }
+
     renderRows(items) {
         return items.map((l) => {
           return (
@@ -88,6 +133,7 @@ class Register extends Component {
                     {l.device.deviceKey ?
                         <a href="#" onClick={this.copyToClipboard} data-key={l.device.deviceKey} className="p-button--neutral small" title={T('copy-device-key')}>
                         <i className="fa fa-clipboard" data-key={l.device.deviceKey} /></a> : ''}
+                    { this.renderDelete(l) }
                 </td>
                 <td className="overflow">{l.id}</td>
                 <td className="overflow">{l.device.brand}</td>

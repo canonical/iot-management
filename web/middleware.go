@@ -21,7 +21,7 @@ package web
 
 import (
 	"errors"
-	"github.com/CanonicalLtd/iot-management/web/usso"
+	"github.com/everactive/iot-management/web/usso"
 	"github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"

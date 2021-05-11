@@ -22,7 +22,7 @@ package memory
 import (
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/everactive/iot-management/datastore"
 )
 
 func TestStore_OrgUserAccess(t *testing.T) {

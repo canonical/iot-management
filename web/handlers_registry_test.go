@@ -24,8 +24,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
+	"github.com/everactive/iot-management/datastore/memory"
+	"github.com/everactive/iot-management/service/manage"
 )
 
 func TestService_RegDeviceList(t *testing.T) {

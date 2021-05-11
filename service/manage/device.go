@@ -20,7 +20,8 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-devicetwin/web"
+	"fmt"
+	"github.com/everactive/iot-devicetwin/web"
 )
 
 // DeviceList gets the devices a user can access for an organization
@@ -51,4 +52,21 @@ func (srv *Management) DeviceGet(orgID, username string, role int, deviceID stri
 	}
 
 	return srv.TwinAPI.DeviceGet(orgID, deviceID)
+}
+
+// DeviceDelete deletes the device from an organization
+func (srv *Management) DeviceDelete(orgID, username string, role int, deviceID string) web.StandardResponse {
+	hasAccess := srv.DB.OrgUserAccess(orgID, username, role)
+	if !hasAccess {
+		return web.StandardResponse{
+				Code:    "DeviceAuth",
+				Message: "the user does not have permissions for the organization",
+			}
+	}
+
+	r1 := srv.TwinAPI.DeviceDelete(deviceID)
+	r2 := srv.IdentityAPI.DeviceDelete(deviceID)
+
+	message := fmt.Sprintf("twinapi: %s, identity: %s", r1.Message, r2.Message)
+	return web.StandardResponse{Message: message}
 }

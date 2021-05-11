@@ -20,7 +20,7 @@
 package memory
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/everactive/iot-management/datastore"
 	"github.com/juju/usso/openid"
 	"sync"
 )

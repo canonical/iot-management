@@ -21,7 +21,7 @@ package identityapi
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-identity/web"
+	"github.com/everactive/iot-identity/web"
 	"path"
 )
 
@@ -91,6 +91,26 @@ func (a *ClientAdapter) RegDeviceUpdate(orgID, deviceID string, body []byte) web
 	p := path.Join("devices", orgID, deviceID)
 
 	resp, err := put(a.urlPath(p), body)
+	if err != nil {
+		r.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Message = err.Error()
+	}
+
+	return r
+}
+
+// DeviceDelete deletes device registration
+func (a *ClientAdapter) DeviceDelete(deviceID string) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("device", deviceID)
+
+	resp, err := delete(a.urlPath(p))
 	if err != nil {
 		r.Message = err.Error()
 		return r

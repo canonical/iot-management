@@ -20,12 +20,12 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-management/identityapi"
+	"github.com/everactive/iot-management/identityapi"
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
-	"github.com/CanonicalLtd/iot-management/domain"
-	"github.com/CanonicalLtd/iot-management/twinapi"
+	"github.com/everactive/iot-management/datastore/memory"
+	"github.com/everactive/iot-management/domain"
+	"github.com/everactive/iot-management/twinapi"
 )
 
 func TestManagement_UserWorkflow(t *testing.T) {

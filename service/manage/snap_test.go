@@ -20,10 +20,10 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
+	"github.com/everactive/iot-management/datastore/memory"
 	"testing"
 
-	"github.com/CanonicalLtd/iot-management/twinapi"
+	"github.com/everactive/iot-management/twinapi"
 )
 
 func TestManagement_SnapList(t *testing.T) {

@@ -21,7 +21,7 @@ package postgres
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/everactive/iot-management/datastore"
 	"github.com/juju/usso/openid"
 	"gopkg.in/errgo.v1"
 	"log"

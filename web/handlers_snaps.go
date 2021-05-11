@@ -21,10 +21,11 @@ package web
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/everactive/iot-devicetwin/web"
+	"github.com/gorilla/mux"
 )
 
 const (
@@ -139,5 +140,27 @@ func (wb Service) SnapConfigUpdateHandler(w http.ResponseWriter, r *http.Request
 
 	// Update a snap's config on a device
 	response := wb.Manage.SnapConfigSet(vars["orgid"], user.Username, user.Role, vars["deviceid"], vars["snap"], body)
+	encodeResponse(response, w)
+}
+
+// SnapServiceAction start/stop/restart a snap on device
+func (wb Service) SnapServiceAction(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsStandardAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil || len(body) == 0 {
+		body = []byte("{}")
+	}
+	defer r.Body.Close()
+
+	vars := mux.Vars(r)
+
+	// Update a snap's config on a device
+	response := wb.Manage.SnapServiceAction(vars["orgid"], user.Username, user.Role, vars["deviceid"], vars["snap"], vars["action"], body)
 	encodeResponse(response, w)
 }
