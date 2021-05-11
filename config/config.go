@@ -21,9 +21,9 @@ package config
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/crypt"
+	"github.com/everactive/iot-management/crypt"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"log"
 	"os"
 	"path"
 
@@ -32,7 +32,7 @@ import (
 
 // Version is the application version
 const (
-	Version                 = "0.1"
+	Version                 = "0.2"
 	paramsPath              = "."
 	paramsFilename          = "settings.yaml"
 	defaultURLHost          = "management:8010"
@@ -68,12 +68,12 @@ func Config(filePath string) (*Settings, error) {
 
 	source, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Println("Error opening the config file. Using default settings")
+		log.Errorf("Error opening the config file. Using default settings")
 	} else {
 		// File exists, so use it
 		err = yaml.Unmarshal(source, settings)
 		if err != nil {
-			log.Println("Error parsing the config file.")
+			log.Errorf("Error parsing the config file.")
 			return settings, err
 		}
 	}
@@ -103,14 +103,14 @@ func Store(c *Settings, p string) error {
 	// Convert the parameters to JSON
 	b, err := yaml.Marshal(c)
 	if err != nil {
-		log.Printf("Error marshalling config parameters: %v", err)
+		log.Errorf("Error marshalling config parameters: %v", err)
 		return err
 	}
 
 	// Output the JSON to the file
 	_, err = f.Write(b)
 	if err != nil {
-		log.Printf("Error storing config parameters: %v", err)
+		log.Errorf("Error storing config parameters: %v", err)
 		return err
 	}
 	_ = f.Sync()

@@ -20,8 +20,8 @@
 package web
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/CanonicalLtd/iot-management/web/usso"
+	"github.com/everactive/iot-management/datastore"
+	"github.com/everactive/iot-management/web/usso"
 	"html/template"
 	"log"
 	"net/http"

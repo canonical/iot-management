@@ -22,9 +22,9 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/web/usso"
+	"github.com/everactive/iot-devicetwin/web"
+	"github.com/everactive/iot-management/config"
+	"github.com/everactive/iot-management/web/usso"
 	"github.com/juju/usso/openid"
 	"io"
 	"log"

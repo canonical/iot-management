@@ -21,7 +21,7 @@ package identityapi
 
 import (
 	"bytes"
-	"github.com/CanonicalLtd/iot-identity/web"
+	"github.com/everactive/iot-identity/web"
 	"net/http"
 	"net/url"
 	"path"
@@ -35,6 +35,7 @@ type Client interface {
 	RegDeviceUpdate(orgID, deviceID string, body []byte) web.StandardResponse
 	RegisterOrganization(body []byte) web.RegisterResponse
 	RegOrganizationList() web.OrganizationsResponse
+	DeviceDelete(orgID string) web.StandardResponse
 }
 
 // ClientAdapter adapts our expectations to device twin API
@@ -60,6 +61,15 @@ func (a *ClientAdapter) urlPath(p string) string {
 
 var get = func(p string) (*http.Response, error) {
 	return http.Get(p)
+}
+
+var delete = func(p string) (*http.Response, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodDelete, p, nil)
+	if err != nil {
+		return nil, err
+	}
+	return client.Do(req)
 }
 
 var post = func(p string, data []byte) (*http.Response, error) {

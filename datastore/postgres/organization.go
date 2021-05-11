@@ -22,7 +22,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/everactive/iot-management/datastore"
 	"log"
 )
 

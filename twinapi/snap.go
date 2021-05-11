@@ -21,8 +21,9 @@ package twinapi
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
 	"path"
+
+	"github.com/everactive/iot-devicetwin/web"
 )
 
 // SnapList lists the snaps for a device
@@ -144,6 +145,26 @@ func (a *ClientAdapter) SnapConfigSet(orgID, deviceID, snap string, config []byt
 	err = json.NewDecoder(resp.Body).Decode(&r)
 	if err != nil {
 		r.Code = "SnapUpdate"
+		r.Message = err.Error()
+	}
+	return r
+}
+
+func (a *ClientAdapter) SnapServiceAction(orgID, deviceID, snap, action string, body []byte) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("device", orgID, deviceID, "services", snap, action)
+
+	resp, err := post(a.urlPath(p), body)
+	if err != nil {
+		r.Code = "SnapServiceAction"
+		r.Message = err.Error()
+		return r
+	}
+
+	// Parse the response
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Code = "SnapServiceAction"
 		r.Message = err.Error()
 	}
 	return r

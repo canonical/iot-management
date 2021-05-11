@@ -142,6 +142,18 @@ class DeviceSnaps extends Component {
         })
     }
 
+    handleSnapRestart = (e) => {
+        e.preventDefault();
+        var snap = e.target.getAttribute('data-key');
+
+        api.snapsRestart(this.props.account.orgid, this.props.device, snap).then(response => {
+            this.setState({snapSettings: null, message: 'Sent restart to snap: ' + snap,
+                    messageType: 'information',
+            })
+        })
+    }
+        
+
     renderShowInstall() {
         if (this.state.showInstall) {
             return (
@@ -168,6 +180,7 @@ class DeviceSnaps extends Component {
                             </label>
                         </fieldset>
                         <button className="p-button--brand" onClick={this.handleSettingsUpdate} data-key={snap.name}>{T('update')}</button>
+                        <button className="p-button--brand" onClick={this.handleSnapRestart} data-key={snap.name}>{T('snap-restart')}</button>
                     </form>
                 </td>
             </tr>

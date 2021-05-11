@@ -19,7 +19,7 @@
 
 package manage
 
-import "github.com/CanonicalLtd/iot-devicetwin/web"
+import "github.com/everactive/iot-devicetwin/web"
 
 // GroupList lists the device groups
 func (srv *Management) GroupList(orgID, username string, role int) web.GroupsResponse {

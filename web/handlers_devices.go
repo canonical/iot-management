@@ -20,8 +20,9 @@
 package web
 
 import (
-	dtwin "github.com/CanonicalLtd/iot-devicetwin/web"
+	dtwin "github.com/everactive/iot-devicetwin/web"
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -47,6 +48,23 @@ func (wb Service) DevicesListHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get the devices
 	response := wb.Manage.DeviceList(vars["orgid"], user.Username, user.Role)
+	log.Tracef("Sending response back: %+v", response)
+	_ = encodeResponse(response, w)
+}
+
+// DeviceDeleteHandler is the API method to delete a registered device
+func (wb Service) DeviceDeleteHandler (w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsAdminAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	// Delete the device
+	response := wb.Manage.DeviceDelete(vars["orgid"], user.Username, user.Role, vars["deviceid"])
 	_ = encodeResponse(response, w)
 }
 

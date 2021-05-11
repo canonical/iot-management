@@ -21,8 +21,9 @@ package twinapi
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-devicetwin/domain"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
+	"github.com/everactive/iot-devicetwin/domain"
+	"github.com/everactive/iot-devicetwin/pkg/messages"
+	"github.com/everactive/iot-devicetwin/web"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -77,10 +78,10 @@ func NewMockClient(body string) *MockClient {
 func (m *MockClient) DeviceList(orgID string) web.DevicesResponse {
 	return web.DevicesResponse{
 		StandardResponse: web.StandardResponse{},
-		Devices: []domain.Device{
-			{OrganizationID: "abc", DeviceID: "a111", Brand: "example", Model: "drone-1000", SerialNumber: "DR1000A111", DeviceKey: "AAAAAAAAA", StoreID: "example-store"},
-			{OrganizationID: "abc", DeviceID: "b222", Brand: "example", Model: "drone-1000", SerialNumber: "DR1000B222", DeviceKey: "BBBBBBBBB", StoreID: "example-store"},
-			{OrganizationID: "abc", DeviceID: "c333", Brand: "canonical", Model: "ubuntu-core-18-amd64", SerialNumber: "d75f7300-abbf-4c11-bf0a-8b7103038490", DeviceKey: "CCCCCCCCC"},
+		Devices: []messages.Device{
+			{OrgId: "abc", DeviceId: "a111", Brand: "example", Model: "drone-1000", Serial: "DR1000A111", DeviceKey: "AAAAAAAAA", Store: "example-store"},
+			{OrgId: "abc", DeviceId: "b222", Brand: "example", Model: "drone-1000", Serial: "DR1000B222", DeviceKey: "BBBBBBBBB", Store: "example-store"},
+			{OrgId: "abc", DeviceId: "c333", Brand: "canonical", Model: "ubuntu-core-18-amd64", Serial: "d75f7300-abbf-4c11-bf0a-8b7103038490", DeviceKey: "CCCCCCCCC"},
 		},
 	}
 }
@@ -89,7 +90,7 @@ func (m *MockClient) DeviceList(orgID string) web.DevicesResponse {
 func (m *MockClient) DeviceGet(orgID, deviceID string) web.DeviceResponse {
 	return web.DeviceResponse{
 		StandardResponse: web.StandardResponse{},
-		Device:           domain.Device{OrganizationID: "abc", DeviceID: "b222", Brand: "example", Model: "drone-1000", SerialNumber: "DR1000B222", DeviceKey: "BBBBBBBBB", StoreID: "example-store"},
+		Device:           messages.Device{OrgId: "abc", DeviceId: "b222", Brand: "example", Model: "drone-1000", Serial: "DR1000B222", DeviceKey: "BBBBBBBBB", Store: "example-store"},
 	}
 }
 
@@ -107,7 +108,7 @@ func (m *MockClient) ActionList(orgID, deviceID string) web.ActionsResponse {
 func (m *MockClient) SnapList(orgID, deviceID string) web.SnapsResponse {
 	return web.SnapsResponse{
 		StandardResponse: web.StandardResponse{},
-		Snaps:            []domain.DeviceSnap{{Name: "example-snap", InstalledSize: 2000, Status: "active"}},
+		Snaps:            []messages.DeviceSnap{{Name: "example-snap", InstalledSize: 2000, Status: "active"}},
 	}
 }
 
@@ -148,8 +149,8 @@ func (m *MockClient) GroupList(orgID string) web.GroupsResponse {
 func (m *MockClient) GroupDevices(orgID, name string) web.DevicesResponse {
 	return web.DevicesResponse{
 		StandardResponse: web.StandardResponse{},
-		Devices: []domain.Device{
-			{OrganizationID: "abc", DeviceID: "a111", Brand: "example", Model: "drone-1000", SerialNumber: "DR1000A111", DeviceKey: "AAAAAAAAA", StoreID: "example-store"},
+		Devices: []messages.Device{
+			{OrgId: "abc", DeviceId: "a111", Brand: "example", Model: "drone-1000", Serial: "DR1000A111", DeviceKey: "AAAAAAAAA", Store: "example-store"},
 		},
 	}
 }
@@ -158,9 +159,9 @@ func (m *MockClient) GroupDevices(orgID, name string) web.DevicesResponse {
 func (m *MockClient) GroupExcludedDevices(orgID, name string) web.DevicesResponse {
 	return web.DevicesResponse{
 		StandardResponse: web.StandardResponse{},
-		Devices: []domain.Device{
-			{OrganizationID: "abc", DeviceID: "b222", Brand: "example", Model: "drone-1000", SerialNumber: "DR1000B222", DeviceKey: "BBBBBBBBB", StoreID: "example-store"},
-			{OrganizationID: "abc", DeviceID: "c333", Brand: "canonical", Model: "ubuntu-core-18-amd64", SerialNumber: "d75f7300-abbf-4c11-bf0a-8b7103038490", DeviceKey: "CCCCCCCCC"},
+		Devices: []messages.Device{
+			{OrgId: "abc", DeviceId: "b222", Brand: "example", Model: "drone-1000", Serial: "DR1000B222", DeviceKey: "BBBBBBBBB", Store: "example-store"},
+			{OrgId: "abc", DeviceId: "c333", Brand: "canonical", Model: "ubuntu-core-18-amd64", Serial: "d75f7300-abbf-4c11-bf0a-8b7103038490", DeviceKey: "CCCCCCCCC"},
 		},
 	}
 }

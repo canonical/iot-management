@@ -21,8 +21,8 @@ package usso
 
 import (
 	"errors"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/datastore/memory"
+	"github.com/everactive/iot-management/config"
+	"github.com/everactive/iot-management/datastore/memory"
 	"net/http"
 	"net/http/httptest"
 	"net/url"

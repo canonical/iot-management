@@ -47,6 +47,7 @@ func (wb Service) Router() *mux.Router {
 	router.Handle("/v1/{orgid}/devices", Middleware(http.HandlerFunc(wb.DevicesListHandler))).Methods("GET")
 	router.Handle("/v1/{orgid}/devices/{deviceid}", Middleware(http.HandlerFunc(wb.DeviceGetHandler))).Methods("GET")
 	router.Handle("/v1/{orgid}/devices/{deviceid}/actions", Middleware(http.HandlerFunc(wb.ActionListHandler))).Methods("GET")
+	router.Handle("/v1/{orgid}/devices/{deviceid}", Middleware(http.HandlerFunc(wb.DeviceDeleteHandler))).Methods("DELETE")
 
 	// API routes: groups
 	router.Handle("/v1/{orgid}/groups", Middleware(http.HandlerFunc(wb.GroupListHandler))).Methods("GET")
@@ -62,6 +63,7 @@ func (wb Service) Router() *mux.Router {
 	router.Handle("/v1/snaps/{orgid}/{deviceid}/{snap}", Middleware(http.HandlerFunc(wb.SnapInstallHandler))).Methods("POST")
 	router.Handle("/v1/snaps/{orgid}/{deviceid}/{snap}", Middleware(http.HandlerFunc(wb.SnapDeleteHandler))).Methods("DELETE")
 	router.Handle("/v1/snaps/{orgid}/{deviceid}/{snap}/settings", Middleware(http.HandlerFunc(wb.SnapConfigUpdateHandler))).Methods("PUT")
+	router.Handle("/v1/snaps/{orgid}/{deviceid}/services/{snap}/{action}", Middleware(http.HandlerFunc(wb.SnapServiceAction))).Methods("POST")
 	router.Handle("/v1/snaps/{orgid}/{deviceid}/{snap}/{action}", Middleware(http.HandlerFunc(wb.SnapUpdateHandler))).Methods("PUT")
 
 	// API routes: store functionality

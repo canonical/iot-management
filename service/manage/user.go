@@ -20,8 +20,8 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/CanonicalLtd/iot-management/domain"
+	"github.com/everactive/iot-management/datastore"
+	"github.com/everactive/iot-management/domain"
 	"github.com/juju/usso/openid"
 )
 

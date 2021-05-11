@@ -21,7 +21,7 @@ package twinapi
 
 import (
 	"encoding/json"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
+	"github.com/everactive/iot-devicetwin/web"
 	"path"
 )
 

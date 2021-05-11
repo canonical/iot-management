@@ -107,6 +107,7 @@ export default {
     'site-description':         'Manage Ubuntu devices connected via the MQTT protocol.',
     'snap':                     'Snap',
     'snap-store':               'Snap Store',
+    'snap-restart':             'Restart Snap',
     'snaps':                    'Snaps',
     'software-version':         'Software Version',
     'status':                   'Status',

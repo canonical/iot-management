@@ -21,7 +21,7 @@ package usso
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/config"
+	"github.com/everactive/iot-management/config"
 	"log"
 	"net/http"
 	"strings"

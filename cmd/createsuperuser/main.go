@@ -22,9 +22,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/CanonicalLtd/iot-management/service/factory"
+	"github.com/everactive/iot-management/config"
+	"github.com/everactive/iot-management/datastore"
+	"github.com/everactive/iot-management/service/factory"
 	"log"
 	"os"
 )

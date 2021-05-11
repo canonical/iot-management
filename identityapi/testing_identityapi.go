@@ -21,8 +21,8 @@ package identityapi
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-identity/domain"
-	"github.com/CanonicalLtd/iot-identity/web"
+	"github.com/everactive/iot-identity/domain"
+	"github.com/everactive/iot-identity/web"
 	"io/ioutil"
 	"net/http"
 	"strings"

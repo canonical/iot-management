@@ -21,7 +21,7 @@ package memory
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/everactive/iot-management/datastore"
 )
 
 // OrgUserAccess checks if the user has permissions to access the organization

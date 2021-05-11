@@ -20,18 +20,30 @@
 package main
 
 import (
-	"github.com/CanonicalLtd/iot-management/config"
-	"github.com/CanonicalLtd/iot-management/identityapi"
-	"github.com/CanonicalLtd/iot-management/service/factory"
-	"github.com/CanonicalLtd/iot-management/service/manage"
-	"github.com/CanonicalLtd/iot-management/twinapi"
-	"github.com/CanonicalLtd/iot-management/web"
-	"log"
+	"github.com/everactive/iot-management/config"
+	"github.com/everactive/iot-management/identityapi"
+	"github.com/everactive/iot-management/service/factory"
+	"github.com/everactive/iot-management/service/manage"
+	"github.com/everactive/iot-management/twinapi"
+	"github.com/everactive/iot-management/web"
+	log "github.com/sirupsen/logrus"
+	"os"
 )
 
 func main() {
+	logLevel := os.Getenv("LOG_LEVEL")
+	if len(logLevel) > 0 {
+		l, err := log.ParseLevel(logLevel)
+		if err != nil {
+			log.SetLevel(log.TraceLevel)
+			log.Tracef("LOG_LEVEL environment variable is set to %s, could not parse to a valid log level. Using trace logging.", logLevel)
+		} else {
+			log.SetLevel(l)
+			log.Infof("Using LOG_LEVEL %s", logLevel)
+		}
+	}
 	// Parse the command line arguments
-	log.Println("Open config file", config.GetPath())
+	log.Infof("Open config file %s", config.GetPath())
 	settings, err := config.Config(config.GetPath())
 	if err != nil {
 		log.Fatalf("Error parsing the config file: %v", err)

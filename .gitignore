@@ -4,3 +4,4 @@ vendor/*/
 settings.yaml
 main
 .coverage/
+.netrc

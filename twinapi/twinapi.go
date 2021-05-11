@@ -21,16 +21,18 @@ package twinapi
 
 import (
 	"bytes"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
 	"net/http"
 	"net/url"
 	"path"
+
+	"github.com/everactive/iot-devicetwin/web"
 )
 
 // Client is a client for the device twin API
 type Client interface {
 	DeviceList(orgID string) web.DevicesResponse
 	DeviceGet(orgID, deviceID string) web.DeviceResponse
+	DeviceDelete(deviceID string) web.StandardResponse
 	ActionList(orgID, deviceID string) web.ActionsResponse
 	SnapList(orgID, deviceID string) web.SnapsResponse
 
@@ -39,6 +41,7 @@ type Client interface {
 	SnapRemove(orgID, deviceID, snap string) web.StandardResponse
 	SnapUpdate(orgID, deviceID, snap, action string) web.StandardResponse
 	SnapConfigSet(orgID, deviceID, snap string, config []byte) web.StandardResponse
+	SnapServiceAction(orgID, deviceID, snap, action string, body []byte) web.StandardResponse
 
 	GroupList(orgID string) web.GroupsResponse
 	GroupCreate(orgID string, body []byte) web.StandardResponse

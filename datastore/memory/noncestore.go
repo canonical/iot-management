@@ -21,7 +21,7 @@ package memory
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-management/datastore"
+	"github.com/everactive/iot-management/datastore"
 	"gopkg.in/errgo.v1"
 	"time"
 )

@@ -20,8 +20,8 @@
 package manage
 
 import (
-	"github.com/CanonicalLtd/iot-identity/web"
-	idweb "github.com/CanonicalLtd/iot-identity/web"
+	"github.com/everactive/iot-identity/web"
+	idweb "github.com/everactive/iot-identity/web"
 )
 
 // RegDeviceList gets the registered devices a user can access for an organization

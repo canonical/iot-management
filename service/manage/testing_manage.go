@@ -21,12 +21,12 @@ package manage
 
 import (
 	"fmt"
-	"github.com/CanonicalLtd/iot-devicetwin/web"
-	iddomain "github.com/CanonicalLtd/iot-identity/domain"
-	idweb "github.com/CanonicalLtd/iot-identity/web"
-	"github.com/CanonicalLtd/iot-management/datastore"
-	"github.com/CanonicalLtd/iot-management/domain"
-	"github.com/CanonicalLtd/iot-management/twinapi"
+	"github.com/everactive/iot-devicetwin/web"
+	iddomain "github.com/everactive/iot-identity/domain"
+	idweb "github.com/everactive/iot-identity/web"
+	"github.com/everactive/iot-management/datastore"
+	"github.com/everactive/iot-management/domain"
+	"github.com/everactive/iot-management/twinapi"
 	"github.com/juju/usso/openid"
 )
 
