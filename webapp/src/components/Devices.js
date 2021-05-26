@@ -19,10 +19,21 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import AlertBox from './AlertBox';
-import {T} from './Utils';
+import DialogBox from "./DialogBox";
+import api from "../models/api";
+import {T, formatError} from './Utils';
 
 
 class Devices extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            message: null,
+            confirmDelete: null,
+            device: {orgid: this.props.account.orgid}
+        };
+    }
 
     getAge(m) {
         var start = moment(m);
@@ -45,7 +56,7 @@ class Devices extends Component {
                 <table>
                 <thead>
                     <tr>
-                    <th>{T('brand')}</th><th>{T('model')}</th><th>{T('serial')}</th><th>{T('reg-date')}</th><th>{T('last-update')}</th>
+                    <th className="small" /><th>{T('brand')}</th><th>{T('model')}</th><th>{T('serial')}</th><th>{T('reg-date')}</th><th>{T('last-update')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,10 +72,53 @@ class Devices extends Component {
         }
     }
 
+    handleDelete = (e) => {
+        e.preventDefault();
+        this.setState({confirmDelete: e.target.getAttribute('data-key')});
+    }
+
+    handleDeleteDevice = (e) => {
+        e.preventDefault();
+        var devices = this.props.devices.filter((device) => {
+            return device.deviceId === this.state.confirmDelete;
+        });
+
+        if (devices.length === 0) {
+            console.log("devices.length == 0")
+            return;
+        }
+
+        api.deviceDelete(this.props.account.orgid, devices[0].deviceId).then(response => {
+            window.location = '/devices';
+        })
+            .catch((e) => {
+                this.setState({error: formatError(e.response.data)});
+            })
+    }
+
+    handleDeleteDeviceCancel = (e) => {
+        e.preventDefault();
+        this.setState({confirmDelete: null});
+    }
+
+    renderDelete(device) {
+        if (device.deviceId !== this.state.confirmDelete) {
+            return (
+                <a href="#" onClick={this.handleDelete} data-key={device.deviceId} className="p-button--neutral small" title={T('delete-device')}>
+                    <i className="fa fa-trash" data-key={device.deviceId} /></a>
+            );
+        } else {
+            return (
+                <DialogBox message={T('confirm-device-delete')} handleYesClick={this.handleDeleteDevice} handleCancelClick={this.handleDeleteDeviceCancel} />
+            );
+        }
+    }
+
     renderRows(items) {
         return items.map((l) => {
           return (
               <tr key={l.registrationId}>
+                  <td>{this.renderDelete(l)}</td>
                   <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.brand}</a></td>
                   <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.model}</a></td>
                   <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.serial}</a></td>

@@ -5,3 +5,5 @@ settings.yaml
 main
 .coverage/
 .netrc
+.cache
+.bash_history

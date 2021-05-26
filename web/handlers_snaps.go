@@ -32,6 +32,7 @@ const (
 	snapRefreshURI = "refresh"
 	snapEnableURI  = "enable"
 	snapDisableURI = "disable"
+	snapSwitchURI  = "switch"
 )
 
 // SnapListHandler fetches the list of installed snaps from the device
@@ -99,7 +100,7 @@ func (wb Service) SnapDeleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // SnapUpdateHandler updates a snap on the device
-// Permitted actions are: enable, disable or refresh
+// Permitted actions are: enable, disable, refresh, or switch
 func (wb Service) SnapUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", JSONHeader)
 	user, err := wb.checkIsStandardAndGetUserFromJWT(w, r)
@@ -108,12 +109,25 @@ func (wb Service) SnapUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		formatStandardResponse("SnapUpdate", err.Error(), w)
+		return
+	}
+
+	if len(body) == 0 {
+		body = []byte("{}")
+	}
+
+	defer r.Body.Close()
+
 	vars := mux.Vars(r)
 	var response web.StandardResponse
 
 	switch vars["action"] {
-	case snapEnableURI, snapDisableURI, snapRefreshURI:
-		response = wb.Manage.SnapUpdate(vars["orgid"], user.Username, user.Role, vars["deviceid"], vars["snap"], vars["action"])
+	case snapEnableURI, snapDisableURI, snapRefreshURI, snapSwitchURI:
+		response = wb.Manage.SnapUpdate(vars["orgid"], user.Username, user.Role, vars["deviceid"], vars["snap"], vars["action"], body)
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 		response = web.StandardResponse{Code: "SnapUpdate", Message: fmt.Sprintf("Invalid action provided: %s", vars["action"])}
@@ -131,9 +145,16 @@ func (wb Service) SnapConfigUpdateHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
+
 	if err != nil {
+		formatStandardResponse("SnapUpdate", err.Error(), w)
+		return
+	}
+
+	if len(body) == 0 {
 		body = []byte("{}")
 	}
+
 	defer r.Body.Close()
 
 	vars := mux.Vars(r)
@@ -153,9 +174,16 @@ func (wb Service) SnapServiceAction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
-	if err != nil || len(body) == 0 {
+
+	if err != nil {
+		formatStandardResponse("SnapUpdate", err.Error(), w)
+		return
+	}
+
+	if len(body) == 0 {
 		body = []byte("{}")
 	}
+
 	defer r.Body.Close()
 
 	vars := mux.Vars(r)

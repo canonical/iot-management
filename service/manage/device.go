@@ -64,7 +64,7 @@ func (srv *Management) DeviceDelete(orgID, username string, role int, deviceID s
 			}
 	}
 
-	r1 := srv.TwinAPI.DeviceDelete(deviceID)
+	r1 := srv.TwinAPI.DeviceDelete(orgID, deviceID)
 	r2 := srv.IdentityAPI.DeviceDelete(deviceID)
 
 	message := fmt.Sprintf("twinapi: %s, identity: %s", r1.Message, r2.Message)

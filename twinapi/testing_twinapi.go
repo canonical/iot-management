@@ -21,12 +21,13 @@ package twinapi
 
 import (
 	"fmt"
-	"github.com/everactive/iot-devicetwin/domain"
-	"github.com/everactive/iot-devicetwin/pkg/messages"
-	"github.com/everactive/iot-devicetwin/web"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/everactive/iot-devicetwin/domain"
+	"github.com/everactive/iot-devicetwin/pkg/messages"
+	"github.com/everactive/iot-devicetwin/web"
 )
 
 // MockClient mocks the device twin client
@@ -128,7 +129,7 @@ func (m *MockClient) SnapRemove(orgID, deviceID, snap string) web.StandardRespon
 }
 
 // SnapUpdate mocks a snap update request
-func (m *MockClient) SnapUpdate(orgID, deviceID, snap, action string) web.StandardResponse {
+func (m *MockClient) SnapUpdate(orgID, deviceID, snap, action string, body []byte) web.StandardResponse {
 	return web.StandardResponse{}
 }
 

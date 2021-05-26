@@ -2,6 +2,7 @@
   "name": "webapp",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://dm:8010",
   "dependencies": {
     "axios": "0.19.0",
     "history": "^4.7.2",

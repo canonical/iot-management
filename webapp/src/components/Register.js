@@ -98,7 +98,7 @@ class Register extends Component {
             return;
         }
 
-        api.deviceDelete(this.props.account.id, devices[0].id).then(response => {
+        api.deviceDelete(this.props.account.orgid, devices[0].id).then(response => {
             window.location = '/register';
         })
             .catch((e) => {
