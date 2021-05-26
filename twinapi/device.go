@@ -64,9 +64,9 @@ func (a *ClientAdapter) DeviceGet(orgID, deviceID string) web.DeviceResponse {
 }
 
 // DeviceDelete fetches a device for an account
-func (a *ClientAdapter) DeviceDelete(deviceID string) web.StandardResponse {
+func (a *ClientAdapter) DeviceDelete(orgID, deviceID string) web.StandardResponse {
 	r := web.StandardResponse{}
-	p := path.Join("device", deviceID)
+	p := path.Join("device", orgID, deviceID)
 
 	resp, err := delete(a.urlPath(p))
 	if err != nil {

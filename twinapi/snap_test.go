@@ -142,6 +142,7 @@ func TestClientAdapter_SnapUpdate(t *testing.T) {
 		snap     string
 		action   string
 		body     string
+		data     []byte
 	}
 	tests := []struct {
 		name    string
@@ -149,9 +150,9 @@ func TestClientAdapter_SnapUpdate(t *testing.T) {
 		args    args
 		wantErr string
 	}{
-		{"valid", fields{""}, args{"abc", "a111", "helloworld", "refresh", b1}, ""},
-		{"invalid-org", fields{""}, args{"invalid", "a111", "helloworld", "refresh", b1}, "MOCK error put"},
-		{"invalid-body", fields{""}, args{"abc", "a111", "helloworld", "refresh", ""}, "EOF"},
+		{"valid", fields{""}, args{"abc", "a111", "helloworld", "refresh", b1, []byte("{}")}, ""},
+		{"invalid-org", fields{""}, args{"invalid", "a111", "helloworld", "refresh,", b1, []byte("{}")}, "MOCK error put"},
+		{"invalid-body", fields{""}, args{"abc", "a111", "helloworld", "refresh", "", []byte("{}")}, "EOF"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -159,7 +160,7 @@ func TestClientAdapter_SnapUpdate(t *testing.T) {
 			a := &ClientAdapter{
 				URL: tt.fields.URL,
 			}
-			got := a.SnapUpdate(tt.args.orgID, tt.args.deviceID, tt.args.snap, tt.args.action)
+			got := a.SnapUpdate(tt.args.orgID, tt.args.deviceID, tt.args.snap, tt.args.action, tt.args.data)
 			if got.Message != tt.wantErr {
 				t.Errorf("ClientAdapter.SnapUpdate() = %v, want %v", got.Message, tt.wantErr)
 			}

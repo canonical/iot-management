@@ -7,8 +7,8 @@ github.com/dgrijalva/jwt-go v3.2.1-0.20180921172315-3af4c746e1c2+incompatible/go
 github.com/eclipse/paho.mqtt.golang v1.1.2-0.20190404092346-54767d4b4811/go.mod h1:H9keYFcgq3Qr5OUJm/JZI/i6U7joQ8SYLhZwfeOo6Ts=
 github.com/eclipse/paho.mqtt.golang v1.2.0 h1:1F8mhG9+aO5/xpdtFkW4SxOJB67ukuDC3t2y2qayIX0=
 github.com/eclipse/paho.mqtt.golang v1.2.0/go.mod h1:H9keYFcgq3Qr5OUJm/JZI/i6U7joQ8SYLhZwfeOo6Ts=
-github.com/everactive/iot-devicetwin v0.0.0-20210511144837-760049314bf2 h1:lZkDwZ/TJ9CQNM4If/jWK7nBo2/jFR3UQpwM0pdW5Xo=
-github.com/everactive/iot-devicetwin v0.0.0-20210511144837-760049314bf2/go.mod h1:G/Gf2ImKnk44vk1CJ4cyH5I90FzhgDodcTZr+kkm560=
+github.com/everactive/iot-devicetwin v0.0.0-20210526135644-b2e6baff192a h1:9eEPKVkrcM5Bxt865uMFINTE/PJC0M6r74nm+7vrFG4=
+github.com/everactive/iot-devicetwin v0.0.0-20210526135644-b2e6baff192a/go.mod h1:G/Gf2ImKnk44vk1CJ4cyH5I90FzhgDodcTZr+kkm560=
 github.com/everactive/iot-identity v0.0.0-20210511140930-c3974b940031 h1:dxQ+fw+NI3HD8INZY48/JcCTRI2K1Gnxm/vDi0uG7Vo=
 github.com/everactive/iot-identity v0.0.0-20210511140930-c3974b940031/go.mod h1:YEl7EPnm6egK1fhdXfR5t73stmZG637/cbHvzARPUAI=
 github.com/frankban/quicktest v1.0.0/go.mod h1:R98jIehRai+d1/3Hv2//jOVCTJhW1VBavT6B6CuGq2k=

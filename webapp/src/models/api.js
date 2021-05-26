@@ -104,8 +104,8 @@ var service = {
         return axios.post(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap);
     },
 
-    snapsUpdate: (account, device, snap, action, cancelCallback) => {
-        return axios.put(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap + '/' + action);
+    snapsUpdate: (account, device, snap, action, data = "", cancelCallback) => {
+        return axios.put(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap + '/' + action, data);
     },
 
     snapsSettings: (account, device, snap, cancelCallback) => {

@@ -32,14 +32,14 @@ import (
 type Client interface {
 	DeviceList(orgID string) web.DevicesResponse
 	DeviceGet(orgID, deviceID string) web.DeviceResponse
-	DeviceDelete(deviceID string) web.StandardResponse
+	DeviceDelete(orgID, deviceID string) web.StandardResponse
 	ActionList(orgID, deviceID string) web.ActionsResponse
 	SnapList(orgID, deviceID string) web.SnapsResponse
 
 	SnapListOnDevice(orgID, deviceID string) web.StandardResponse
 	SnapInstall(orgID, deviceID, snap string) web.StandardResponse
 	SnapRemove(orgID, deviceID, snap string) web.StandardResponse
-	SnapUpdate(orgID, deviceID, snap, action string) web.StandardResponse
+	SnapUpdate(orgID, deviceID, snap, action string, body []byte) web.StandardResponse
 	SnapConfigSet(orgID, deviceID, snap string, config []byte) web.StandardResponse
 	SnapServiceAction(orgID, deviceID, snap, action string, body []byte) web.StandardResponse
 

@@ -21,6 +21,7 @@ package manage
 
 import (
 	"fmt"
+
 	"github.com/everactive/iot-devicetwin/web"
 	iddomain "github.com/everactive/iot-identity/domain"
 	idweb "github.com/everactive/iot-identity/web"
@@ -125,7 +126,7 @@ func (m *MockManage) SnapRemove(orgID, username string, role int, deviceID, snap
 }
 
 // SnapUpdate mocks updating a snap
-func (m *MockManage) SnapUpdate(orgID, username string, role int, deviceID, snap, action string) web.StandardResponse {
+func (m *MockManage) SnapUpdate(orgID, username string, role int, deviceID, snap, action string, body []byte) web.StandardResponse {
 	return web.StandardResponse{}
 }
 

@@ -28,6 +28,7 @@ export default {
     'cancel':                   'Cancel',
     'close':                    'Close',
     'code':                     'Code',
+    'confirm-device-delete':    'Confirm delete device',
     'confirm-snap-install':     'Enter the snap to install',
     'confirm-user-delete':      'Confirm user deletion',
     'copy-device-key':          'Copy device public key to clipboard',

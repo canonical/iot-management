@@ -21,10 +21,11 @@ package web
 
 import (
 	"bytes"
-	"github.com/everactive/iot-management/datastore/memory"
-	"github.com/everactive/iot-management/service/manage"
 	"net/http"
 	"testing"
+
+	"github.com/everactive/iot-management/datastore/memory"
+	"github.com/everactive/iot-management/service/manage"
 )
 
 func TestService_SnapListHandler(t *testing.T) {
@@ -77,6 +78,7 @@ func TestService_SnapWorkflow(t *testing.T) {
 		{"update-valid-refresh", "PUT", "/v1/snaps/abc/a111/helloworld/refresh", nil, 300, http.StatusOK, ""},
 		{"update-valid-enable", "PUT", "/v1/snaps/abc/a111/helloworld/enable", nil, 300, http.StatusOK, ""},
 		{"update-valid-disable", "PUT", "/v1/snaps/abc/a111/helloworld/disable", nil, 300, http.StatusOK, ""},
+		{"update-valid-switch", "PUT", "/v1/snaps/abc/a111/helloworld/switch", []byte("{}"), 300, http.StatusOK, ""},
 		{"update-action-invalid", "PUT", "/v1/snaps/abc/a111/helloworld/invalid", nil, 300, http.StatusBadRequest, "SnapUpdate"},
 		{"update-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/refresh", nil, 0, http.StatusBadRequest, "UserAuth"},
 		{"config-valid", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 300, http.StatusOK, ""},

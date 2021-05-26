@@ -108,12 +108,12 @@ func (a *ClientAdapter) SnapRemove(orgID, deviceID, snap string) web.StandardRes
 	return r
 }
 
-// SnapUpdate enables/disables/refreshes a snap on a device
-func (a *ClientAdapter) SnapUpdate(orgID, deviceID, snap, action string) web.StandardResponse {
+// SnapUpdate enables/disables/refreshes/switch a snap on a device
+func (a *ClientAdapter) SnapUpdate(orgID, deviceID, snap, action string, body []byte) web.StandardResponse {
 	r := web.StandardResponse{}
 	p := path.Join("device", orgID, deviceID, "snaps", snap, action)
 
-	resp, err := put(a.urlPath(p), nil)
+	resp, err := put(a.urlPath(p), body)
 	if err != nil {
 		r.Code = "SnapUpdate"
 		r.Message = err.Error()

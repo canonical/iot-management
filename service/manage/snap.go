@@ -77,8 +77,8 @@ func (srv *Management) SnapRemove(orgID, username string, role int, deviceID, sn
 	return srv.TwinAPI.SnapRemove(orgID, deviceID, snap)
 }
 
-// SnapUpdate enables/disables/refreshes a snap on a device
-func (srv *Management) SnapUpdate(orgID, username string, role int, deviceID, snap, action string) web.StandardResponse {
+// SnapUpdate enables/disables/refreshes/swtich a snap on a device
+func (srv *Management) SnapUpdate(orgID, username string, role int, deviceID, snap, action string, body []byte) web.StandardResponse {
 	hasAccess := srv.DB.OrgUserAccess(orgID, username, role)
 	if !hasAccess {
 		return web.StandardResponse{
@@ -87,7 +87,7 @@ func (srv *Management) SnapUpdate(orgID, username string, role int, deviceID, sn
 		}
 	}
 
-	return srv.TwinAPI.SnapUpdate(orgID, deviceID, snap, action)
+	return srv.TwinAPI.SnapUpdate(orgID, deviceID, snap, action, body)
 }
 
 // SnapConfigSet updates a snap config on a device

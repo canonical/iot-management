@@ -20,8 +20,9 @@
 package manage
 
 import (
-	"github.com/everactive/iot-management/datastore/memory"
 	"testing"
+
+	"github.com/everactive/iot-management/datastore/memory"
 
 	"github.com/everactive/iot-management/twinapi"
 )
@@ -130,14 +131,15 @@ func TestManagement_SnapUpdate(t *testing.T) {
 		deviceID string
 		snap     string
 		action   string
+		body     []byte
 	}
 	tests := []struct {
 		name    string
 		args    args
 		wantErr string
 	}{
-		{"valid-enable", args{"abc", "jamesj", 300, "a111", "helloworld", "enable"}, ""},
-		{"invalid-user", args{"abc", "invalid", 200, "a111", "helloworld", "enable"}, "SnapAuth"},
+		{"valid-enable", args{"abc", "jamesj", 300, "a111", "helloworld", "enable", []byte("{}")}, ""},
+		{"invalid-user", args{"abc", "invalid", 200, "a111", "helloworld", "enable", []byte("{}")}, "SnapAuth"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -146,7 +148,7 @@ func TestManagement_SnapUpdate(t *testing.T) {
 				DB:       memory.NewStore(),
 				TwinAPI:  twinapi.NewMockClient(""),
 			}
-			got := srv.SnapUpdate(tt.args.orgID, tt.args.username, tt.args.role, tt.args.deviceID, tt.args.snap, tt.args.action)
+			got := srv.SnapUpdate(tt.args.orgID, tt.args.username, tt.args.role, tt.args.deviceID, tt.args.snap, tt.args.action, tt.args.body)
 			if got.Code != tt.wantErr {
 				t.Errorf("Management.SnapUpdate() = %v, want %v", got.Code, tt.wantErr)
 			}
