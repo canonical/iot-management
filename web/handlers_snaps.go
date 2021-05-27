@@ -135,6 +135,34 @@ func (wb Service) SnapUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	encodeResponse(response, w)
 }
 
+func (wb Service) SnapSnapshotHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsStandardAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		formatStandardResponse("SnapPost", err.Error(), w)
+		return
+	}
+
+	if len(body) == 0 {
+		body = []byte("{}")
+		return
+	}
+
+	defer r.Body.Close()
+
+	vars := mux.Vars(r)
+
+	response := wb.Manage.SnapSnapshot(vars["orgid"], user.Username, user.Role, vars["deviceid"], vars["snap"], body)
+
+	encodeResponse(response, w)
+}
+
 // SnapConfigUpdateHandler gets the config for a snap on a device
 func (wb Service) SnapConfigUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", JSONHeader)

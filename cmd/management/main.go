@@ -20,6 +20,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/everactive/iot-management/config"
 	"github.com/everactive/iot-management/identityapi"
 	"github.com/everactive/iot-management/service/factory"
@@ -27,7 +29,6 @@ import (
 	"github.com/everactive/iot-management/twinapi"
 	"github.com/everactive/iot-management/web"
 	log "github.com/sirupsen/logrus"
-	"os"
 )
 
 func main() {
@@ -42,6 +43,12 @@ func main() {
 			log.Infof("Using LOG_LEVEL %s", logLevel)
 		}
 	}
+
+	logFormat := os.Getenv("LOG_FORMAT")
+	if logFormat == "json" {
+		log.SetFormatter(&log.JSONFormatter{})
+	}
+
 	// Parse the command line arguments
 	log.Infof("Open config file %s", config.GetPath())
 	settings, err := config.Config(config.GetPath())

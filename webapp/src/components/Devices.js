@@ -104,8 +104,8 @@ class Devices extends Component {
     renderDelete(device) {
         if (device.deviceId !== this.state.confirmDelete) {
             return (
-                <a href="#" onClick={this.handleDelete} data-key={device.deviceId} className="p-button--neutral small" title={T('delete-device')}>
-                    <i className="fa fa-trash" data-key={device.deviceId} /></a>
+                <button onClick={this.handleDelete} data-key={device.deviceId} className="p-button--neutral small" title={T('delete-device')}>
+                    <i className="fa fa-trash" data-key={device.deviceId} /></button>
             );
         } else {
             return (
@@ -114,11 +114,86 @@ class Devices extends Component {
         }
     }
 
+    handleLogUrlChange = (e) => {
+        e.preventDefault();
+        this.setState({deviceLogUrl: e.target.value});
+    }
+
+    handleLogLimitChange = (e) => {
+        e.preventDefault();
+        this.setState({deviceLogLimit: e.target.value});
+    }
+
+    renderDeviceLogtDialog(device) {
+        if (device.deviceId !== this.state.deviceLogDialog) {
+            return
+        }
+
+        return (
+            <tr>
+                <td colSpan="6">
+                    <form>
+                        <fieldset>
+                            <label htmlFor={this.state.deviceLogDialog}>
+                                Log upload url:
+                                <input type="text" rows="12" value={this.state.deviceLogUrl} data-key={this.state.deviceLogDialog} onChange={this.handleLogUrlChange}/>
+                            </label>
+                            <label htmlFor={this.state.deviceLogDialog}>
+                                Limit:
+                                <input type="text" value={this.state.deviceLogLimit} data-key={this.state.deviceLogDialog} onChange={this.handleLogLimitChange}/>
+                            </label>
+                        </fieldset>
+                        <button className="p-button--brand" onClick={this.handleDeviceLogsSend} data-key={device.deviceId}>{T('Send')}</button>
+                        <button className="p-button--brand" onClick={this.handleDeviceLogsCancel} data-key={device.deviceId}>{T('cancel')}</button>
+                    </form>
+                </td>
+            </tr>
+        )
+    }
+
+    handleDeviceLogsSend = (e) => {
+        e.preventDefault();
+        var device = e.target.getAttribute('data-key');
+        var settings = JSON.stringify({
+            url: this.state.deviceLogUrl,
+            limit: parseInt(this.state.deviceLogLimit)})
+
+        api.deviceLogsNew(this.props.account.orgid, device, settings).then(response => {
+            this.handleMessage({
+                message: 'Sent device logs request',
+                messageType: 'information',
+            })
+    
+            this.setState({deviceLogDialog: null})
+            this.setState({deviceLogLimit: null})
+            this.setState({deviceLogUrl: null})
+        })
+        
+    }
+
+    handleDeviceLogsCancel = (e) => {
+        e.preventDefault();
+        this.setState({deviceLogDialog: null})
+    }
+
+    handleDeviceLogsDialog = (e) => {
+        e.preventDefault();
+        var device = e.target.getAttribute('data-key');
+
+        this.setState({deviceLogDialog: device})
+    }
+
     renderRows(items) {
         return items.map((l) => {
           return (
+              <>
               <tr key={l.registrationId}>
-                  <td>{this.renderDelete(l)}</td>
+                  <td>
+                    <button onClick={this.handleDeviceLogsDialog}  className="small u-float" title={T("fetch logs")} data-key={l.deviceId}>
+                        <i className="fa fa-download" aria-hidden="true" data-key={l.deviceId} />
+                    </button>
+                      {this.renderDelete(l)}
+                  </td>
                   <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.brand}</a></td>
                   <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.model}</a></td>
                   <td className="overflow"><a href={'/devices/' + l.deviceId+ '/info'}>{l.serial}</a></td>
@@ -129,8 +204,14 @@ class Devices extends Component {
                       {this.getAge(l.lastRefresh)}
                   </td>
               </tr>
+              {this.renderDeviceLogtDialog(l)}
+              </>
           );
         });
+    }
+
+    handleMessage = (message) => {
+        this.setState(message)
     }
 
     render () {
@@ -139,7 +220,7 @@ class Devices extends Component {
                 <section className="row">
                     <h2>{T('devices-connected')}</h2>
                     <div className="col-12">
-                        <AlertBox message={this.props.message} />
+                        <AlertBox message={this.state.message} type={this.state.messageType}/>
                     </div>
                 </section>
 

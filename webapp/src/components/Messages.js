@@ -118,6 +118,7 @@ export default {
     'timezone':                 'Timezone',
     'title':                    'Device Management Service',
     'toggle-status':            'Enable/Disable',
+    'snapshot-snap':            'Take Snapshot',
     'update':                   'Update',
     'uptime':                   'Uptime',
     'user-email-desc':          'Email address of the user',

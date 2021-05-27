@@ -47,8 +47,10 @@ type Manage interface {
 	DeviceList(orgID, username string, role int) web.DevicesResponse
 	DeviceGet(orgID, username string, role int, deviceID string) web.DeviceResponse
 	DeviceDelete(orgID, username string, role int, deviceID string) web.StandardResponse
+	DeviceLogs(orgID, username string, role int, deviceID string, body []byte) web.StandardResponse
 	ActionList(orgID, username string, role int, deviceID string) web.ActionsResponse
 
+	SnapSnapshot(orgID, username string, role int, deviceID, snap string, body []byte) web.StandardResponse
 	SnapList(orgID, username string, role int, deviceID string) web.SnapsResponse
 	SnapListOnDevice(orgID, username string, role int, deviceID string) web.StandardResponse
 	SnapInstall(orgID, username string, role int, deviceID, snap string) web.StandardResponse

@@ -33,9 +33,11 @@ type Client interface {
 	DeviceList(orgID string) web.DevicesResponse
 	DeviceGet(orgID, deviceID string) web.DeviceResponse
 	DeviceDelete(orgID, deviceID string) web.StandardResponse
+	DeviceLogs(orgID, deviceID string, body []byte) web.StandardResponse
 	ActionList(orgID, deviceID string) web.ActionsResponse
 	SnapList(orgID, deviceID string) web.SnapsResponse
 
+	SnapSnapshot(orgID, deviceID, snap string, body []byte) web.StandardResponse
 	SnapListOnDevice(orgID, deviceID string) web.StandardResponse
 	SnapInstall(orgID, deviceID, snap string) web.StandardResponse
 	SnapRemove(orgID, deviceID, snap string) web.StandardResponse

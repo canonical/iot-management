@@ -21,11 +21,12 @@ package config
 
 import (
 	"fmt"
-	"github.com/everactive/iot-management/crypt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"path"
+
+	"github.com/everactive/iot-management/crypt"
+	log "github.com/sirupsen/logrus"
 
 	"gopkg.in/yaml.v2"
 )

@@ -21,9 +21,12 @@ package web
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/everactive/iot-management/config"
 	"github.com/everactive/iot-management/service/manage"
-	"net/http"
+	muxlogrus "github.com/pytimer/mux-logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // JSONHeader is the content-type header for JSON responses
@@ -46,5 +49,9 @@ func NewService(settings *config.Settings, srv manage.Manage) *Service {
 // Run starts the web service
 func (wb Service) Run() error {
 	fmt.Printf("Starting service on port :%s\n", wb.Settings.LocalPort)
-	return http.ListenAndServe(":"+wb.Settings.LocalPort, wb.Router())
+
+	r := wb.Router()
+	r.Use(muxlogrus.NewLogger(muxlogrus.LogOptions{Formatter: &log.JSONFormatter{}}).Middleware)
+
+	return http.ListenAndServe(":"+wb.Settings.LocalPort, r)
 }

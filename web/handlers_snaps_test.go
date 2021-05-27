@@ -84,6 +84,9 @@ func TestService_SnapWorkflow(t *testing.T) {
 		{"config-valid", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 300, http.StatusOK, ""},
 		{"config-valid-empty", "PUT", "/v1/snaps/abc/a111/helloworld/settings", nil, 300, http.StatusOK, ""},
 		{"config-invalid-permissions", "PUT", "/v1/snaps/abc/a111/helloworld/settings", []byte("{}"), 0, http.StatusBadRequest, "UserAuth"},
+		{"send-snapshot-valid", "POST", "/v1/snaps/abc/a111/helloworld/snapshot", []byte("{}"), 300, http.StatusOK, ""},
+		{"send-snapshot-invalid-permissions", "POST", "/v1/snaps/abc/a111/helloworld/snapshot", []byte("{}"), 0, http.StatusBadRequest, "UserAuth"},
+		{"send-snapshot-valid-empty", "POST", "/v1/snaps/abc/a111/helloworld/snapshot", nil, 300, http.StatusBadRequest, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

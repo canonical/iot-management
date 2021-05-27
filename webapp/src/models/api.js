@@ -116,6 +116,10 @@ var service = {
         return axios.put(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap + '/settings', settings);
     },
 
+    snapsSnapshot: (account, device, snap, settings, cancelCallback) => {
+        return axios.post(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/' + snap + '/snapshot', settings);
+    },
+
     snapsRestart: (account, device, snap) => {
         return axios.post(constants.baseUrl + 'snaps/' + account + '/' + device.device.deviceId + '/services/' + snap + "/restart");
     },
@@ -166,6 +170,10 @@ var service = {
 
     actionsList: (account, id, cancelCallback) => {
         return axios.get(constants.baseUrl + account + '/devices/' + id + '/actions');
+    },
+
+    deviceLogsNew: (account, id, settings, cancelCallback) => {
+        return axios.post(constants.baseUrl + account + '/devices/' + id + '/logs', settings);
     },
 
     usersList: (query, cancelCallback) => {

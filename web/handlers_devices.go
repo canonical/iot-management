@@ -20,10 +20,12 @@
 package web
 
 import (
+	"io/ioutil"
+	"net/http"
+
 	dtwin "github.com/everactive/iot-devicetwin/web"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func formatStandardResponse(errorCode, message string, w http.ResponseWriter) {
@@ -53,7 +55,7 @@ func (wb Service) DevicesListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // DeviceDeleteHandler is the API method to delete a registered device
-func (wb Service) DeviceDeleteHandler (w http.ResponseWriter, r *http.Request) {
+func (wb Service) DeviceDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", JSONHeader)
 	user, err := wb.checkIsAdminAndGetUserFromJWT(w, r)
 	if err != nil {
@@ -97,5 +99,34 @@ func (wb Service) ActionListHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get the device
 	response := wb.Manage.ActionList(vars["orgid"], user.Username, user.Role, vars["deviceid"])
+	_ = encodeResponse(response, w)
+}
+
+// DeviceLogsHandler is the API method to get logs for a device
+func (wb Service) DeviceLogsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", JSONHeader)
+	user, err := wb.checkIsAdminAndGetUserFromJWT(w, r)
+	if err != nil {
+		formatStandardResponse("UserAuth", "", w)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		formatStandardResponse("DeviceLogs", err.Error(), w)
+		return
+	}
+
+	if len(body) == 0 {
+		body = []byte("{}")
+	}
+
+	defer r.Body.Close()
+
+	vars := mux.Vars(r)
+
+	// Get the device
+	response := wb.Manage.DeviceLogs(vars["orgid"], user.Username, user.Role, vars["deviceid"], body)
 	_ = encodeResponse(response, w)
 }

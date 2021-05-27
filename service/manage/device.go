@@ -21,6 +21,7 @@ package manage
 
 import (
 	"fmt"
+
 	"github.com/everactive/iot-devicetwin/web"
 )
 
@@ -59,9 +60,9 @@ func (srv *Management) DeviceDelete(orgID, username string, role int, deviceID s
 	hasAccess := srv.DB.OrgUserAccess(orgID, username, role)
 	if !hasAccess {
 		return web.StandardResponse{
-				Code:    "DeviceAuth",
-				Message: "the user does not have permissions for the organization",
-			}
+			Code:    "DeviceAuth",
+			Message: "the user does not have permissions for the organization",
+		}
 	}
 
 	r1 := srv.TwinAPI.DeviceDelete(orgID, deviceID)
@@ -69,4 +70,16 @@ func (srv *Management) DeviceDelete(orgID, username string, role int, deviceID s
 
 	message := fmt.Sprintf("twinapi: %s, identity: %s", r1.Message, r2.Message)
 	return web.StandardResponse{Message: message}
+}
+
+func (srv *Management) DeviceLogs(orgID, username string, role int, deviceID string, body []byte) web.StandardResponse {
+	hasAccess := srv.DB.OrgUserAccess(orgID, username, role)
+	if !hasAccess {
+		return web.StandardResponse{
+			Code:    "SnapAuth",
+			Message: "the user does not have permissions for the organization",
+		}
+	}
+
+	return srv.TwinAPI.DeviceLogs(orgID, deviceID, body)
 }

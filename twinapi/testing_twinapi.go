@@ -187,3 +187,13 @@ func (m *MockClient) GroupDeviceUnlink(orgID, name, deviceID string) web.Standar
 	}
 	return web.StandardResponse{}
 }
+
+// SnapUpdate mocks a snap update request
+func (m *MockClient) SnapSnapshot(orgID, deviceID, snap, body []byte) web.StandardResponse {
+	return web.StandardResponse{}
+}
+
+// DeviceLogs mocks a device create logs request
+func (m *MockClient) DeviceLogs(orgID, deviceID, body []byte) web.StandardResponse {
+	return web.StandardResponse{}
+}

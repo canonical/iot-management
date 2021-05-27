@@ -20,10 +20,11 @@
 package manage
 
 import (
+	"testing"
+
 	"github.com/everactive/iot-management/config"
 	"github.com/everactive/iot-management/datastore/memory"
 	"github.com/everactive/iot-management/identityapi"
-	"testing"
 
 	"github.com/everactive/iot-management/twinapi"
 )
@@ -95,6 +96,37 @@ func TestManagement_DeviceGet(t *testing.T) {
 			}
 			if got.Device.SerialNumber != tt.wantSerial {
 				t.Errorf("Management.DeviceGet() = %v, want %v", got.Device.SerialNumber, tt.wantSerial)
+			}
+		})
+	}
+}
+
+func TestManagement_DeviceLogs(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+		role     int
+		deviceID string
+		body     []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr string
+	}{
+		{"valid-enable", args{"abc", "jamesj", 300, "a111", []byte("{}")}, ""},
+		{"invalid-user", args{"abc", "invalid", 200, "a111", []byte("{}")}, "SnapAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := &Management{
+				Settings: getSettings(),
+				DB:       memory.NewStore(),
+				TwinAPI:  twinapi.NewMockClient(""),
+			}
+			got := srv.DeviceLogs(tt.args.orgID, tt.args.username, tt.args.role, tt.args.deviceID, tt.args.snap, tt.args.body)
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.DeviceLogs() = %v, want %v", got.Code, tt.wantErr)
 			}
 		})
 	}

@@ -187,3 +187,35 @@ func TestManagement_SnapConfigSet(t *testing.T) {
 		})
 	}
 }
+
+func TestManagement_SnapSnapshot(t *testing.T) {
+	type args struct {
+		orgID    string
+		username string
+		role     int
+		deviceID string
+		snap     string
+		body     []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr string
+	}{
+		{"valid-enable", args{"abc", "jamesj", 300, "a111", "helloworld", []byte("{}")}, ""},
+		{"invalid-user", args{"abc", "invalid", 200, "a111", "helloworld", []byte("{}")}, "SnapAuth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := &Management{
+				Settings: getSettings(),
+				DB:       memory.NewStore(),
+				TwinAPI:  twinapi.NewMockClient(""),
+			}
+			got := srv.SnapSnapshot(tt.args.orgID, tt.args.username, tt.args.role, tt.args.deviceID, tt.args.snap, tt.args.body)
+			if got.Code != tt.wantErr {
+				t.Errorf("Management.SnapSnapshot() = %v, want %v", got.Code, tt.wantErr)
+			}
+		})
+	}
+}

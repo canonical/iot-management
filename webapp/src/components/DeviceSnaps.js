@@ -97,8 +97,60 @@ class DeviceRow extends Component {
             this.setState({snapSettings: null})
             this.props.handleMessage({message: 'Sent restart to snap: ' + snap,
             messageType: 'information'})
-            
         })
+    }
+
+    handleShowSnapshot = (e) => {
+        e.preventDefault();
+        var snap = e.target.getAttribute('data-key');
+        this.setState({snapSnapshotDialog: snap})
+    }
+
+    handleSnapshotSend = (e) => {
+        e.preventDefault();
+        var snap = e.target.getAttribute('data-key');
+        var url = this.state.snapshotUrl;
+        var data = JSON.stringify({url: url});
+
+        api.snapsSnapshot(this.props.account.orgid, this.props.device, snap, data).then(response => {
+            this.setState({snapshotUrl: null})
+            this.setState({snapSnapshotDialog: null})
+            this.props.handleMessage({message: 'Requested shapshot of snap: ' + snap,
+            messageType: 'information'})
+        })
+    }
+
+    handleSnapshotCancel = (e) => {
+        e.preventDefault();
+        this.setState({snapSnapshotDialog: null})
+    }
+
+    handleSnapshotUpdateUrl = (e) => {
+        e.preventDefault();
+        this.setState({snapshotUrl: e.target.value})
+    }
+
+    renderSnapshotDialog(snap) {
+        if (snap.name !== this.state.snapSnapshotDialog) {
+            return
+        }
+
+        return (
+            <tr>
+                <td colSpan="6">
+                    <form>
+                        <fieldset>
+                            <label htmlFor={this.state.snapSnapshotDialog}>
+                                Upload url for {this.state.snapSnapshotDialog}:
+                                <input type="text" rows="12" value={this.state.snapshotUrl} data-key={this.state.snapSnapshotDialog} onChange={this.handleSnapshotUpdateUrl}/>
+                            </label>
+                        </fieldset>
+                        <button className="p-button--brand" onClick={this.handleSnapshotSend} data-key={snap.name}>{T('Send')}</button>
+                        <button className="p-button--brand" onClick={this.handleSnapshotCancel} data-key={snap.name}>{T('cancel')}</button>
+                    </form>
+                </td>
+            </tr>
+        )
     }
 
     renderSettings(snap) {
@@ -188,6 +240,9 @@ class DeviceRow extends Component {
                     <button onClick={this.handleToggle}  className="small" title={T("toggle-status")} data-key={s.name}>
                         <i className="fa fa-plug" aria-hidden="true" data-key={s.name} />
                     </button>
+                    <button onClick={this.handleShowSnapshot} className="small" title={T("snapshot-snap")} data-key={s.name}>
+                        <i className="fa fa-camera" aria-hidden="true" data-key={s.name} />
+                    </button>
                     <button onClick={this.handleRemove} className="small" title={T("remove")} data-key={s.name}>
                         <i className="fa fa-times" aria-hidden="true" data-key={s.name} />
                     </button>
@@ -202,6 +257,7 @@ class DeviceRow extends Component {
                     </button>
                 </td>
             </tr>
+            {this.renderSnapshotDialog(s)}
             {this.renderSettings(s)}
             </>
         )

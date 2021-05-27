@@ -48,6 +48,7 @@ func (wb Service) Router() *mux.Router {
 	router.Handle("/v1/{orgid}/devices/{deviceid}", Middleware(http.HandlerFunc(wb.DeviceGetHandler))).Methods("GET")
 	router.Handle("/v1/{orgid}/devices/{deviceid}/actions", Middleware(http.HandlerFunc(wb.ActionListHandler))).Methods("GET")
 	router.Handle("/v1/{orgid}/devices/{deviceid}", Middleware(http.HandlerFunc(wb.DeviceDeleteHandler))).Methods("DELETE")
+	router.Handle("/v1/{orgid}/devices/{deviceid}/logs", Middleware(http.HandlerFunc(wb.DeviceLogsHandler))).Methods("POST")
 
 	// API routes: groups
 	router.Handle("/v1/{orgid}/groups", Middleware(http.HandlerFunc(wb.GroupListHandler))).Methods("GET")
@@ -65,6 +66,7 @@ func (wb Service) Router() *mux.Router {
 	router.Handle("/v1/snaps/{orgid}/{deviceid}/{snap}/settings", Middleware(http.HandlerFunc(wb.SnapConfigUpdateHandler))).Methods("PUT")
 	router.Handle("/v1/snaps/{orgid}/{deviceid}/services/{snap}/{action}", Middleware(http.HandlerFunc(wb.SnapServiceAction))).Methods("POST")
 	router.Handle("/v1/snaps/{orgid}/{deviceid}/{snap}/{action}", Middleware(http.HandlerFunc(wb.SnapUpdateHandler))).Methods("PUT")
+	router.Handle("/v1/snaps/{orgid}/{deviceid}/{snap}/snapshot", Middleware(http.HandlerFunc(wb.SnapSnapshotHandler))).Methods("POST")
 
 	// API routes: store functionality
 	router.Handle("/v1/store/snaps/{snapName}", Middleware(http.HandlerFunc(wb.StoreSearchHandler))).Methods("GET")

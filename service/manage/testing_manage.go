@@ -263,3 +263,13 @@ func (m *MockManage) RegDeviceUpdate(orgID, username string, role int, deviceID 
 	}
 	return idweb.StandardResponse{}
 }
+
+// SnapShot mocks create a snap snapshot
+func (m *MockManage) SnapShot(orgID, username string, role int, deviceID, snap, action string, body []byte) web.StandardResponse {
+	return web.StandardResponse{}
+}
+
+// DeviceLogs mocks create a device logs
+func (m *MockManage) DeviceLogs(orgID, username string, role int, deviceID, snap, action string, body []byte) web.StandardResponse {
+	return web.StandardResponse{}
+}

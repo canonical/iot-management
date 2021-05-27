@@ -21,8 +21,9 @@ package identityapi
 
 import (
 	"encoding/json"
-	"github.com/everactive/iot-identity/web"
 	"path"
+
+	"github.com/everactive/iot-identity/web"
 )
 
 // RegDeviceList lists the devices for an account

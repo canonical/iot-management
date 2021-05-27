@@ -169,3 +169,25 @@ func (a *ClientAdapter) SnapServiceAction(orgID, deviceID, snap, action string, 
 	}
 	return r
 }
+
+func (a *ClientAdapter) SnapSnapshot(orgID, deviceID, snap string, body []byte) web.StandardResponse {
+	r := web.StandardResponse{}
+	p := path.Join("device", orgID, deviceID, "snaps", snap, "snapshot")
+
+	resp, err := post(a.urlPath(p), body)
+	if err != nil {
+		r.Code = "SnapPost"
+		r.Message = err.Error()
+		return r
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&r)
+	if err != nil {
+		r.Code = "SnapPost"
+		r.Message = err.Error()
+		return r
+	}
+
+	return r
+
+}

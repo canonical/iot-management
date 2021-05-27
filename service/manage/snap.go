@@ -114,3 +114,15 @@ func (srv *Management) SnapServiceAction(orgID, username string, role int, devic
 
 	return srv.TwinAPI.SnapServiceAction(orgID, deviceID, snap, action, body)
 }
+
+func (srv *Management) SnapSnapshot(orgID, username string, role int, deviceID, snap string, body []byte) web.StandardResponse {
+	hasAccess := srv.DB.OrgUserAccess(orgID, username, role)
+	if !hasAccess {
+		return web.StandardResponse{
+			Code:    "SnapAuth",
+			Message: "the user does not have permissions for the organization",
+		}
+	}
+
+	return srv.TwinAPI.SnapSnapshot(orgID, deviceID, snap, body)
+}
