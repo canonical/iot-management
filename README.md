@@ -13,11 +13,10 @@ for Ubuntu devices.
  ![IoT Management Solution Overview](docs/IoTManagement.svg)
  
  ## Build
- The project uses vendorized dependencies using `govendor`. Development has been done on minimum Go version 1.12.1.
+ The project uses go module and it is recommended to use go 1.13.
  ```bash
  $ go get github.com/canonical/iot-management
  $ cd iot-management
- $ ./get-deps.sh
  $ go build ./...
  ```
  

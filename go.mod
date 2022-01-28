@@ -1,6 +1,6 @@
 module github.com/canonical/iot-management
 
-go 1.12
+go 1.13
 
 require (
 	github.com/canonical/iot-devicetwin v0.0.0-20210408101321-73fe6113136c
