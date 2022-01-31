@@ -1,4 +1,4 @@
-FROM golang:1.12 as builder1
+FROM golang:1.13 as builder1
 COPY . ./src/github.com/canonical/iot-management
 WORKDIR /go/src/github.com/canonical/iot-management
 RUN CGO_ENABLED=1 GOOS=linux go build -a -o /go/bin/management -ldflags='-extldflags "-static"' cmd/management/main.go
